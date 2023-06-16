@@ -1,13 +1,13 @@
 package plus.dragons.createenchantmentindustry.entry;
 
+import java.util.Locale;
+
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.utility.Lang;
-import com.tterrag.registrate.providers.RegistrateItemTagsProvider;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
+
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,35 +16,29 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
-
-import java.util.Collections;
-import java.util.Locale;
 
 
 public class CeiTags {
-    public static <T> TagKey<T> optionalTag(IForgeRegistry<T> registry,
+    public static <T> TagKey<T> optionalTag(Registry<T> registry,
                                             ResourceLocation id) {
-        return registry.tags()
-                .createOptionalTagKey(id, Collections.emptySet());
+        return TagKey.create(registry.key(), id);
     }
 
-    public static <T> TagKey<T> forgeTag(IForgeRegistry<T> registry, String path) {
+    public static <T> TagKey<T> forgeTag(Registry<T> registry, String path) {
         return optionalTag(registry, new ResourceLocation("forge", path));
     }
 
     public static TagKey<Block> forgeBlockTag(String path) {
-        return forgeTag(ForgeRegistries.BLOCKS, path);
+        return forgeTag(Registry.BLOCK, path);
     }
 
     public static TagKey<Item> forgeItemTag(String path) {
-        return forgeTag(ForgeRegistries.ITEMS, path);
+        return forgeTag(Registry.ITEM, path);
     }
 
     public static TagKey<Fluid> forgeFluidTag(String path) {
-        return forgeTag(ForgeRegistries.FLUIDS, path);
+        return forgeTag(Registry.FLUID, path);
     }
     String FORGE = "forge";
     String CREATE = "create";
@@ -105,13 +99,9 @@ public class CeiTags {
         }
 
         BlockTag(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
-            ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
-            if (optional) {
-                tag = optionalTag(ForgeRegistries.BLOCKS, id);
-            } else {
-                tag = BlockTags.create(id);
-            }
-            this.alwaysDatagen = alwaysDatagen;
+			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
+			tag = optionalTag(Registry.BLOCK, id);
+			this.alwaysDatagen = alwaysDatagen;
         }
 
         @SuppressWarnings("deprecation")
@@ -160,13 +150,9 @@ public class CeiTags {
         }
 
         ItemTag(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
-            ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
-            if (optional) {
-                tag = optionalTag(ForgeRegistries.ITEMS, id);
-            } else {
-                tag = ItemTags.create(id);
-            }
-            this.alwaysDatagen = alwaysDatagen;
+			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
+			tag = optionalTag(Registry.ITEM, id);
+			this.alwaysDatagen = alwaysDatagen;
         }
 
         @SuppressWarnings("deprecation")
@@ -217,13 +203,9 @@ public class CeiTags {
         }
 
         FluidTag(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
-            ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
-            if (optional) {
-                tag = optionalTag(ForgeRegistries.FLUIDS, id);
-            } else {
-                tag = FluidTags.create(id);
-            }
-            this.alwaysDatagen = alwaysDatagen;
+			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
+			tag = optionalTag(Registry.FLUID, id);
+			this.alwaysDatagen = alwaysDatagen;
         }
 
         @SuppressWarnings("deprecation")
