@@ -1,20 +1,14 @@
 package plus.dragons.createenchantmentindustry;
 
 import com.simibubi.create.foundation.config.ui.BaseConfigScreen;
+
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter.BlazeEnchanterRenderer;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.ink.InkRenderingCamera;
 import plus.dragons.createenchantmentindustry.entry.CeiBlockPartials;
 import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
 import plus.dragons.createenchantmentindustry.foundation.ponder.content.CeiPonderIndex;
-
+// TODO
 public class EnchantmentIndustryClient {
 
     public EnchantmentIndustryClient() {
@@ -26,7 +20,7 @@ public class EnchantmentIndustryClient {
         modEventBus.register(this);
         registerForgeEvents(forgeEventBus);
     }
-    
+
     private void registerForgeEvents(IEventBus forgeEventBus) {
         forgeEventBus.addListener(InkRenderingCamera::handleInkFogColor);
     }
@@ -36,7 +30,7 @@ public class EnchantmentIndustryClient {
         CeiPonderIndex.register();
         CeiPonderIndex.registerTags();
     }
-    
+
     @SuppressWarnings("deprecation")
     @SubscribeEvent
     public void modelRegistry(final TextureStitchEvent.Pre event) {
@@ -44,7 +38,7 @@ public class EnchantmentIndustryClient {
             event.addSprite(BlazeEnchanterRenderer.BOOK_MATERIAL.texture());
         }
     }
-    
+
     @SubscribeEvent
     public void loadComplete(final FMLLoadCompleteEvent event) {
         BaseConfigScreen.setDefaultActionFor(EnchantmentIndustry.ID, screen -> screen

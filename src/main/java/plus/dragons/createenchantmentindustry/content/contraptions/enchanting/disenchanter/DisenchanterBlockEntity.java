@@ -19,12 +19,14 @@ import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.foundation.utility.VecHelper;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -236,34 +238,38 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
             });
             if (sum.get() != 0) {
                 var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), sum.get());
-                var inserted = internalTank.getPrimaryHandler().fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-                if (inserted != 0) {
-                    for (var player : players) {
-                        var total = getPlayerExperience(player);
-                        if (inserted >= ABSORB_AMOUNT) {
-                            if (total >= ABSORB_AMOUNT) {
-                                player.giveExperiencePoints(-ABSORB_AMOUNT);
-                                inserted -= ABSORB_AMOUNT;
-                            } else if (total != 0) {
-                                inserted -= total;
-                                player.giveExperiencePoints(-total);
-                            }
-                            CeiAdvancements.SPIRIT_TAKING.getTrigger().trigger((ServerPlayer) player);
-                        } else if (inserted > 0) {
-                            if (total >= inserted) {
-                                player.giveExperiencePoints(-inserted);
-                                inserted = 0;
-                            } else {
-                                inserted -= total;
-                                player.giveExperiencePoints(-total);
-                            }
-                            absorbedXp = true;
-                            CeiAdvancements.SPIRIT_TAKING.getTrigger().trigger((ServerPlayer) player);
-                        } else {
-                            break;
-                        }
-                    }
-                }
+				try(Transaction t = TransferUtil.getTransaction()){
+					try (Transaction nested = t.openNested()){
+						var inserted = internalTank.getPrimaryHandler().insert(fluidStack.getType(), fluidStack.getAmount(), nested);
+						if (inserted != 0) {
+							for (var player : players) {
+								var total = getPlayerExperience(player);
+								if (inserted >= ABSORB_AMOUNT) {
+									if (total >= ABSORB_AMOUNT) {
+										player.giveExperiencePoints(-ABSORB_AMOUNT);
+										inserted -= ABSORB_AMOUNT;
+									} else if (total != 0) {
+										inserted -= total;
+										player.giveExperiencePoints(-total);
+									}
+									CeiAdvancements.SPIRIT_TAKING.getTrigger().trigger((ServerPlayer) player);
+								} else if (inserted > 0) {
+									if (total >= inserted) {
+										player.giveExperiencePoints((int) -inserted);
+										inserted = 0;
+									} else {
+										inserted -= total;
+										player.giveExperiencePoints(-total);
+									}
+									absorbedXp = true;
+									CeiAdvancements.SPIRIT_TAKING.getTrigger().trigger((ServerPlayer) player);
+								} else {
+									break;
+								}
+							}
+						}
+					}
+				}
             }
             internalTank.forbidInsertion();
         }
@@ -273,17 +279,21 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
             for (var orb : experienceOrbs) {
                 var amount = orb.value;
                 var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), amount);
-                var inserted = internalTank.getPrimaryHandler().fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-                if (inserted == amount) {
-                    absorbedXp = true;
-                    orb.remove(Entity.RemovalReason.DISCARDED);
-                } else {
-                    if (inserted != 0) {
-                        absorbedXp = true;
-                        orb.value -= inserted;
-                    }
-                    break;
-                }
+				try(Transaction t = TransferUtil.getTransaction()) {
+					try (Transaction nested = t.openNested()) {
+						var inserted = internalTank.getPrimaryHandler().insert(fluidStack.getType(), fluidStack.getAmount(), nested);
+						if (inserted == amount) {
+							absorbedXp = true;
+							orb.remove(Entity.RemovalReason.DISCARDED);
+						} else {
+							if (inserted != 0) {
+								absorbedXp = true;
+								orb.value -= inserted;
+							}
+							break;
+						}
+					}
+				}
             }
             internalTank.forbidInsertion();
         }
@@ -315,12 +325,15 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
 
         if (processingTicks > 5) {
             internalTank.allowInsertion();
-            if (internalTank.getPrimaryHandler()
-                    .fill(xp, IFluidHandler.FluidAction.SIMULATE) != xp.getAmount()) {
-                internalTank.forbidInsertion();
-                processingTicks = DISENCHANTER_TIME;
-                return true;
-            }
+			try(Transaction t = TransferUtil.getTransaction()) {
+				try (Transaction nested = t.openNested()) {
+					if (internalTank.getPrimaryHandler().insert(xp.getType(),xp.getAmount(),nested) != xp.getAmount()) {
+						internalTank.forbidInsertion();
+						processingTicks = DISENCHANTER_TIME;
+						return true;
+					}
+				}
+			}
             internalTank.forbidInsertion();
             return true;
         }
@@ -333,7 +346,7 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
         if (playerId != null) {
             var player = level.getPlayerByUUID(playerId);
             if(player!=null)
-                CeiTriggers.DISENCHANTED.trigger(player, xp.getAmount());
+                CeiTriggers.DISENCHANTED.trigger(player, (int) xp.getAmount());
         }
 
         // Process finished
@@ -341,7 +354,11 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
         resultItem.setCount(heldItem.stack.getCount());
         heldItem.stack = resultItem;
         internalTank.allowInsertion();
-        internalTank.getPrimaryHandler().fill(xp, IFluidHandler.FluidAction.EXECUTE);
+		try(Transaction t = TransferUtil.getTransaction()) {
+			try (Transaction nested = t.openNested()) {
+				internalTank.getPrimaryHandler().insert(xp.getType(), xp.getAmount(), nested);
+			}
+		}
         internalTank.forbidInsertion();
         level.levelEvent(1042, worldPosition, 0);
         notifyUpdate();
@@ -413,7 +430,7 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
             var tank = getInternalTank().getPrimaryHandler();
             var fluidStack = tank.getFluid();
             if(fluidStack.getFluid() instanceof ExperienceFluid expFluid) {
-                expFluid.drop(serverLevel, VecHelper.getCenterOf(getBlockPos()), fluidStack.getAmount());
+                expFluid.drop(serverLevel, VecHelper.getCenterOf(getBlockPos()), (int) fluidStack.getAmount());
             }
         }
     }

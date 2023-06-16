@@ -3,24 +3,23 @@ package plus.dragons.createenchantmentindustry.content.contraptions.fluids.exper
 import com.simibubi.create.content.fluids.OpenEndedPipe;
 import com.simibubi.create.foundation.ponder.PonderWorld;
 import com.simibubi.create.foundation.utility.VecHelper;
+
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerXpEvent;
-import net.minecraftforge.fluids.FluidStack;
 import plus.dragons.createenchantmentindustry.foundation.advancement.CeiAdvancements;
 
 public class ExperienceEffectHandler implements OpenEndedPipe.IEffectHandler {
-    
+
     @Override
     public boolean canApplyEffects(OpenEndedPipe pipe, FluidStack fluid) {
         return fluid.getFluid() instanceof ExperienceFluid;
     }
-    
+
     @Override
     public void applyEffects(OpenEndedPipe pipe, FluidStack fluidStack) {
         if (pipe.getWorld() instanceof PonderWorld){
@@ -46,7 +45,7 @@ public class ExperienceEffectHandler implements OpenEndedPipe.IEffectHandler {
                              pos.getZ() - pipePos.getZ()).scale(0.2);
         var orbPos = VecHelper.getCenterOf(pos);
         ExperienceFluid fluid = (ExperienceFluid) fluidStack.getFluid();
-        int amount = fluidStack.getAmount();
+        int amount = (int) fluidStack.getAmount();
         if (players.isEmpty()) {
             fluid.awardOrDrop(null, level, orbPos, speed, amount);
         } else {
@@ -62,5 +61,4 @@ public class ExperienceEffectHandler implements OpenEndedPipe.IEffectHandler {
             }
         }
     }
-    
 }

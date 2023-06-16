@@ -1,36 +1,29 @@
 package plus.dragons.createenchantmentindustry;
 
-import com.simibubi.create.AllItems;
-import com.simibubi.create.content.kinetics.crusher.CrushingWheelBlockEntity;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import net.minecraft.resources.ResourceLocation;
 import plus.dragons.createdragonlib.advancement.AdvancementFactory;
 import plus.dragons.createdragonlib.init.SafeRegistrate;
 import plus.dragons.createdragonlib.lang.Lang;
 import plus.dragons.createdragonlib.lang.LangFactory;
 import plus.dragons.createdragonlib.tag.TagGen;
-import plus.dragons.createenchantmentindustry.compat.apotheosis.ApotheosisCompat;
-import plus.dragons.createenchantmentindustry.compat.quark.QuarkCompat;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.OpenEndedPipeEffects;
-import plus.dragons.createenchantmentindustry.entry.*;
+import plus.dragons.createenchantmentindustry.entry.CeiBlockEntities;
+import plus.dragons.createenchantmentindustry.entry.CeiBlocks;
+import plus.dragons.createenchantmentindustry.entry.CeiContainerTypes;
+import plus.dragons.createenchantmentindustry.entry.CeiEntityTypes;
+import plus.dragons.createenchantmentindustry.entry.CeiFluids;
+import plus.dragons.createenchantmentindustry.entry.CeiItems;
+import plus.dragons.createenchantmentindustry.entry.CeiPackets;
+import plus.dragons.createenchantmentindustry.entry.CeiRecipeTypes;
+import plus.dragons.createenchantmentindustry.entry.CeiTags;
 import plus.dragons.createenchantmentindustry.foundation.advancement.CeiAdvancements;
 import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
 import plus.dragons.createenchantmentindustry.foundation.ponder.content.CeiPonderIndex;
 
+// TODO
 @Mod(EnchantmentIndustry.ID)
 public class EnchantmentIndustry {
     public static final Logger LOGGER = LogManager.getLogger();
@@ -52,9 +45,9 @@ public class EnchantmentIndustry {
     public EnchantmentIndustry() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
-        
+
         CeiConfigs.register(ModLoadingContext.get());
-        
+
         registerEntries(modEventBus);
         modEventBus.register(this);
         modEventBus.addListener(EventPriority.LOWEST, ADVANCEMENT_FACTORY::datagen);
@@ -64,7 +57,7 @@ public class EnchantmentIndustry {
                 .addItemTagFactory(CeiTags::genItemTag)
                 .addFluidTagFactory(CeiTags::genFluidTag)
                 .build().activate();
-        
+
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> EnchantmentIndustryClient::new);
     }
 
@@ -84,7 +77,7 @@ public class EnchantmentIndustry {
         forgeEventBus.addListener(CeiItems::fillCreateItemGroup);
         forgeEventBus.addListener(CeiFluids::handleInkEffect);
     }
-    
+
     @SubscribeEvent
     public void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {

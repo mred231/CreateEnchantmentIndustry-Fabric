@@ -1,37 +1,29 @@
 package plus.dragons.createenchantmentindustry.compat.jei;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
+
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.forge.ForgeTypes;
-import mezz.jei.api.helpers.IColorHelper;
-import mezz.jei.api.ingredients.IIngredientType;
-import mezz.jei.api.ingredients.subtypes.ISubtypeManager;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.api.registration.*;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.api.runtime.IJeiRuntime;
-import mezz.jei.common.ingredients.fluid.FluidIngredientHelper;
-import mezz.jei.common.platform.IPlatformFluidHelperInternal;
-import mezz.jei.common.platform.Services;
-import mezz.jei.common.render.FluidTankRenderer;
-import mezz.jei.forge.platform.FluidHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
 import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
 import plus.dragons.createenchantmentindustry.compat.jei.category.DisenchantingCategory;
 import plus.dragons.createenchantmentindustry.compat.jei.category.RecipeCategoryBuilder;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.disenchanter.DisenchantRecipe;
 import plus.dragons.createenchantmentindustry.entry.CeiBlocks;
-import plus.dragons.createenchantmentindustry.entry.CeiFluids;
 import plus.dragons.createenchantmentindustry.entry.CeiRecipeTypes;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.List;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -67,10 +59,10 @@ public class CeiJEIPlugin implements IModPlugin {
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        List<FluidStack> fluidIngredients = new ArrayList<>();
+        /*List<FluidStack> fluidIngredients = new ArrayList<>();
         fluidIngredients.add(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), FluidType.BUCKET_VOLUME));
         fluidIngredients.add(new FluidStack(CeiFluids.HYPER_EXPERIENCE.get().getSource(), FluidType.BUCKET_VOLUME));
-        jeiRuntime.getIngredientManager().addIngredientsAtRuntime(ForgeTypes.FLUID_STACK,fluidIngredients);
+        jeiRuntime.getIngredientManager().addIngredientsAtRuntime(FabricTypes.FLUID_STACK,fluidIngredients);*/
     }
 
     private static <T extends Recipe<?>> RecipeCategoryBuilder<T> builder(Class<T> cls) {

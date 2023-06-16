@@ -7,6 +7,13 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.Tag;
@@ -59,11 +66,11 @@ public class EnchantingGuideMenu extends GhostItemMenu<ItemStack> {
             );
         boolean resetIndex = previousEnchantments == null || !previousEnchantments.toString().equals(enchantments.toString());
         previousEnchantments = ImmutableList.copyOf(enchantments);
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            if (Minecraft.getInstance().screen instanceof EnchantingGuideScreen screen) {
-                screen.updateScrollInput(resetIndex);
-            }
-        });
+		if(FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT)){
+			if (Minecraft.getInstance().screen instanceof EnchantingGuideScreen screen) {
+				screen.updateScrollInput(resetIndex);
+			}
+		}
     }
 
     @Override
@@ -158,12 +165,23 @@ public class EnchantingGuideMenu extends GhostItemMenu<ItemStack> {
             ItemStack stackToInsert = playerInventory.getItem(index);
             if (getSlot(36).mayPlace(stackToInsert)) {
                 ItemStack copy = stackToInsert.copy();
-                ghostInventory.insertItem(0, copy, false);
-                getSlot(36).setChanged();
+				ItemVariant itemVariant = ItemVariant.of(copy);
+				try(Transaction t = TransferUtil.getTransaction()) {
+					try (Transaction nested = t.openNested()) {
+						ghostInventory.insertSlot(0, itemVariant, copy.getCount(), nested);
+						getSlot(36).setChanged();
+					}
+				}
+
             }
         } else {
-            ghostInventory.extractItem(0, 1, false);
-            getSlot(index).setChanged();
+			try(Transaction t = TransferUtil.getTransaction()) {
+				try (Transaction nested = t.openNested()) {
+					ghostInventory.extractSlot(0, ItemVariant.of(ghostInventory.getStackInSlot(0)),1, nested);
+					getSlot(index).setChanged();
+				}
+			}
+
         }
         return ItemStack.EMPTY;
     }

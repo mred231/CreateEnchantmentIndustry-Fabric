@@ -1,19 +1,21 @@
 package plus.dragons.createenchantmentindustry.foundation.mixin;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.processing.basin.BasinBlock;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.utility.VecHelper;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.ExperienceFluid;
 
 @Mixin(value = BasinBlock.class)
@@ -33,7 +35,7 @@ public abstract class BasinBlockMixin extends Block implements IBE<BasinBlockEnt
             for (var tank : tanks) {
                 var fluidStack = tank.getPrimaryHandler().getFluid();
                 if(fluidStack.getFluid() instanceof ExperienceFluid expFluid) {
-                    expFluid.drop(serverLevel, VecHelper.getCenterOf(pos), fluidStack.getAmount());
+                    expFluid.drop(serverLevel, VecHelper.getCenterOf(pos), (int) fluidStack.getAmount());
                 }
             }
         });

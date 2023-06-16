@@ -281,7 +281,7 @@ public class PrintEntries {
 
         @Override
         public Fluid requiredInkType(ItemStack target) {
-            return CeiFluids.INK;
+            return CeiFluids.INK.get();
         }
 
         @Override

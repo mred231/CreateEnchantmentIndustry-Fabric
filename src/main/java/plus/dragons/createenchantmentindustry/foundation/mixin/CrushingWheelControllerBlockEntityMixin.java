@@ -1,9 +1,16 @@
 package plus.dragons.createenchantmentindustry.foundation.mixin;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelControllerBlock;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelControllerBlockEntity;
 import com.simibubi.create.foundation.utility.VecHelper;
+
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.entity.Entity;
@@ -11,11 +18,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
 
 @Mixin(CrushingWheelControllerBlockEntity.class)
@@ -44,7 +46,7 @@ public class CrushingWheelControllerBlockEntityMixin {
                             (facing.getAxis() == Direction.Axis.Y ? .55f * offset : 0f), (facing.getAxis() == Direction.Axis.Z ? .55f * offset : 0f));
                     var expItem = new ItemEntity(processingEntity.level,outPos.x(),outPos.y(),outPos.z(), new ItemStack(AllItems.EXP_NUGGET.get(),count));
                     expItem.setDeltaMovement(outSpeed);
-                    expItem.getPersistentData()
+                    expItem.getExtraCustomData()
                             .put("BypassCrushingWheel", NbtUtils.writeBlockPos(self.getBlockPos()));
                     processingEntity.level.addFreshEntity(expItem);
                 }

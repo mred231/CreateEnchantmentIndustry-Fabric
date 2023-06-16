@@ -35,7 +35,7 @@ import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter.BlazeEnchanterBlock.HeatLevel;
 
 public class BlazeEnchanterRenderer extends SmartBlockEntityRenderer<BlazeEnchanterBlockEntity> {
-    public static final Material BOOK_MATERIAL = new Material(TextureAtlas.LOCATION_BLOCKS, EnchantmentIndustry.genRL("block/blaze_enchanter_book"))）;
+    public static final Material BOOK_MATERIAL = new Material(TextureAtlas.LOCATION_BLOCKS, EnchantmentIndustry.genRL("block/blaze_enchanter_book"));
     private static final float PI = 3.14159265358979323846f;
     private final BookModel bookModel;
 

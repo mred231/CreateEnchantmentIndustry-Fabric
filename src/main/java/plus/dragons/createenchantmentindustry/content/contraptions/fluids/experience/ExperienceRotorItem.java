@@ -1,8 +1,9 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 public class ExperienceRotorItem extends Item {
 
@@ -10,19 +11,18 @@ public class ExperienceRotorItem extends Item {
         super(properties);
     }
 
-    @Override
+	@Override
     public boolean isFoil(@NotNull ItemStack pStack) {
         return true;
     }
 
-    @Override
-    public boolean hasCraftingRemainingItem(ItemStack stack) {
-        return true;
-    }
+	@Override
+	public boolean hasCraftingRemainingItem() {
+		return true;
+	}
 
-    @Override
-    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
-        return itemStack;
-    }
-
+	@Override
+	public ItemStack getRecipeRemainder(ItemStack stack) {
+		return stack;
+	}
 }

@@ -123,7 +123,7 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
         behaviours.add(new DirectBeltInputBehaviour(this).allowingBeltFunnels()
                 .setInsertionHandler(this::tryInsertingFromSide));
         behaviours.add(internalTank = FilteringFluidTankBehaviour
-                .single(fluidStack -> fluidStack.getFluid().is(CeiTags.FluidTag.BLAZE_ENCHANTER_INPUT.tag),
+                .single(fluidVariant -> fluidVariant.getFluid().is(CeiTags.FluidTag.BLAZE_ENCHANTER_INPUT.tag),
                     this, CeiConfigs.SERVER.blazeEnchanterTankCapacity.get())
                 .whenFluidUpdates(() -> {
                     var fluid = internalTank.getPrimaryHandler().getFluid().getFluid();
@@ -473,7 +473,7 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
             var tank = internalTank.getPrimaryHandler();
             var fluidStack = tank.getFluid();
             if(fluidStack.getFluid() instanceof ExperienceFluid expFluid) {
-                expFluid.drop(serverLevel, VecHelper.getCenterOf(pos), fluidStack.getAmount());
+                expFluid.drop(serverLevel, VecHelper.getCenterOf(pos), (int) fluidStack.getAmount());
             }
         }
     }

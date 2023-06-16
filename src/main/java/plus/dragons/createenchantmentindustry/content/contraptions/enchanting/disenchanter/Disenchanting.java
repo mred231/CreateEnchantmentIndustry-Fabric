@@ -7,8 +7,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.foundation.utility.Pair;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.ItemStack;
@@ -36,11 +38,20 @@ public class Disenchanting {
                     tank.allowInsertion();
                     long amount = recipe.getExperience();
                     var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), itemStack.getCount() * amount);
-                    int inserted = tank.getPrimaryHandler().fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) / amount;
+					int inserted = 0;
+					try(Transaction t = TransferUtil.getTransaction()) {
+						try (Transaction nested = t.openNested()) {
+							inserted = (int) tank.getPrimaryHandler().simulateInsert(fluidStack.getType(),fluidStack.getAmount(),nested);
+						}
+					}
                     ItemStack ret = itemStack.copy();
                     if (!simulate) {
-                        fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), inserted * amount);
-                        tank.getPrimaryHandler().fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+						fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), inserted * amount);
+						try(Transaction t = TransferUtil.getTransaction()) {
+							try (Transaction nested = t.openNested()) {
+								tank.getPrimaryHandler().insert(fluidStack.getType(),fluidStack.getAmount(),nested);
+							}
+						}
                     }
                     ret.shrink(inserted);
                     tank.forbidInsertion();

@@ -34,7 +34,7 @@ public class EnchantmentEntry extends Pair<Enchantment, Integer> {
         var enchantment = getFirst();
         int level = getSecond();
         int maxLevel = enchantment.getMaxLevel();
-        Optional<Holder<Enchantment>> optional = ForgeRegistries.ENCHANTMENTS.getHolder(enchantment);
+        Optional<Holder<Enchantment>> optional = Registry.ENCHANTMENT.getHolder(Registry.ENCHANTMENT.getId(enchantment));
         if (optional.isPresent()) {
             Holder<Enchantment> holder = optional.get();
             if (holder.is(HYPER_ENCHANTABLE_BLACKLIST)) {
