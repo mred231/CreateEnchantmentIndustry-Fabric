@@ -1,20 +1,15 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter;
 
+import java.util.Optional;
+
 import com.simibubi.create.foundation.utility.Pair;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.ForgeRegistries;
 import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
-import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.EnchantmentLevelUtil;
 import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
-
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
-import java.util.Optional;
 
 public class EnchantmentEntry extends Pair<Enchantment, Integer> {
     public static final TagKey<Enchantment> HYPER_ENCHANTABLE =
@@ -22,7 +17,7 @@ public class EnchantmentEntry extends Pair<Enchantment, Integer> {
     public static final TagKey<Enchantment> HYPER_ENCHANTABLE_BLACKLIST =
             TagKey.create(Registry.ENCHANTMENT_REGISTRY, EnchantmentIndustry.genRL("hyper_enchantable_blacklist"));
 
-    
+
     protected EnchantmentEntry(Enchantment first, Integer second) {
         super(first, second);
     }
@@ -38,7 +33,7 @@ public class EnchantmentEntry extends Pair<Enchantment, Integer> {
     public boolean valid() {
         var enchantment = getFirst();
         int level = getSecond();
-        int maxLevel = EnchantmentLevelUtil.getMaxLevel(enchantment);
+        int maxLevel = enchantment.getMaxLevel();
         Optional<Holder<Enchantment>> optional = ForgeRegistries.ENCHANTMENTS.getHolder(enchantment);
         if (optional.isPresent()) {
             Holder<Enchantment> holder = optional.get();

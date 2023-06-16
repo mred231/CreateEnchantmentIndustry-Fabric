@@ -1,5 +1,14 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter;
 
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
+
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
@@ -7,8 +16,22 @@ import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.utility.*;
+import com.simibubi.create.foundation.utility.AngleHelper;
+import com.simibubi.create.foundation.utility.BlockHelper;
+import com.simibubi.create.foundation.utility.Iterate;
+import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -35,13 +58,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemHandlerHelper;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.FilteringFluidTankBehaviour;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.ExperienceFluid;
 import plus.dragons.createenchantmentindustry.entry.CeiContainerTypes;
@@ -51,11 +67,7 @@ import plus.dragons.createenchantmentindustry.entry.CeiTags;
 import plus.dragons.createenchantmentindustry.foundation.advancement.CeiAdvancements;
 import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
 
-import java.util.*;
-
-import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
-
-public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, MenuProvider {
+public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, MenuProvider, SidedStorageBlockEntity {
 
     public static final int ENCHANTING_TIME = 200;
     SmartFluidTankBehaviour internalTank;
@@ -72,6 +84,22 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
     float flipT;
     float flipA;
     public boolean goggles;
+	SnapshotParticipant<TransportedItemStack> snapshotParticipant = new SnapshotParticipant<>() {
+		@Override
+		protected TransportedItemStack createSnapshot() {
+			return heldItem == null ? TransportedItemStack.EMPTY : heldItem.fullCopy();
+		}
+
+		@Override
+		protected void readSnapshot(TransportedItemStack snapshot) {
+			heldItem = snapshot == TransportedItemStack.EMPTY ? null : snapshot;
+		}
+
+		@Override
+		protected void onFinalCommit() {
+			notifyUpdate();
+		}
+	};
 
     public BlazeEnchanterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -426,8 +454,6 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
     @Override
     public void invalidate() {
         super.invalidate();
-        for (LazyOptional<EnchantingItemHandler> lazyOptional : itemHandlers.values())
-            lazyOptional.invalidate();
     }
 
     @Override
@@ -460,7 +486,7 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
     public void write(CompoundTag compoundTag, boolean clientPacket) {
         super.write(compoundTag, clientPacket);
         compoundTag.putInt("ProcessingTicks", processingTicks);
-        compoundTag.put("TargetItem", targetItem.serializeNBT());
+        compoundTag.put("TargetItem", NBTSerializer.serializeNBT(targetItem));
         compoundTag.putBoolean("Goggles", goggles);
         if (heldItem != null)
             compoundTag.put("HeldItem", heldItem.serializeNBT());
@@ -473,7 +499,7 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
     @Override
     public void writeSafe(CompoundTag tag) {
         super.writeSafe(tag);
-        tag.put("TargetItem", new ItemStack(CeiItems.ENCHANTING_GUIDE.get()).serializeNBT());
+        tag.put("TargetItem", NBTSerializer.serializeNBT(new ItemStack(CeiItems.ENCHANTING_GUIDE.get())));
         tag.putBoolean("Goggles", goggles);
     }
 
@@ -492,19 +518,20 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
             spawnEnchantParticles();
     }
 
-    @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction side) {
-        if (side != null && side.getAxis()
-                .isHorizontal() && isItemHandlerCap(capability))
-            return itemHandlers.get(side)
-                    .cast();
+	@Override
+	public @Nullable Storage<FluidVariant> getFluidStorage(Direction side) {
+		if(side == Direction.DOWN || side == null)
+			return internalTank.getCapability();
+		return null;
+	}
 
-        if ((side == Direction.DOWN || side == null) && isFluidHandlerCap(capability))
-            return internalTank.getCapability()
-                    .cast();
-        return super.getCapability(capability, side);
-    }
+	@Override
+	public @Nullable Storage<ItemVariant> getItemStorage(Direction side) {
+		if (side != null && side.getAxis()
+				.isHorizontal())
+			return itemHandlers.get(side).getValueUnsafer();
+		return null;
+	}
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
@@ -531,7 +558,7 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
                 }
             }
         }
-        containedFluidTooltip(tooltip, isPlayerSneaking, getCapability(ForgeCapabilities.FLUID_HANDLER));
+        containedFluidTooltip(tooltip, isPlayerSneaking, getFluidStorage(null));
         return true;
     }
 

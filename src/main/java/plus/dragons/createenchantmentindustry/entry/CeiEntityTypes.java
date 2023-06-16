@@ -1,13 +1,14 @@
 package plus.dragons.createenchantmentindustry.entry;
 
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.REGISTRATE;
+
 import com.tterrag.registrate.util.entry.EntityEntry;
+
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.entity.MobCategory;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceBottle;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceOrb;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceOrbRenderer;
-
-import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.REGISTRATE;
 
 public class CeiEntityTypes {
 
@@ -29,4 +30,5 @@ public class CeiEntityTypes {
 
     public static void register() {
     }
+
 }

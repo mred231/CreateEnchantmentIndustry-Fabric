@@ -1,8 +1,9 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.printer;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
+
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import net.minecraft.world.item.ItemStack;
 
 
 public class Printing {
@@ -20,7 +21,7 @@ public class Printing {
     public static int getRequiredAmountForItem(PrintEntry printEntry, ItemStack target) {
         return printEntry.requiredInkAmount(target);
     }
-    
+
     @SuppressWarnings("deprecation") //Fluid Tags are still useful for mod interaction
     public static boolean isCorrectInk(PrintEntry printEntry, FluidStack fluidStack, ItemStack target) {
         return fluidStack.getFluid().isSame(printEntry.requiredInkType(target));

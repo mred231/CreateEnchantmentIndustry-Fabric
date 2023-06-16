@@ -1,7 +1,12 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter;
 
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.Tag;
@@ -14,14 +19,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
-
-import javax.annotation.Nullable;
-
-import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
 
 public class EnchantingGuideMenu extends GhostItemMenu<ItemStack> {
     private static final Component NO_ENCHANTMENT = LANG.translate("gui.enchanting_guide.no_enchantment").component();

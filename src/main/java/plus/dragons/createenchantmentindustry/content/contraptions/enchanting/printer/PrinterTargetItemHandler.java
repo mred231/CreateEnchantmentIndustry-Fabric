@@ -1,56 +1,87 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.printer;
 
 import com.simibubi.create.AllItems;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.items.IItemHandler;
-import org.jetbrains.annotations.NotNull;
-import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
 
-public class PrinterTargetItemHandler implements IItemHandler {
+public class PrinterTargetItemHandler extends SnapshotParticipant<Unit> implements SingleSlotStorage<ItemVariant> {
     PrinterBlockEntity be;
 
     public PrinterTargetItemHandler(PrinterBlockEntity be) {
         this.be = be;
     }
 
-    @Override
-    public int getSlots() {
-        return 1;
+    private boolean isItemValid(ItemVariant itemVariant) {
+        return itemVariant.getItem().equals(Items.ENCHANTED_BOOK) || itemVariant.getItem().equals(Items.WRITTEN_BOOK) ||
+				itemVariant.getItem().equals(Items.NAME_TAG) || itemVariant.getItem().equals(AllItems.SCHEDULE.get());
     }
 
-    @Override
-    public @NotNull ItemStack getStackInSlot(int slot) {
-        return be.getCopyTarget();
-    }
 
-    @Override
-    public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        if(!be.getCopyTarget().isEmpty()) return stack;
-        else{
-            if(!simulate){
-                be.setCopyTarget(stack);
-            }
-        }
-        return ItemStack.EMPTY;
-    }
+	@Override
+	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		if (!be.getCopyTarget().isEmpty())
+			return 0;
 
-    @Override
-    public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-        var ret = be.getCopyTarget().copy();
-        if(!simulate){
-            be.setCopyTarget(ItemStack.EMPTY);
-        }
-        return ret;
-    }
+		if(isItemValid(resource))
+			return 0;
 
-    @Override
-    public int getSlotLimit(int slot) {
-        return 1;
-    }
+		be.snapshotParticipant.updateSnapshots(transaction);
+		be.setCopyTarget(resource.toStack());
+		return 1;
+	}
 
-    @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return (stack.is(Items.ENCHANTED_BOOK) || stack.is(Items.WRITTEN_BOOK) || stack.is(Items.NAME_TAG) || stack.is(AllItems.SCHEDULE.get())) && stack.getCount() == 1;
-    }
+	@Override
+	public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		if(!resource.isOf(be.getCopyTarget().getItem()))
+			return 0;
+
+		be.snapshotParticipant.updateSnapshots(transaction);
+		return 1;
+	}
+
+	@Override
+	public boolean isResourceBlank() {
+		return getResource().isBlank();
+	}
+
+	@Override
+	public ItemVariant getResource() {
+		return ItemVariant.of(getStack());
+	}
+
+	@Override
+	public long getAmount() {
+		ItemStack stack = getStack();
+		return stack.isEmpty() ? 0 : stack.getCount();
+	}
+
+	@Override
+	public long getCapacity() {
+		return getStack().getMaxStackSize();
+	}
+
+	public ItemStack getStack() {
+		return be.getCopyTarget();
+	}
+
+
+	@Override
+	protected Unit createSnapshot() {
+		return Unit.INSTANCE;
+	}
+
+	@Override
+	protected void readSnapshot(Unit snapshot) {}
+
+	@Override
+	protected void onFinalCommit() {
+		super.onFinalCommit();
+		be.notifyUpdate();
+	}
 }

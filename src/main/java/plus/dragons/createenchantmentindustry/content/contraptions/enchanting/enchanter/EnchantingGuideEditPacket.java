@@ -1,11 +1,11 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter;
 
 import com.simibubi.create.foundation.networking.SimplePacketBase;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent.Context;
 import plus.dragons.createenchantmentindustry.entry.CeiItems;
 
 public class EnchantingGuideEditPacket extends SimplePacketBase {

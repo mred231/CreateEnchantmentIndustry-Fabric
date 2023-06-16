@@ -1,5 +1,15 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.printer;
 
+import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.HOLD;
+import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.PASS;
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour;
 import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour;
@@ -9,6 +19,15 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.utility.VecHelper;
+
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,12 +45,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import plus.dragons.createdragonlib.mixin.AdvancementBehaviourAccessor;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.FilteringFluidTankBehaviour;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.ExperienceFluid;
@@ -40,14 +53,7 @@ import plus.dragons.createenchantmentindustry.foundation.advancement.CeiAdvancem
 import plus.dragons.createenchantmentindustry.foundation.advancement.CeiTriggers;
 import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.HOLD;
-import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.PASS;
-import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
-
-public class PrinterBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+public class PrinterBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, SidedStorageBlockEntity {
 
     public static final int COPYING_TIME = 100;
     protected BeltProcessingBehaviour beltProcessing;
@@ -57,8 +63,24 @@ public class PrinterBlockEntity extends SmartBlockEntity implements IHaveGoggleI
     public boolean tooExpensive;
     public PrintEntry printEntry;
     boolean sendParticles;
-
     LazyOptional<PrinterTargetItemHandler> itemHandler = LazyOptional.of(()->new PrinterTargetItemHandler(this));
+
+	SnapshotParticipant<ItemStack> snapshotParticipant = new SnapshotParticipant<>() {
+		@Override
+		protected ItemStack createSnapshot() {
+			return getCopyTarget();
+		}
+
+		@Override
+		protected void readSnapshot(ItemStack snapshot) {
+			setCopyTarget(snapshot == ItemStack.EMPTY ? null : snapshot);
+		}
+
+		@Override
+		protected void onFinalCommit() {
+			notifyUpdate();
+		}
+	};
 
     public PrinterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -225,7 +247,7 @@ public class PrinterBlockEntity extends SmartBlockEntity implements IHaveGoggleI
                 Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), heldItemStack);
             var fluidStack = tank.getPrimaryHandler().getFluid();
             if(fluidStack.getFluid() instanceof ExperienceFluid expFluid) {
-                expFluid.drop(serverLevel, VecHelper.getCenterOf(pos), fluidStack.getAmount());
+                expFluid.drop(serverLevel, VecHelper.getCenterOf(pos), (int) fluidStack.getAmount());
             }
         }
     }
@@ -236,7 +258,7 @@ public class PrinterBlockEntity extends SmartBlockEntity implements IHaveGoggleI
         compoundTag.putInt("ProcessingTicks", processingTicks);
         compoundTag.putBoolean("tooExpensive", tooExpensive);
         if (copyTarget != null)
-            compoundTag.put("copyTarget", copyTarget.serializeNBT());
+            compoundTag.put("copyTarget", NBTSerializer.serializeNBT(copyTarget));
         if (sendParticles && clientPacket) {
             compoundTag.putBoolean("SpawnParticles", true);
             sendParticles = false;
@@ -269,19 +291,19 @@ public class PrinterBlockEntity extends SmartBlockEntity implements IHaveGoggleI
     @Override
     public void invalidate() {
         super.invalidate();
-        this.itemHandler.invalidate();
     }
 
-    @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.FLUID_HANDLER && side != Direction.DOWN)
-            return tank.getCapability()
-                    .cast();
-        else if(cap == ForgeCapabilities.ITEM_HANDLER)
-            return itemHandler.cast();
-        return super.getCapability(cap, side);
-    }
+	@Override
+	public @Nullable Storage<FluidVariant> getFluidStorage(Direction side) {
+		if(side!=Direction.DOWN)
+			return tank.getCapability();
+		return null;
+	}
+
+	@Override
+	public @Nullable Storage<ItemVariant> getItemStorage(Direction side) {
+		return itemHandler.getValueUnsafer();
+	}
 
     @Override
     protected AABB createRenderBoundingBox() {
@@ -298,7 +320,7 @@ public class PrinterBlockEntity extends SmartBlockEntity implements IHaveGoggleI
         } else {
             printEntry.addToGoggleTooltip(tooltip,isPlayerSneaking,copyTarget);
         }
-        containedFluidTooltip(tooltip, isPlayerSneaking, getCapability(ForgeCapabilities.FLUID_HANDLER));
+        containedFluidTooltip(tooltip, isPlayerSneaking, getFluidStorage(null));
         return true;
     }
 

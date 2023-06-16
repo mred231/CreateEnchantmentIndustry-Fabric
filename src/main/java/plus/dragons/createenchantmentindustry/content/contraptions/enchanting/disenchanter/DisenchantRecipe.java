@@ -2,15 +2,16 @@ package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.d
 
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 import plus.dragons.createenchantmentindustry.entry.CeiFluids;
 import plus.dragons.createenchantmentindustry.entry.CeiRecipeTypes;
 
-public class DisenchantRecipe extends ProcessingRecipe<RecipeWrapper> {
+public class DisenchantRecipe extends ProcessingRecipe<ItemStackHandlerContainer> {
 
-    private final int experience;
+    private final long experience;
 
     public DisenchantRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
         super(CeiRecipeTypes.DISENCHANTING, params);
@@ -20,11 +21,6 @@ public class DisenchantRecipe extends ProcessingRecipe<RecipeWrapper> {
         if (!fluid.getFluid().isSame(CeiFluids.EXPERIENCE.get().getSource()))
             throw new IllegalArgumentException("Illegal Disenchanting Recipe: " + id.toString() + " has wrong type of fluid output!");
         this.experience = fluid.getAmount();
-    }
-
-    @Override
-    public boolean matches(RecipeWrapper inv, Level pLevel) {
-        return ingredients.get(0).test(inv.getItem(0));
     }
 
     @Override
@@ -51,7 +47,12 @@ public class DisenchantRecipe extends ProcessingRecipe<RecipeWrapper> {
         return results.isEmpty();
     }
 
-    public int getExperience() {
+    public long getExperience() {
         return experience;
     }
+
+	@Override
+	public boolean matches(ItemStackHandlerContainer container, Level level) {
+		return ingredients.get(0).test(container.getItem(0));
+	}
 }

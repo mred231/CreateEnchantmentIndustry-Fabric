@@ -1,12 +1,13 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter;
 
 import com.simibubi.create.foundation.networking.SimplePacketBase;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent.Context;
 
 public class BlazeEnchanterEditPacket extends SimplePacketBase {
 
@@ -43,7 +44,7 @@ public class BlazeEnchanterEditPacket extends SimplePacketBase {
 
                     CompoundTag tag = blazeEnchanter.targetItem.getOrCreateTag();
                     tag.putInt("index", index);
-                    tag.put("target", itemStack.serializeNBT());
+                    tag.put("target", NBTSerializer.serializeNBT(itemStack));
                     tag.remove("blockPos");
 
                     if(blazeEnchanter.processingTicks>5){

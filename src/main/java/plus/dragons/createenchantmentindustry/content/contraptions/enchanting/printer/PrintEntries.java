@@ -1,6 +1,13 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.printer;
 
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.simibubi.create.AllItems;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -10,19 +17,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.WrittenBookItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.MinecraftForge;
 import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
-import plus.dragons.createenchantmentindustry.api.PrintEntryRegisterEvent;
-import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.EnchantmentLevelUtil;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter.Enchanting;
 import plus.dragons.createenchantmentindustry.entry.CeiFluids;
 import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
 
 public class PrintEntries {
     public static Map<ResourceLocation,PrintEntry> ENTRIES = new HashMap<>();
@@ -36,9 +34,6 @@ public class PrintEntries {
         ENTRIES.put(e2.id(),e2);
         ENTRIES.put(e3.id(),e3);
         ENTRIES.put(e4.id(),e4);
-
-        var event = new PrintEntryRegisterEvent();
-        MinecraftForge.EVENT_BUS.post(event);
     }
 
     static class EnchantedBook implements PrintEntry{
@@ -68,7 +63,7 @@ public class PrintEntries {
             return EnchantmentHelper.getEnchantments(target)
                     .entrySet()
                     .stream()
-                    .map(entry -> entry.getValue()>EnchantmentLevelUtil.getMaxLevel(entry.getKey()))
+                    .map(entry -> entry.getValue()>entry.getKey().getMaxLevel())
                     .reduce(false, (a,b)->a||b) ? CeiFluids.HYPER_EXPERIENCE.get(): CeiFluids.EXPERIENCE.get();
         }
 
@@ -90,7 +85,7 @@ public class PrintEntries {
                 var hyper = EnchantmentHelper.getEnchantments(target)
                         .entrySet()
                         .stream()
-                        .map(entry -> entry.getValue()>EnchantmentLevelUtil.getMaxLevel(entry.getKey()))
+                        .map(entry -> entry.getValue()>entry.getKey().getMaxLevel())
                         .reduce(false, (a,a2)->a||a2);
                 tooltip.add(Component.literal("     ").append(LANG.translate(
                         hyper ? "gui.goggles.hyper_xp_consumption": "gui.goggles.xp_consumption",
@@ -286,7 +281,7 @@ public class PrintEntries {
 
         @Override
         public Fluid requiredInkType(ItemStack target) {
-            return CeiFluids.INK.get();
+            return CeiFluids.INK;
         }
 
         @Override

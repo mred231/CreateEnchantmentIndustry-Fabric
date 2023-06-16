@@ -1,13 +1,17 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.disenchanter;
 
+import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
-import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import org.jetbrains.annotations.NotNull;
 
-public class DisenchanterItemHandler implements IItemHandler {
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Unit;
+import net.minecraft.world.item.ItemStack;
+
+public class DisenchanterItemHandler extends SnapshotParticipant<Unit> implements SingleSlotStorage<ItemVariant> {
     private final DisenchanterBlockEntity be;
     private final Direction side;
 
@@ -16,69 +20,77 @@ public class DisenchanterItemHandler implements IItemHandler {
         this.side = side;
     }
 
-    @Override
-    public int getSlots() {
-        return 1;
-    }
+	@Override
+	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		if (!be.getHeldItemStack().isEmpty())
+			return 0;
+		ItemStack stack = resource.toStack();
+		int toInsert = GenericItemEmptying.canItemBeEmptied(be.getLevel(), stack)
+				? 1
+				: Math.min((int) maxAmount, resource.getItem().getMaxStackSize());
+		stack.setCount(toInsert);
+		TransportedItemStack heldItem = new TransportedItemStack(stack);
+		heldItem.prevBeltPosition = 0;
+		be.snapshotParticipant.updateSnapshots(transaction);
+		be.setHeldItem(heldItem, side.getOpposite());
+		return toInsert;
+	}
 
-    @Override
-    @NotNull
-    public ItemStack getStackInSlot(int slot) {
-        return be.getHeldItemStack();
-    }
+	@Override
+	public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		TransportedItemStack held = be.heldItem;
+		if (held == null)
+			return 0;
+		int toExtract = Math.min((int) maxAmount, held.stack.getCount());
+		ItemStack stack = held.stack.copy();
+		stack.shrink(toExtract);
+		be.snapshotParticipant.updateSnapshots(transaction);
+		be.heldItem.stack = stack;
+		if (stack.isEmpty())
+			be.heldItem = null;
+		return toExtract;
+	}
 
-    @Override
-    @NotNull
-    public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        if (!be.getHeldItemStack().isEmpty())
-            return stack;
+	@Override
+	public boolean isResourceBlank() {
+		return getResource().isBlank();
+	}
 
-        ItemStack disenchanted = Disenchanting.disenchantAndInsert(be, stack, simulate);
-        if (!ItemStack.matches(stack, disenchanted)) {
-            return disenchanted;
-        }
+	@Override
+	public ItemVariant getResource() {
+		return ItemVariant.of(getStack());
+	}
 
-        ItemStack returned = ItemStack.EMPTY;
-        if (stack.getCount() > 1 && Disenchanting.disenchantResult(stack, be.getLevel()) != null) {
-            returned = ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - 1);
-            stack = ItemHandlerHelper.copyStackWithSize(stack, 1);
-        }
+	@Override
+	public long getAmount() {
+		ItemStack stack = getStack();
+		return stack.isEmpty() ? 0 : stack.getCount();
+	}
 
-        if (!simulate) {
-            TransportedItemStack heldItem = new TransportedItemStack(stack);
-            heldItem.prevBeltPosition = 0;
-            be.setHeldItem(heldItem, side.getOpposite());
-            be.notifyUpdate();
-        }
+	@Override
+	public long getCapacity() {
+		return getStack().getMaxStackSize();
+	}
 
-        return returned;
-    }
+	public ItemStack getStack() {
+		TransportedItemStack held = be.heldItem;
+		if (held == null || held.stack == null || held.stack.isEmpty())
+			return ItemStack.EMPTY;
+		return held.stack;
+	}
 
-    @Override
-    @NotNull
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        TransportedItemStack held = be.heldItem;
-        if (held == null)
-            return ItemStack.EMPTY;
 
-        ItemStack stack = held.stack.copy();
-        ItemStack extracted = stack.split(amount);
-        if (!simulate) {
-            be.heldItem.stack = stack;
-            if (stack.isEmpty())
-                be.heldItem = null;
-            be.notifyUpdate();
-        }
-        return extracted;
-    }
+	@Override
+	protected Unit createSnapshot() {
+		return Unit.INSTANCE;
+	}
 
-    @Override
-    public int getSlotLimit(int slot) {
-        return 64;
-    }
+	@Override
+	protected void readSnapshot(Unit snapshot) {}
 
-    @Override
-    public boolean isItemValid(int slot, ItemStack stack) {
-        return true;
-    }
+	@Override
+	protected void onFinalCommit() {
+		super.onFinalCommit();
+		be.notifyUpdate();
+	}
 }

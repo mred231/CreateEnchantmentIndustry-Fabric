@@ -1,5 +1,12 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.disenchanter;
 
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
@@ -11,6 +18,14 @@ import com.simibubi.create.foundation.utility.BlockHelper;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.foundation.utility.VecHelper;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -28,28 +43,15 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import plus.dragons.createdragonlib.mixin.AdvancementBehaviourAccessor;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter.Enchanting;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.ExperienceFluid;
 import plus.dragons.createenchantmentindustry.entry.CeiFluids;
+import plus.dragons.createenchantmentindustry.foundation.advancement.CeiAdvancements;
 import plus.dragons.createenchantmentindustry.foundation.advancement.CeiTriggers;
 import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
-import plus.dragons.createenchantmentindustry.foundation.advancement.CeiAdvancements;
 
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
-public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, SidedStorageBlockEntity {
 
     public static final int DISENCHANTER_TIME = 10;
     private static final int ABSORB_AMOUNT = 100;
@@ -57,16 +59,30 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
     SmartFluidTankBehaviour internalTank;
     TransportedItemStack heldItem;
     int processingTicks;
-    Map<Direction, LazyOptional<DisenchanterItemHandler>> itemHandlers;
-
+    Map<Direction, DisenchanterItemHandler> itemHandlers;
     AABB absorbArea;
+	SnapshotParticipant<TransportedItemStack> snapshotParticipant = new SnapshotParticipant<>() {
+		@Override
+		protected TransportedItemStack createSnapshot() {
+			return heldItem == null ? TransportedItemStack.EMPTY : heldItem.fullCopy();
+		}
+
+		@Override
+		protected void readSnapshot(TransportedItemStack snapshot) {
+			heldItem = snapshot == TransportedItemStack.EMPTY ? null : snapshot;
+		}
+
+		@Override
+		protected void onFinalCommit() {
+			notifyUpdate();
+		}
+	};
 
     public DisenchanterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         itemHandlers = new IdentityHashMap<>();
         for (Direction d : Iterate.horizontalDirections) {
-            DisenchanterItemHandler disenchanterItemHandler = new DisenchanterItemHandler(this, d);
-            itemHandlers.put(d, LazyOptional.of(() -> disenchanterItemHandler));
+            itemHandlers.put(d, new DisenchanterItemHandler(this, d));
         }
         absorbArea = new AABB(pos.above());
     }
@@ -385,8 +401,6 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
     @Override
     public void invalidate() {
         super.invalidate();
-        for (LazyOptional<DisenchanterItemHandler> lazyOptional : itemHandlers.values())
-            lazyOptional.invalidate();
     }
 
     @Override
@@ -422,21 +436,22 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
     }
 
     @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction side) {
-        if (side != null && side.getAxis()
-                .isHorizontal() && isItemHandlerCap(capability))
-            return itemHandlers.get(side)
-                    .cast();
-
-        if ((side != Direction.UP) && isFluidHandlerCap(capability))
-            return internalTank.getCapability()
-                    .cast();
-        return super.getCapability(capability, side);
-    }
-
-    @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        return containedFluidTooltip(tooltip, isPlayerSneaking, getCapability(ForgeCapabilities.FLUID_HANDLER));
+        return containedFluidTooltip(tooltip, isPlayerSneaking, getFluidStorage(null));
     }
+
+	@Override
+	public @Nullable Storage<FluidVariant> getFluidStorage(Direction side) {
+		if(side!=Direction.UP)
+			return internalTank.getCapability();
+		return null;
+	}
+
+	@Override
+	public @Nullable Storage<ItemVariant> getItemStorage(Direction side) {
+		if (side != null && side.getAxis()
+				.isHorizontal())
+			return itemHandlers.get(side);
+		return null;
+	}
 }

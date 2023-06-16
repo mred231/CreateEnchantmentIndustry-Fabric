@@ -1,6 +1,8 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience;
 
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -33,9 +35,8 @@ public class HyperExperienceBottle extends ThrowableItemProjectile {
     }
 
     @SuppressWarnings("unchecked")
-    public static EntityType.Builder<?> build(EntityType.Builder<?> builder) {
-        EntityType.Builder<HyperExperienceBottle> entityBuilder = (EntityType.Builder<HyperExperienceBottle>) builder;
-        return entityBuilder.sized(.25f, .25f);
+    public static FabricEntityTypeBuilder<?> build(FabricEntityTypeBuilder<?> builder) {
+        return builder.dimensions(EntityDimensions.fixed(.25f, .25f));
     }
 
     /**
@@ -57,5 +58,5 @@ public class HyperExperienceBottle extends ThrowableItemProjectile {
             this.discard();
         }
     }
-    
+
 }

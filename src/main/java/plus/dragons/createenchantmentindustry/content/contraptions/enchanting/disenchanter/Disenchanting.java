@@ -1,6 +1,14 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.disenchanter;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.simibubi.create.foundation.utility.Pair;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.ItemStack;
@@ -8,33 +16,25 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.jetbrains.annotations.Nullable;
 import plus.dragons.createenchantmentindustry.entry.CeiFluids;
 import plus.dragons.createenchantmentindustry.entry.CeiRecipeTypes;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
 public class Disenchanting {
 
-    private static final RecipeWrapper WRAPPER = new RecipeWrapper(new ItemStackHandler(1));
+    private static final ItemStackHandlerContainer WRAPPER = new ItemStackHandlerContainer(1);
 
     public static ItemStack disenchantAndInsert(DisenchanterBlockEntity be, ItemStack itemStack, boolean simulate) {
         Level level = be.getLevel();
         if (level == null)
             return itemStack;
         WRAPPER.setItem(0, itemStack);
-        return CeiRecipeTypes.DISENCHANTING.<RecipeWrapper, DisenchantRecipe>find(WRAPPER, be.getLevel())
+        return CeiRecipeTypes.DISENCHANTING.<ItemStackHandlerContainer, DisenchantRecipe>find(WRAPPER, be.getLevel())
                 .map(recipe -> {
                     if (!recipe.hasNoResult())
                         return itemStack;
                     var tank = be.getInternalTank();
                     tank.allowInsertion();
-                    int amount = recipe.getExperience();
+                    long amount = recipe.getExperience();
                     var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), itemStack.getCount() * amount);
                     int inserted = tank.getPrimaryHandler().fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) / amount;
                     ItemStack ret = itemStack.copy();
@@ -59,7 +59,7 @@ public class Disenchanting {
             return Pair.of(xp, result);
         }
         WRAPPER.setItem(0, itemStack);
-        var recipe = CeiRecipeTypes.DISENCHANTING.<RecipeWrapper, DisenchantRecipe>find(WRAPPER, level).orElse(null);
+        var recipe = CeiRecipeTypes.DISENCHANTING.<ItemStackHandlerContainer, DisenchantRecipe>find(WRAPPER, level).orElse(null);
         if (recipe != null && !recipe.hasNoResult()) {
             var xp = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), recipe.getExperience());
             var result = recipe.getResultItem().copy();
@@ -93,7 +93,7 @@ public class Disenchanting {
         return result;
     }
 
-    private static int getDisenchantExperience(ItemStack itemStack) {
+    private static long getDisenchantExperience(ItemStack itemStack) {
         int xp = EnchantmentHelper.getEnchantments(itemStack)
                 .entrySet().stream()
                 .filter(entry -> !entry.getKey().isCurse())
