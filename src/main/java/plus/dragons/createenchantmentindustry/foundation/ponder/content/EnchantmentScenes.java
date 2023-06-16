@@ -23,6 +23,9 @@ import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.instruction.EmitParticlesInstruction;
 import com.simibubi.create.foundation.utility.Pointing;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -46,7 +49,7 @@ import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.pr
 import plus.dragons.createenchantmentindustry.entry.CeiBlocks;
 import plus.dragons.createenchantmentindustry.entry.CeiFluids;
 import plus.dragons.createenchantmentindustry.entry.CeiItems;
-// TODO
+
 public class EnchantmentScenes {
     public static void disenchant(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("disenchant", "Disenchanting");
@@ -158,24 +161,20 @@ public class EnchantmentScenes {
                 BlazeEnchanterBlock.HeatLevel.KINDLED),false);
         scene.world.modifyBlockEntity(util.grid.at(1, 2, 0), BlazeEnchanterBlockEntity.class, be -> {
             be.setTargetItem(enchantingGuide(Enchantments.THORNS, 1));
-            be.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(tank ->
-                    tank.fill(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 1000), IFluidHandler.FluidAction.EXECUTE));
+			TransferUtil.insertFluid(be.getFluidStorage(null),new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 1000));
         });
         scene.world.modifyBlockEntity(util.grid.at(0, 2, 6), BlazeEnchanterBlockEntity.class, be -> {
             be.setTargetItem(enchantingGuide(Enchantments.THORNS, 2));
-            be.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(tank ->
-                    tank.fill(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 1000), IFluidHandler.FluidAction.EXECUTE));
-        });
+			TransferUtil.insertFluid(be.getFluidStorage(null),new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 1000));
+		});
         scene.world.modifyBlockEntity(util.grid.at(6, 2, 7), BlazeEnchanterBlockEntity.class, be -> {
             be.setTargetItem(enchantingGuide(Enchantments.MENDING, 1));
-            be.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(tank ->
-                    tank.fill(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 1000), IFluidHandler.FluidAction.EXECUTE));
-        });
+			TransferUtil.insertFluid(be.getFluidStorage(null),new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 1000));
+		});
         scene.world.modifyBlockEntity(util.grid.at(7, 2, 1), BlazeEnchanterBlockEntity.class, be -> {
             be.setTargetItem(enchantingGuide(Enchantments.UNBREAKING, 1));
-            be.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(tank ->
-                    tank.fill(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 1000), IFluidHandler.FluidAction.EXECUTE));
-        });
+			TransferUtil.insertFluid(be.getFluidStorage(null),new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 1000));
+		});
         scene.world.modifyBlockEntity(util.grid.at(3, 1, 3), CreativeFluidTankBlockEntity.class, be -> ((CreativeFluidTankBlockEntity.CreativeSmartFluidTank) be.getTankInventory())
                 .setContainedFluid(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 1000)));
         // Must propagatePipeChange first or it won't work correctly
@@ -316,7 +315,7 @@ public class EnchantmentScenes {
         ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
         scene.idle(10);
         scene.world.modifyBlockEntityNBT(deployerSelection, DeployerBlockEntity.class, nbt -> {
-            nbt.put("HeldItem", sword.serializeNBT());
+            nbt.put("HeldItem", NBTSerializer.serializeNBT(sword));
             nbt.putString("mode", "PUNCH");
         });
         scene.idle(30);
@@ -491,8 +490,7 @@ public class EnchantmentScenes {
         scene.world.modifyBlockEntity(util.grid.at(2, 1, 5), CreativeFluidTankBlockEntity.class, be -> ((CreativeFluidTankBlockEntity.CreativeSmartFluidTank) be.getTankInventory())
                 .setContainedFluid(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 1000)));
         scene.world.modifyBlockEntity(util.grid.at(2, 3, 2), PrinterBlockEntity.class, be ->
-                be.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(tank ->
-                        tank.fill(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 3000), IFluidHandler.FluidAction.EXECUTE)));
+				TransferUtil.insertFluid(be.getFluidStorage(null),new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 3000)));
         scene.overlay.showText(40)
                 .text("Liquid Experience is required to duplicate enchanted books.")
                 .attachKeyFrame()
@@ -502,11 +500,10 @@ public class EnchantmentScenes {
 
         scene.world.modifyBlockEntity(util.grid.at(2, 1, 5), CreativeFluidTankBlockEntity.class, be -> ((CreativeFluidTankBlockEntity.CreativeSmartFluidTank) be.getTankInventory())
                 .setContainedFluid(new FluidStack(CeiFluids.HYPER_EXPERIENCE.get().getSource(), 1000)));
-        scene.world.modifyBlockEntity(util.grid.at(2, 3, 2), PrinterBlockEntity.class, be ->
-                be.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(tank -> {
-                        tank.drain(3000, IFluidHandler.FluidAction.EXECUTE);
-                        tank.fill(new FluidStack(CeiFluids.HYPER_EXPERIENCE.get().getSource(), 3000), IFluidHandler.FluidAction.EXECUTE);
-                }));
+        scene.world.modifyBlockEntity(util.grid.at(2, 3, 2), PrinterBlockEntity.class, be -> {
+			TransferUtil.clearStorage(be.getFluidStorage(null));
+			TransferUtil.insertFluid(be.getFluidStorage(null),new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 3000));
+		});
         scene.overlay.showText(40)
                 .text("If the enchantment on the enchantment book you are copying has a level that exceeds its maximum level, then you will need Hyper Experience.")
                 .attachKeyFrame()
@@ -533,10 +530,10 @@ public class EnchantmentScenes {
         scene.world.modifyBlockEntity(util.grid.at(2, 1, 5), CreativeFluidTankBlockEntity.class, be -> ((CreativeFluidTankBlockEntity.CreativeSmartFluidTank) be.getTankInventory())
                 .setContainedFluid(new FluidStack(CeiFluids.INK.get().getSource(), 1000)));
         scene.world.modifyBlockEntity(util.grid.at(2, 3, 2), PrinterBlockEntity.class, be ->
-                be.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(tank -> {
-                    tank.drain(3000, IFluidHandler.FluidAction.EXECUTE);
-                    tank.fill(new FluidStack(CeiFluids.INK.get().getSource(), 3000), IFluidHandler.FluidAction.EXECUTE);
-                }));
+		{
+			TransferUtil.clearStorage(be.getFluidStorage(null));
+			TransferUtil.insertFluid(be.getFluidStorage(null),new FluidStack(CeiFluids.INK.get().getSource(), 3000));
+		});
         scene.overlay.showText(40)
                 .text("Ink is required to duplicate written books.")
                 .attachKeyFrame()
@@ -560,10 +557,10 @@ public class EnchantmentScenes {
         scene.world.modifyBlockEntity(util.grid.at(2, 1, 5), CreativeFluidTankBlockEntity.class, be -> ((CreativeFluidTankBlockEntity.CreativeSmartFluidTank) be.getTankInventory())
                 .setContainedFluid(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 1000)));
         scene.world.modifyBlockEntity(util.grid.at(2, 3, 2), PrinterBlockEntity.class, be ->
-                be.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(tank ->{
-                            tank.drain(3000, IFluidHandler.FluidAction.EXECUTE);
-                            tank.fill(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 3000), IFluidHandler.FluidAction.EXECUTE);
-                }));
+		{
+			TransferUtil.clearStorage(be.getFluidStorage(null));
+			TransferUtil.insertFluid(be.getFluidStorage(null),new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 3000));
+		});
         scene.overlay.showControls(new InputWindowElement(util.vector.centerOf(2, 3, 2), Pointing.DOWN).rightClick()
                 .withItem(Items.NAME_TAG.getDefaultInstance()), 40);
         scene.overlay.showText(40)
@@ -603,8 +600,8 @@ public class EnchantmentScenes {
 
         scene.world.showSection(util.select.fromTo(3, 1, 3, 4, 4, 4), Direction.DOWN);
         scene.idle(5);
-        scene.world.modifyBlockEntity(util.grid.at(3, 1, 3), FluidTankBlockEntity.class, be -> ((FluidTank) be.getTankInventory())
-                .setFluid(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 48000)));
+        scene.world.modifyBlockEntity(util.grid.at(3, 1, 3), FluidTankBlockEntity.class,
+				be -> TransferUtil.insertFluid(be.getFluidStorage(null),new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 48000)));
         scene.overlay.showText(40)
                 .text("I have a tank full of experience")
                 .placeNearTarget()
@@ -662,7 +659,7 @@ public class EnchantmentScenes {
         ret.getOrCreateTag().putInt("index", 0);
         var book = Items.ENCHANTED_BOOK.getDefaultInstance();
         EnchantmentHelper.setEnchantments(Map.of(enchantment, level), book);
-        ret.getOrCreateTag().put("target", book.serializeNBT());
+        ret.getOrCreateTag().put("target", NBTSerializer.serializeNBT(book));
         return ret;
     }
 }

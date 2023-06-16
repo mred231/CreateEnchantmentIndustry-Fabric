@@ -1,40 +1,65 @@
 package plus.dragons.createenchantmentindustry.foundation.config;
 
+
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.simibubi.create.foundation.config.ConfigBase;
+
 import net.minecraftforge.api.ModLoadingContext;
-import net.minecraftforge.api.fml.event.config.ModConfigEvent;
+import net.minecraftforge.api.fml.event.config.ModConfigEvents;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
 
-// TODO
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CeiConfigs {
 
     public static CeiServerConfig SERVER;
     public static ForgeConfigSpec SERVER_SPEC;
+	private static final Map<ModConfig.Type, ConfigBase> CONFIGS = new EnumMap<>(ModConfig.Type.class);
 
-    public static void register(ModLoadingContext context) {
-        Pair<CeiServerConfig, ForgeConfigSpec> serverConfigPair = new ForgeConfigSpec.Builder().configure(builder -> {
-            CeiServerConfig config = new CeiServerConfig();
-            config.registerAll(builder);
-            return config;
-        });
-        SERVER = serverConfigPair.getKey();
-        SERVER_SPEC = serverConfigPair.getValue();
-        context.registerConfig(ModConfig.Type.SERVER, SERVER_SPEC);
-    }
+	public static CeiServerConfig server() {
+		return SERVER;
+	}
 
-    @SubscribeEvent
-    public static void onLoad(ModConfigEvent.Loading event) {
-        if (SERVER_SPEC == event.getConfig().getSpec())
-            SERVER.onLoad();
-    }
+	private static <T extends ConfigBase> T register(Supplier<T> factory, ModConfig.Type side) {
+		Pair<T, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(builder -> {
+			T config = factory.get();
+			config.registerAll(builder);
+			return config;
+		});
 
-    @SubscribeEvent
-    public static void onReload(ModConfigEvent.Reloading event) {
-        if (SERVER_SPEC == event.getConfig().getSpec())
-            SERVER.onReload();
-    }
+		T config = specPair.getLeft();
+		config.specification = specPair.getRight();
+		CONFIGS.put(side, config);
+		return config;
+	}
+
+	public static void register() {
+		SERVER = register(CeiServerConfig::new, ModConfig.Type.SERVER);
+
+		for (Map.Entry<ModConfig.Type, ConfigBase> pair : CONFIGS.entrySet())
+			ModLoadingContext.registerConfig(EnchantmentIndustry.ID, pair.getKey(), pair.getValue().specification);
+
+		ModConfigEvents.loading(EnchantmentIndustry.ID).register(CeiConfigs::onLoad);
+		ModConfigEvents.reloading(EnchantmentIndustry.ID).register(CeiConfigs::onReload);
+	}
+
+	public static void onLoad(ModConfig modConfig) {
+		for (ConfigBase config : CONFIGS.values())
+			if (config.specification == modConfig
+					.getSpec())
+				config.onLoad();
+	}
+
+	public static void onReload(ModConfig modConfig) {
+		for (ConfigBase config : CONFIGS.values())
+			if (config.specification == modConfig
+					.getSpec())
+				config.onReload();
+	}
 
 }

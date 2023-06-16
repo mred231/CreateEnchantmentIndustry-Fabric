@@ -1,5 +1,5 @@
 accessWidener v1 named
-accessible field net/minecraft/world/item/alchemy/PotionBrewing ALLOWED_CONTAINER Ljava/util/function/Predicate
+accessible field net/minecraft/world/item/alchemy/PotionBrewing ALLOWED_CONTAINER Ljava/util/function/Predicate;
 accessible field net/minecraft/world/entity/ExperienceOrb count I
 accessible field net/minecraft/world/entity/ExperienceOrb value I
 accessible method net/minecraft/world/entity/ExperienceOrb tryMergeToExisting (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;I)Z

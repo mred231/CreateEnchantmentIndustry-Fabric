@@ -29,7 +29,35 @@ repositories {
 	maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
 	maven { url = "https://jitpack.io/" } // Mixin Extras, Fabric ASM
 	maven { url = "https://maven.tterrag.com/" } // Flywheel
-	maven { url = "https://maven.dragons.plus/releases" } // Flywheel
+	maven { url = "https://maven.dragons.plus/releases" } // DragonLib
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/create_enchantment_industry.accesswidener")
+	sourceSets {
+		main {
+			resources {
+				srcDir("src/generated/resources")
+				exclude("src/generated/resources/.cache")
+			}
+		}
+	}
+
+	runs {
+		datagen {
+			client()
+
+			name "Data Generation"
+			vmArg "-Dfabric-api.datagen"
+			vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}"
+			vmArg "-Dfabric-api.datagen.modid=create"
+			vmArg "-Dporting_lib.datagen.existing_resources=${file("src/main/resources")}"
+		}
+
+		server {
+			runDir "run/server"
+		}
+	}
 }
 
 dependencies {
@@ -47,9 +75,13 @@ dependencies {
 
 	// Create - dependencies are added transitively
 	modImplementation("com.simibubi.create:create-fabric-${minecraft_version}:${create_version}")
+	// still missing dependency of forgeconfigapiport, so we manually add it
+	//modLocalRuntime("com.electronwill.night-config:core:3.6.3")
+	//modLocalRuntime("com.electronwill.night-config:toml:3.6.3")
+
 
 	// Create Dragon Lib
-	modImplementation("plus.dragons.createdragonlib:create_dragon_lib-fabric-${minecraft_version}:${dragonlib_version}")
+	modImplementation(include("plus.dragons.createdragonlib:create_dragon_lib-fabric-${minecraft_version}:${dragonlib_version}"))
 
 	// Development QOL
 	modLocalRuntime("maven.modrinth:lazydfu:${lazydfu_version}")
@@ -70,10 +102,6 @@ dependencies {
 //    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}")
 //    modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rei_version}")
 //    modCompileOnly("dev.emi:emi:${emi_version}")
-}
-
-loom {
-	accessWidenerPath = file("src/main/resources/create_enchantment_industry.accesswidener")
 }
 
 processResources {

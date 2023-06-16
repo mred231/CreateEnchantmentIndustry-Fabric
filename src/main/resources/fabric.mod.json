@@ -16,7 +16,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.example.modid.ExampleMod"
+      "plus.dragons.createenchantmentindustry.EnchantmentIndustry"
+    ],
+    "client": [
+      "plus.dragons.createenchantmentindustry.EnchantmentIndustryClient"
+    ],
+    "fabric-datagen": [
+      "plus.dragons.createenchantmentindustry.EnchantmentIndustryData"
     ]
   },
   "mixins": [

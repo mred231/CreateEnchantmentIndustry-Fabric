@@ -71,7 +71,7 @@ public class CeiFluids {
     public static void register() {
     }
 
-	// TODO
+	// FIXME Ink effect
     /*public static void handleInkEffect(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = event.getEntity();
         if (entity.tickCount % 20 != 0) return;
