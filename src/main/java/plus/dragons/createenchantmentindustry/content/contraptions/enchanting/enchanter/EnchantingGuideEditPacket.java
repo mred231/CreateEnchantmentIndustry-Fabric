@@ -2,6 +2,7 @@ package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.e
 
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,7 +41,7 @@ public class EnchantingGuideEditPacket extends SimplePacketBase {
 
                     CompoundTag tag = mainHandItem.getOrCreateTag();
                     tag.putInt("index", index);
-                    tag.put("target", itemStack.serializeNBT());
+                    tag.put("target", NBTSerializer.serializeNBT(itemStack));
 
                     sender.getCooldowns()
                             .addCooldown(mainHandItem.getItem(), 5);
