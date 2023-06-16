@@ -11,33 +11,32 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Lang;
 
-import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
+import io.github.fabricators_of_create.porting_lib.util.ShapedRecipeUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
-import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.disenchanter.DisenchantRecipe;
 
 public enum CeiRecipeTypes implements IRecipeTypeInfo {
     DISENCHANTING(DisenchantRecipe::new);
 
     private final ResourceLocation id;
-    private final RegistryObject<RecipeSerializer<?>> serializerObject;
+    private final RecipeSerializer<?> serializerObject;
     @Nullable
-    private final RegistryObject<RecipeType<?>> typeObject;
+    private final RecipeType<?> typeObject;
     private final Supplier<RecipeType<?>> type;
 
     CeiRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = Lang.asId(name());
         id = Create.asResource(name);
-        serializerObject = CeiRecipeTypes.Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
-        typeObject = CeiRecipeTypes.Registers.TYPE_REGISTER.register(name, () -> simpleType(id));
-        type = typeObject;
+		serializerObject = Registry.register(Registry.RECIPE_SERIALIZER, id, serializerSupplier.get());
+		typeObject = simpleType(id);
+		Registry.register(Registry.RECIPE_TYPE, id, typeObject);
+		type = () -> typeObject;
     }
 
     CeiRecipeTypes(ProcessingRecipeBuilder.ProcessingRecipeFactory<?> processingFactory) {
@@ -54,11 +53,10 @@ public enum CeiRecipeTypes implements IRecipeTypeInfo {
         };
     }
 
-    public static void register(IEventBus modEventBus) {
-        ShapedRecipe.setCraftingSize(9, 9);
-        CeiRecipeTypes.Registers.SERIALIZER_REGISTER.register(modEventBus);
-        CeiRecipeTypes.Registers.TYPE_REGISTER.register(modEventBus);
-    }
+	public static void register() {
+		ShapedRecipeUtil.setCraftingSize(9, 9);
+		// fabric: just load the class
+	}
 
     public <C extends Container, T extends Recipe<C>> Optional<T> find(C inv, Level world) {
         return world.getRecipeManager().getRecipeFor(this.getType(), inv, world);
@@ -72,17 +70,12 @@ public enum CeiRecipeTypes implements IRecipeTypeInfo {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends RecipeSerializer<?>> T getSerializer() {
-        return (T) serializerObject.get();
+        return (T) serializerObject;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T extends RecipeType<?>> T getType() {
         return (T) type.get();
-    }
-
-    private static class Registers {
-        private static final DeferredRegister<RecipeSerializer<?>> SERIALIZER_REGISTER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, EnchantmentIndustry.ID);
-        private static final DeferredRegister<RecipeType<?>> TYPE_REGISTER = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, EnchantmentIndustry.ID);
     }
 }
