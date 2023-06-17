@@ -1,17 +1,25 @@
 package plus.dragons.createenchantmentindustry.entry;
 
-import com.simibubi.create.*;
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.REGISTRATE;
+
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllCreativeModeTabs;
+import com.simibubi.create.AllFluids;
+import com.simibubi.create.AllItems;
+import com.simibubi.create.infrastructure.item.CreateCreativeModeTab;
 import com.tterrag.registrate.util.entry.ItemEntry;
+
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import plus.dragons.createdragonlib.init.FillCreateItemGroupEvent;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter.EnchantingGuideItem;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.ExperienceRotorItem;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceBottleItem;
 
-import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.REGISTRATE;
-
 public class CeiItems {
-    
+
     static {
         REGISTRATE.creativeModeTab(() -> AllCreativeModeTabs.BASE_CREATIVE_TAB);
     }
@@ -29,17 +37,21 @@ public class CeiItems {
     public static final ItemEntry<ExperienceRotorItem> EXPERIENCE_ROTOR = REGISTRATE.item("experience_rotor", ExperienceRotorItem::new)
             .register();
 
-    public static void fillCreateItemGroup(FillCreateItemGroupEvent event) {
-        if (event.getItemGroup() == AllCreativeModeTabs.BASE_CREATIVE_TAB) {
-            event.addInsertion(AllBlocks.ITEM_DRAIN.get(), CeiBlocks.DISENCHANTER.asStack());
-            event.addInsertion(AllBlocks.SPOUT.get(), CeiBlocks.PRINTER.asStack());
-            event.addInsertion(AllBlocks.BLAZE_BURNER.get(), ENCHANTING_GUIDE.asStack());
-            event.addInsertion(AllItems.ELECTRON_TUBE.get(), EXPERIENCE_ROTOR.asStack());
-            event.addInsertion(AllFluids.CHOCOLATE.get().getBucket(), CeiFluids.INK.get().getBucket().getDefaultInstance());
-            event.addInsertion(AllFluids.CHOCOLATE.get().getBucket(), HYPER_EXP_BOTTLE.asStack());
+    public static InteractionResult fillCreateItemGroup(CreateCreativeModeTab itemGroup, NonNullList<ItemStack> items) {
+        if (itemGroup == AllCreativeModeTabs.BASE_CREATIVE_TAB) {
+			FillCreateItemGroupEvent.Inserter inserter = new FillCreateItemGroupEvent.Inserter(items);
+			inserter.addInsertion(AllBlocks.ITEM_DRAIN.get(), CeiBlocks.DISENCHANTER.asStack());
+			inserter.addInsertion(AllBlocks.SPOUT.get(), CeiBlocks.PRINTER.asStack());
+			inserter.addInsertion(AllBlocks.BLAZE_BURNER.get(), ENCHANTING_GUIDE.asStack());
+			inserter.addInsertion(AllItems.ELECTRON_TUBE.get(), EXPERIENCE_ROTOR.asStack());
+			inserter.addInsertion(AllFluids.CHOCOLATE.get().getBucket(), CeiFluids.INK.get().getBucket().getDefaultInstance());
+			inserter.addInsertion(AllFluids.CHOCOLATE.get().getBucket(), HYPER_EXP_BOTTLE.asStack());
+			inserter.doneInsertion();
+			return InteractionResult.SUCCESS;
         }
+		return InteractionResult.PASS;
     }
 
     public static void register() {}
-    
+
 }

@@ -1,13 +1,16 @@
 package plus.dragons.createenchantmentindustry;
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import plus.dragons.createdragonlib.advancement.AdvancementFactory;
+import plus.dragons.createdragonlib.init.FillCreateItemGroupEvent;
 import plus.dragons.createdragonlib.init.SafeRegistrate;
 import plus.dragons.createdragonlib.lang.Lang;
 import plus.dragons.createdragonlib.lang.LangFactory;
@@ -66,14 +69,19 @@ public class EnchantmentIndustry implements ModInitializer {
 		CeiFluids.registerLavaReaction();
 		OpenEndedPipeEffects.register();
 
-		// FIXME
-		//forgeEventBus.addListener(CeiItems::fillCreateItemGroup);
+		FillCreateItemGroupEvent.CallBack.EVENT.register(CeiItems::fillCreateItemGroup);
+
+		ServerTickEvents.START_WORLD_TICK.register(CeiFluids::handleInkEffect);
+
+		CeiPackets.getChannel().initServerListener();
 	}
 
 	public static void gatherData(FabricDataGenerator gen, ExistingFileHelper helper) {
+		// FIXME datagen has serious problem
+		REGISTRATE.setupDatagen(gen, helper);
 		ADVANCEMENT_FACTORY.datagen(gen);
 		LANG_FACTORY.datagen(gen);
-		new TagGen.Builder(EnchantmentIndustry.REGISTRATE)
+		new TagGen.Builder(REGISTRATE)
 				.addItemTagFactory(CeiTags::genItemTag)
 				.addFluidTagFactory(CeiTags::genFluidTag)
 				.build().activate();

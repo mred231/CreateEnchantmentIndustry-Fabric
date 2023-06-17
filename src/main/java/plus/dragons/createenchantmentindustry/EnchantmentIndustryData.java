@@ -8,9 +8,6 @@ public class EnchantmentIndustryData implements DataGeneratorEntrypoint {
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
 		ExistingFileHelper helper = ExistingFileHelper.withResourcesFromArg();
-		EnchantmentIndustry.REGISTRATE.setupDatagen(fabricDataGenerator, helper);
 		EnchantmentIndustry.gatherData(fabricDataGenerator, helper);
-
-
 	}
 }

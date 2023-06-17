@@ -9,6 +9,10 @@ import com.tterrag.registrate.util.entry.FluidEntry;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributeHandler;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
 import plus.dragons.createdragonlib.fluid.FluidLavaReaction;
 import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
@@ -72,13 +76,16 @@ public class CeiFluids {
     }
 
 	// FIXME Ink effect
-    /*public static void handleInkEffect(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = event.getEntity();
-        if (entity.tickCount % 20 != 0) return;
-        if (entity.isEyeInFluidType(INK.getType())) {
-            entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 0, true, false, false));
-        }
-    }*/
+    public static void handleInkEffect(ServerLevel world) {
+		for(var entity: world.getAllEntities()){
+			if(entity instanceof LivingEntity livingEntity && livingEntity.isAlive() && !livingEntity.isSpectator()){
+				if (entity.tickCount % 20 != 0) return;
+				if (livingEntity.isEyeInFluid(CeiTags.FluidTag.INK.tag)) {
+					livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 0, true, false, false));
+				}
+			}
+		}
+    }
 
     public static void registerLavaReaction() {
         FluidLavaReaction.register(FluidVariant.of(INK.get()),

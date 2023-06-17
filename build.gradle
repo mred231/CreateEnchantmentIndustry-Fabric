@@ -30,6 +30,7 @@ repositories {
 	maven { url = "https://jitpack.io/" } // Mixin Extras, Fabric ASM
 	maven { url = "https://maven.tterrag.com/" } // Flywheel
 	maven { url = "https://maven.dragons.plus/releases" } // DragonLib
+	maven { url = "https://maven.dragons.plus/snapshots" } // DragonLib snapshot
 }
 
 loom {
@@ -50,7 +51,7 @@ loom {
 			name "Data Generation"
 			vmArg "-Dfabric-api.datagen"
 			vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}"
-			vmArg "-Dfabric-api.datagen.modid=create"
+			vmArg "-Dfabric-api.datagen.modid=create_enchantment_industry"
 			vmArg "-Dporting_lib.datagen.existing_resources=${file("src/main/resources")}"
 		}
 
@@ -75,13 +76,12 @@ dependencies {
 
 	// Create - dependencies are added transitively
 	modImplementation("com.simibubi.create:create-fabric-${minecraft_version}:${create_version}")
-	// still missing dependency of forgeconfigapiport, so we manually add it
-	//modLocalRuntime("com.electronwill.night-config:core:3.6.3")
-	//modLocalRuntime("com.electronwill.night-config:toml:3.6.3")
 
 
 	// Create Dragon Lib
-	modImplementation(include("plus.dragons.createdragonlib:create_dragon_lib-fabric-${minecraft_version}:${dragonlib_version}"))
+	include(modImplementation("plus.dragons.createdragonlib:create_dragon_lib-fabric-${minecraft_version}:${dragonlib_version}"){
+		transitive = false
+	})
 
 	// Development QOL
 	modLocalRuntime("maven.modrinth:lazydfu:${lazydfu_version}")

@@ -6,7 +6,6 @@ import net.fabricmc.api.ClientModInitializer;
 import plus.dragons.createenchantmentindustry.entry.CeiBlockPartials;
 import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
 import plus.dragons.createenchantmentindustry.foundation.ponder.content.CeiPonderIndex;
-// TODO
 public class EnchantmentIndustryClient implements ClientModInitializer {
 
 

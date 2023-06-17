@@ -5,11 +5,9 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import com.simibubi.create.foundation.utility.Lang;
 
 import io.github.fabricators_of_create.porting_lib.util.ShapedRecipeUtil;
 import net.minecraft.core.Registry;
@@ -19,6 +17,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.disenchanter.DisenchantRecipe;
 
 public enum CeiRecipeTypes implements IRecipeTypeInfo {
@@ -31,8 +30,8 @@ public enum CeiRecipeTypes implements IRecipeTypeInfo {
     private final Supplier<RecipeType<?>> type;
 
     CeiRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
-        String name = Lang.asId(name());
-        id = Create.asResource(name);
+        String name = EnchantmentIndustry.LANG.asId(name());
+        id = EnchantmentIndustry.genRL(name);
 		serializerObject = Registry.register(Registry.RECIPE_SERIALIZER, id, serializerSupplier.get());
 		typeObject = simpleType(id);
 		Registry.register(Registry.RECIPE_TYPE, id, typeObject);
