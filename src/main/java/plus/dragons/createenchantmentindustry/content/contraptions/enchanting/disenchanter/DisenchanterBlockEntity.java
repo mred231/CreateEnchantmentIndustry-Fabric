@@ -93,6 +93,7 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         behaviours.add(new DirectBeltInputBehaviour(this).allowingBeltFunnels()
                 .setInsertionHandler(this::tryInsertingFromSide));
+		// FIXME do not absorb exp correctly
         behaviours.add(internalTank = SmartFluidTankBehaviour.single(this, CeiConfigs.SERVER.disenchanterTankCapacity.get())
                 .allowExtraction()
                 .forbidInsertion());

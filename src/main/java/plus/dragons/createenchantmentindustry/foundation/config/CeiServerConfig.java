@@ -2,19 +2,21 @@ package plus.dragons.createenchantmentindustry.foundation.config;
 
 import com.simibubi.create.foundation.config.ConfigBase;
 import com.simibubi.create.foundation.config.ui.ConfigAnnotations;
+
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class CeiServerConfig extends ConfigBase {
-    
-    public final ConfigInt disenchanterTankCapacity = i(1000, 0,
+
+	public static int BUCKET = 81000;
+    public final ConfigInt disenchanterTankCapacity = i(BUCKET, 0,
         "disenchanterTankCapacity",
         Comments.disenchanterTankCapacity,
         ConfigAnnotations.RequiresRestart.SERVER.asComment());
-    public final ConfigInt copierTankCapacity = i(4000, 0,
+    public final ConfigInt copierTankCapacity = i(4 * BUCKET, 0,
         "copierTankCapacity",
         Comments.copierTankCapacity,
         ConfigAnnotations.RequiresRestart.SERVER.asComment());
-    public final ConfigInt blazeEnchanterTankCapacity = i(2000, 0,
+    public final ConfigInt blazeEnchanterTankCapacity = i(2, 0,
         "blazeEnchanterTankCapacity",
         Comments.blazeEnchanterTankCapacity,
         ConfigAnnotations.RequiresRestart.SERVER.asComment());
@@ -45,7 +47,7 @@ public class CeiServerConfig extends ConfigBase {
     public final ConfigBool copyingWrittenBookAlwaysGetOriginalVersion = b(true,
             "copyingWrittenBookAlwaysGetOriginalVersion",
             Comments.copyingWrittenBookAlwaysGetOriginalVersion);
-    
+
     @Override
     public void registerAll(ForgeConfigSpec.Builder builder) {
         super.registerAll(builder);
@@ -55,9 +57,9 @@ public class CeiServerConfig extends ConfigBase {
     public String getName() {
         return "server";
     }
-    
+
     private static class Comments {
-    
+
         static String disenchanterTankCapacity =
             "The Tank Capacity of the Disenchanter";
         static String copierTankCapacity =
@@ -76,7 +78,7 @@ public class CeiServerConfig extends ConfigBase {
         static String crushingWheelDropExpRate = "The probability of dropping Experience Nugget after killing a creature on the Crushing Wheel";
         static String copyingWrittenBookAlwaysGetOriginalVersion =
                 "Whether or not copying a written book always get original version. Setting it to false let you always get copy version of the book.";
-        
+
     }
 
 }
