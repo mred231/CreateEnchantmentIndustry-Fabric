@@ -1,8 +1,9 @@
 package plus.dragons.createenchantmentindustry;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.simibubi.create.foundation.ponder.PonderLocalization;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -26,6 +27,7 @@ import plus.dragons.createenchantmentindustry.entry.CeiPackets;
 import plus.dragons.createenchantmentindustry.entry.CeiRecipeTypes;
 import plus.dragons.createenchantmentindustry.entry.CeiTags;
 import plus.dragons.createenchantmentindustry.foundation.advancement.CeiAdvancements;
+import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
 import plus.dragons.createenchantmentindustry.foundation.ponder.content.CeiPonderIndex;
 
 public class EnchantmentIndustry implements ModInitializer {
@@ -64,6 +66,8 @@ public class EnchantmentIndustry implements ModInitializer {
 		// fabric exclusive, squeeze this in here to register before stuff is used
 		REGISTRATE.register();
 
+		CeiConfigs.register();
+
 		CeiAdvancements.register();
 		CeiPackets.registerPackets();
 		CeiFluids.registerLavaReaction();
@@ -82,7 +86,7 @@ public class EnchantmentIndustry implements ModInitializer {
 				.addItemTagFactory(CeiTags::genItemTag)
 				.addFluidTagFactory(CeiTags::genFluidTag)
 				.build().activate();
+		PonderLocalization.provideRegistrateLang(REGISTRATE);
 		LANG_FACTORY.datagen(gen);
-
 	}
 }
