@@ -30,7 +30,7 @@ import plus.dragons.createenchantmentindustry.foundation.ponder.content.CeiPonde
 
 public class EnchantmentIndustry implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger();
-    public static final String NAME = "Create: Enchantment Industry";
+    public static final String NAME = "Create Enchantment Industry";
     public static final String ID = "create_enchantment_industry";
     public static final SafeRegistrate REGISTRATE = new SafeRegistrate(ID);
     public static final Lang LANG = new Lang(ID);
@@ -78,13 +78,13 @@ public class EnchantmentIndustry implements ModInitializer {
 
 	public static void gatherData(FabricDataGenerator gen, ExistingFileHelper helper) {
 		// FIXME datagen has serious problem
-		REGISTRATE.setupDatagen(gen, helper);
+
 		ADVANCEMENT_FACTORY.datagen(gen);
-		LANG_FACTORY.datagen(gen);
 		new TagGen.Builder(REGISTRATE)
 				.addItemTagFactory(CeiTags::genItemTag)
 				.addFluidTagFactory(CeiTags::genFluidTag)
 				.build().activate();
+		LANG_FACTORY.datagen(gen);
 
 	}
 }
