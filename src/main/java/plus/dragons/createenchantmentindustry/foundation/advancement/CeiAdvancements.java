@@ -1,13 +1,18 @@
 package plus.dragons.createenchantmentindustry.foundation.advancement;
 
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.ADVANCEMENT_FACTORY;
+
+import java.util.Map;
+
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
-import com.simibubi.create.Create;
+
 import net.minecraft.Util;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -17,10 +22,6 @@ import plus.dragons.createdragonlib.advancement.critereon.AccumulativeTrigger;
 import plus.dragons.createenchantmentindustry.entry.CeiBlocks;
 import plus.dragons.createenchantmentindustry.entry.CeiFluids;
 import plus.dragons.createenchantmentindustry.entry.CeiItems;
-
-import java.util.Map;
-
-import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.ADVANCEMENT_FACTORY;
 
 public class CeiAdvancements {
     private static boolean registered = false;
@@ -32,7 +33,7 @@ public class CeiAdvancements {
             .description("Get some Nuggets of Experience from crushing ores or killing mobs using deployer")
             .icon(AllItems.EXP_NUGGET)
             .externalTrigger("have_experience_nugget", InventoryChangeTrigger.TriggerInstance.hasItems(AllItems.EXP_NUGGET.get()))
-            .parent(Create.asResource("display_board_0"))
+            .parent(new ResourceLocation("create", "display_board_0"))
             .build(),
     // Printer Branch
     BLACK_AS_INK = ADVANCEMENT_FACTORY.builder("black_as_ink")
@@ -144,12 +145,12 @@ public class CeiAdvancements {
             .parent(ADDITIONAL_ORDER)
             .build(),
     END = null;
-    
+
     public static void register() {
         if (!registered) {
             ADVANCEMENT_FACTORY.register();
         }
         registered = true;
     }
-    
+
 }

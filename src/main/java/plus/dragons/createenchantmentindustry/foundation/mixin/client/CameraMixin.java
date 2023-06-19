@@ -1,4 +1,14 @@
-package plus.dragons.createenchantmentindustry.foundation.mixin;
+package plus.dragons.createenchantmentindustry.foundation.mixin.client;
+
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Implements;
+import org.spongepowered.asm.mixin.Interface;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.client.Camera;
 import net.minecraft.core.BlockPos;
@@ -6,10 +16,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.ink.InkRenderingCamera;
 import plus.dragons.createenchantmentindustry.entry.CeiTags;
 

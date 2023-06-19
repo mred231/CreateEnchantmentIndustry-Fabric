@@ -20,7 +20,7 @@
     "TankSegmentAccessor"
   ],
   "client": [
-    "CameraMixin",
+    "client.CameraMixin",
     "client.FogRendererMixin",
     "client.TextureAtlasMixin"
   ],
