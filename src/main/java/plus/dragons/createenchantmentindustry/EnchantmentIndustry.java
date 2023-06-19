@@ -77,8 +77,6 @@ public class EnchantmentIndustry implements ModInitializer {
 	}
 
 	public static void gatherData(FabricDataGenerator gen, ExistingFileHelper helper) {
-		// FIXME datagen has serious problem
-
 		ADVANCEMENT_FACTORY.datagen(gen);
 		new TagGen.Builder(REGISTRATE)
 				.addItemTagFactory(CeiTags::genItemTag)

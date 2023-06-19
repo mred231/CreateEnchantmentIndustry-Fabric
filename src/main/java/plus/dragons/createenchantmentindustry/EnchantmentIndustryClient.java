@@ -8,20 +8,6 @@ import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
 import plus.dragons.createenchantmentindustry.foundation.ponder.content.CeiPonderIndex;
 public class EnchantmentIndustryClient implements ClientModInitializer {
 
-
-	// FIXME
-    /*private void registerForgeEvents(IEventBus forgeEventBus) {
-        forgeEventBus.addListener(InkRenderingCamera::handleInkFogColor);
-    }*/
-
-
-    // FIXME
-    /*public void modelRegistry(final TextureStitchEvent.Pre event) {
-        if (event.getAtlas().location().equals(InventoryMenu.BLOCK_ATLAS)) {
-            event.addSprite(BlazeEnchanterRenderer.BOOK_MATERIAL.texture());
-        }
-    }*/
-
 	@Override
 	public void onInitializeClient() {
 		CeiBlockPartials.register();

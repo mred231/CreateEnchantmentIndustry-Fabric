@@ -20,7 +20,9 @@
     "TankSegmentAccessor"
   ],
   "client": [
-    "CameraMixin"
+    "CameraMixin",
+    "client.FogRendererMixin",
+    "client.TextureAtlasMixin"
   ],
   "injectors": {
     "defaultRequire": 1
