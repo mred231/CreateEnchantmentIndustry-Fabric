@@ -56,7 +56,6 @@ public class EnchantmentIndustry implements ModInitializer {
 	public void onInitialize() {
 		CeiBlocks.register();
 		CeiItems.register();
-		// FIXME fluids' name are Air
 		CeiFluids.register();
 		CeiBlockEntities.register();
 		CeiContainerTypes.register();
@@ -69,9 +68,9 @@ public class EnchantmentIndustry implements ModInitializer {
 
 		CeiConfigs.register();
 
+		CeiFluids.registerLavaReaction();
 		CeiAdvancements.register();
 		CeiPackets.registerPackets();
-		CeiFluids.registerLavaReaction();
 		OpenEndedPipeEffects.register();
 
 		FillCreateItemGroupEvent.CallBack.EVENT.register(CeiItems::fillCreateItemGroup);

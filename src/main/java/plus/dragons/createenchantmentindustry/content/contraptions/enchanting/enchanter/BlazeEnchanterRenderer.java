@@ -2,6 +2,8 @@ package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.e
 
 import static plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter.BlazeEnchanterBlockEntity.ENCHANTING_TIME;
 
+import java.util.Set;
+
 import com.jozufozu.flywheel.core.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -28,7 +30,9 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
@@ -192,5 +196,11 @@ public class BlazeEnchanterRenderer extends SmartBlockEntityRenderer<BlazeEnchan
                 .light(LightTexture.FULL_BRIGHT)
                 .renderInto(ps, vc);
     }
+
+	public static void loadTexture(ResourceLocation location, Set<ResourceLocation> sprites){
+		if (location.equals(InventoryMenu.BLOCK_ATLAS)) {
+			sprites.add(BlazeEnchanterRenderer.BOOK_MATERIAL.texture());
+		}
+	}
 
 }

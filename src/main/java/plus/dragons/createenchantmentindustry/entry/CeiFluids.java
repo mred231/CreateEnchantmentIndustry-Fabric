@@ -16,6 +16,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -43,6 +44,10 @@ public class CeiFluids {
             .lang("Liquid Experience")
 			.fluidAttributes(()->new FluidVariantAttributeHandler(){
 				@Override
+				public Component getName(FluidVariant fluidVariant) {
+					return Component.translatable("fluid.create_enchantment_industry.experience");
+				}
+				@Override
 				public int getLuminance(FluidVariant variant) {
 					return 15;
 				}
@@ -64,6 +69,10 @@ public class CeiFluids {
             HYPER_EXPERIENCE_STILL_RL, HYPER_EXPERIENCE_FLOW_RL, HyperExperienceFluid::new)
             .lang("Liquid Hyper Experience")
 			.fluidAttributes(()->new FluidVariantAttributeHandler(){
+				@Override
+				public Component getName(FluidVariant fluidVariant) {
+					return Component.translatable("fluid.create_enchantment_industry.hyper_experience");
+				}
 				@Override
 				public int getLuminance(FluidVariant variant) {
 					return 15;
