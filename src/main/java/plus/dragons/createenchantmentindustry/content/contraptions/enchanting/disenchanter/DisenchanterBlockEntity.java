@@ -93,10 +93,10 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         behaviours.add(new DirectBeltInputBehaviour(this).allowingBeltFunnels()
                 .setInsertionHandler(this::tryInsertingFromSide));
-		// FIXME do not absorb exp correctly
         behaviours.add(internalTank = SmartFluidTankBehaviour.single(this, CeiConfigs.SERVER.disenchanterTankCapacity.get())
                 .allowExtraction()
                 .forbidInsertion());
+		internalTank.getPrimaryHandler().setValidator(fluidStack -> true);
         registerAwardables(behaviours,
                 CeiAdvancements.EXPERIMENTAL.asCreateAdvancement(),
                 CeiAdvancements.GONE_WITH_THE_FOIL.asCreateAdvancement());
@@ -229,7 +229,6 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
         List<Player> players = level.getEntitiesOfClass(Player.class, absorbArea, LivingEntity::isAlive);
         if (!players.isEmpty()) {
             AtomicInteger sum = new AtomicInteger();
-            internalTank.allowInsertion();
             players.forEach(player -> {
                 if (getPlayerExperience(player) >= ABSORB_AMOUNT) {
                     sum.addAndGet(ABSORB_AMOUNT);
@@ -240,39 +239,40 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
             if (sum.get() != 0) {
                 var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), sum.get());
 				try(Transaction t = TransferUtil.getTransaction()){
-					try (Transaction nested = t.openNested()){
-						var inserted = internalTank.getPrimaryHandler().insert(fluidStack.getType(), fluidStack.getAmount(), nested);
-						if (inserted != 0) {
-							for (var player : players) {
-								var total = getPlayerExperience(player);
-								if (inserted >= ABSORB_AMOUNT) {
-									if (total >= ABSORB_AMOUNT) {
-										player.giveExperiencePoints(-ABSORB_AMOUNT);
-										inserted -= ABSORB_AMOUNT;
-									} else if (total != 0) {
-										inserted -= total;
-										player.giveExperiencePoints(-total);
-									}
-									CeiAdvancements.SPIRIT_TAKING.getTrigger().trigger((ServerPlayer) player);
-								} else if (inserted > 0) {
-									if (total >= inserted) {
-										player.giveExperiencePoints((int) -inserted);
-										inserted = 0;
-									} else {
-										inserted -= total;
-										player.giveExperiencePoints(-total);
-									}
-									absorbedXp = true;
-									CeiAdvancements.SPIRIT_TAKING.getTrigger().trigger((ServerPlayer) player);
-								} else {
-									break;
+					internalTank.allowInsertion();
+					var inserted = internalTank.getPrimaryHandler().insert(fluidStack.getType(), fluidStack.getAmount(), t);
+					t.commit();
+					if (inserted != 0) {
+						for (var player : players) {
+							var total = getPlayerExperience(player);
+							if (inserted >= ABSORB_AMOUNT) {
+								if (total >= ABSORB_AMOUNT) {
+									player.giveExperiencePoints(-ABSORB_AMOUNT);
+									inserted -= ABSORB_AMOUNT;
+								} else if (total != 0) {
+									inserted -= total;
+									player.giveExperiencePoints(-total);
 								}
+								CeiAdvancements.SPIRIT_TAKING.getTrigger().trigger((ServerPlayer) player);
+							} else if (inserted > 0) {
+								if (total >= inserted) {
+									player.giveExperiencePoints((int) -inserted);
+									inserted = 0;
+								} else {
+									inserted -= total;
+									player.giveExperiencePoints(-total);
+								}
+								absorbedXp = true;
+								CeiAdvancements.SPIRIT_TAKING.getTrigger().trigger((ServerPlayer) player);
+							} else {
+								break;
 							}
 						}
 					}
+					internalTank.forbidInsertion();
 				}
             }
-            internalTank.forbidInsertion();
+
         }
         List<ExperienceOrb> experienceOrbs = level.getEntitiesOfClass(ExperienceOrb.class, absorbArea);
         if (!experienceOrbs.isEmpty()) {
@@ -281,18 +281,17 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
                 var amount = orb.value;
                 var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), amount);
 				try(Transaction t = TransferUtil.getTransaction()) {
-					try (Transaction nested = t.openNested()) {
-						var inserted = internalTank.getPrimaryHandler().insert(fluidStack.getType(), fluidStack.getAmount(), nested);
-						if (inserted == amount) {
+					var inserted = internalTank.getPrimaryHandler().insert(fluidStack.getType(), fluidStack.getAmount(), t);
+					t.commit();
+					if (inserted == amount) {
+						absorbedXp = true;
+						orb.remove(Entity.RemovalReason.DISCARDED);
+					} else {
+						if (inserted != 0) {
 							absorbedXp = true;
-							orb.remove(Entity.RemovalReason.DISCARDED);
-						} else {
-							if (inserted != 0) {
-								absorbedXp = true;
-								orb.value -= inserted;
-							}
-							break;
+							orb.value -= inserted;
 						}
+						break;
 					}
 				}
             }
@@ -325,17 +324,15 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
         xp.setAmount(xp.getAmount() * heldItem.stack.getCount());
 
         if (processingTicks > 5) {
-            internalTank.allowInsertion();
 			try(Transaction t = TransferUtil.getTransaction()) {
-				try (Transaction nested = t.openNested()) {
-					if (internalTank.getPrimaryHandler().insert(xp.getType(),xp.getAmount(),nested) != xp.getAmount()) {
-						internalTank.forbidInsertion();
-						processingTicks = DISENCHANTER_TIME;
-						return true;
-					}
+				internalTank.allowInsertion();
+				if (internalTank.getPrimaryHandler().simulateInsert(xp.getType(),xp.getAmount(),t) != xp.getAmount()) {
+					internalTank.forbidInsertion();
+					processingTicks = DISENCHANTER_TIME;
+					return true;
 				}
+				internalTank.forbidInsertion();
 			}
-            internalTank.forbidInsertion();
             return true;
         }
 
@@ -354,13 +351,12 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
         var resultItem = result.getSecond();
         resultItem.setCount(heldItem.stack.getCount());
         heldItem.stack = resultItem;
-        internalTank.allowInsertion();
 		try(Transaction t = TransferUtil.getTransaction()) {
-			try (Transaction nested = t.openNested()) {
-				internalTank.getPrimaryHandler().insert(xp.getType(), xp.getAmount(), nested);
-			}
+			internalTank.allowInsertion();
+			internalTank.getPrimaryHandler().insert(xp.getType(), xp.getAmount(), t);
+			t.commit();
+			internalTank.forbidInsertion();
 		}
-        internalTank.forbidInsertion();
         level.levelEvent(1042, worldPosition, 0);
         notifyUpdate();
         return true;

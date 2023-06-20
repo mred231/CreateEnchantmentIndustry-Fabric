@@ -1,23 +1,20 @@
 package plus.dragons.createenchantmentindustry.foundation.mixin;
 
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-
-import com.simibubi.create.content.fluids.OpenEndedPipe;
 
 import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
 
+// TODO
 @Mixin(targets = "com.simibubi.create.content.fluids.OpenEndedPipe$OpenEndFluidHandler")
 public abstract class OpenEndFluidHandlerMixin extends FluidTank {
     public OpenEndFluidHandlerMixin(int capacity) {
         super(capacity);
     }
 
-    @SuppressWarnings("target")
+    /*@SuppressWarnings("target")
     @Final
     @Shadow(remap = false)
-    OpenEndedPipe this$0;
+    OpenEndedPipe this$0;*/
 
     // TODO
 	// What we need here:
