@@ -14,7 +14,7 @@ public class EnchantmentIndustryData implements DataGeneratorEntrypoint {
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
 		Path resources = Paths.get(System.getProperty(ExistingFileHelper.EXISTING_RESOURCES));
-		// fixme re-enable the existing file helper when porting lib's ResourcePackLoader.createPackForMod is fixed
+		// FIXME re-enable the existing file helper when porting lib's ResourcePackLoader.createPackForMod is fixed
 		// Thank SnR for the way to a temporarily fix
 		ExistingFileHelper helper = new ExistingFileHelper(
 				Set.of(resources), Set.of("create"), false, null, null

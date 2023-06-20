@@ -4,7 +4,6 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
 
-// TODO
 @Mixin(targets = "com.simibubi.create.content.fluids.OpenEndedPipe$OpenEndFluidHandler")
 public abstract class OpenEndFluidHandlerMixin extends FluidTank {
     public OpenEndFluidHandlerMixin(int capacity) {
