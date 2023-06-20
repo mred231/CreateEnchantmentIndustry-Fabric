@@ -31,6 +31,7 @@ repositories {
 	maven { url = "https://maven.tterrag.com/" } // Flywheel
 	maven { url = "https://maven.dragons.plus/releases" } // DragonLib
 	maven { url = "https://maven.dragons.plus/snapshots" } // DragonLib snapshot
+	mavenLocal() // Fast test
 }
 
 loom {
