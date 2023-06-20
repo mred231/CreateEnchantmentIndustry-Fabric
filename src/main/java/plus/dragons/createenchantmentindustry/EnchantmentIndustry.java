@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import plus.dragons.createdragonlib.advancement.AdvancementFactory;
-import plus.dragons.createdragonlib.init.FillCreateItemGroupEvent;
+import plus.dragons.createdragonlib.event.FillCreateItemGroupEvent;
 import plus.dragons.createdragonlib.init.SafeRegistrate;
 import plus.dragons.createdragonlib.lang.Lang;
 import plus.dragons.createdragonlib.lang.LangFactory;
