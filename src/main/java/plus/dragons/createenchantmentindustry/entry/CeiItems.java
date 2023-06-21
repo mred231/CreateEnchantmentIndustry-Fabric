@@ -5,7 +5,6 @@ import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.REGISTR
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllCreativeModeTabs;
 import com.simibubi.create.AllFluids;
-import com.simibubi.create.AllItems;
 import com.simibubi.create.infrastructure.item.CreateCreativeModeTab;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
@@ -43,7 +42,7 @@ public class CeiItems {
 			inserter.addInsertion(AllBlocks.ITEM_DRAIN.get(), CeiBlocks.DISENCHANTER.asStack());
 			inserter.addInsertion(AllBlocks.SPOUT.get(), CeiBlocks.PRINTER.asStack());
 			inserter.addInsertion(AllBlocks.BLAZE_BURNER.get(), ENCHANTING_GUIDE.asStack());
-			inserter.addInsertion(AllItems.ELECTRON_TUBE.get(), EXPERIENCE_ROTOR.asStack());
+			//inserter.addInsertion(AllItems.ELECTRON_TUBE.get(), EXPERIENCE_ROTOR.asStack()); Hide it for now
 			inserter.addInsertion(AllFluids.CHOCOLATE.get().getBucket(), CeiFluids.INK.get().getBucket().getDefaultInstance());
 			inserter.addInsertion(AllFluids.CHOCOLATE.get().getBucket(), HYPER_EXP_BOTTLE.asStack());
 			inserter.doneInsertion();
