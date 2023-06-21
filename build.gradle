@@ -13,9 +13,7 @@ targetCompatibility = JavaVersion.VERSION_17
 
 archivesBaseName = project.archives_base_name
 group = project.maven_group
-
-String buildNumber = System.getenv("GITHUB_RUN_NUMBER")
-version = "${mod_version}+${minecraft_version}" + (buildNumber != null ? "-${buildNumber}" : "")
+version = mod_version
 
 repositories {
 	maven { url = "https://maven.shedaniel.me/" } // Cloth Config, REI
@@ -119,11 +117,6 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand properties
 	}
-}
-
-machete {
-	// disable machete locally for faster builds
-	enabled = buildNumber != null
 }
 
 tasks.withType(JavaCompile).configureEach {
