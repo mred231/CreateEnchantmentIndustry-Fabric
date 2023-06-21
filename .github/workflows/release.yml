@@ -47,7 +47,7 @@ jobs:
           # Config
           name: "CEI Fabric ${{ env.VERSION }} for Create ${{ env.MINECRAFT_VERSION }}-${{ env.CREATE_VERSION }}"
           version: ${{ env.VERSION }}
-          version-type: release
+          version-type: beta
           changelog-file: changelog/${{ env.VERSION }}.md
           files-primary: build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim)).jar
           files-secondary: ""
