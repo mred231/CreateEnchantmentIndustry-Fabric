@@ -1,8 +1,8 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience;
 
-import io.github.fabricators_of_create.porting_lib.entity.ExtraSpawnDataEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -81,7 +81,7 @@ public class HyperExperienceOrb extends ExperienceOrb {
 
     @Override
     public Packet<?> getAddEntityPacket() {
-        return ExtraSpawnDataEntity.createExtraDataSpawnPacket(this);
+        return new ClientboundAddEntityPacket(this);
     }
 
 }
