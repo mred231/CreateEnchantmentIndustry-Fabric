@@ -26,7 +26,7 @@ public abstract class BasinBlockMixin extends Block implements IBE<BasinBlockEnt
 
     // Support Experience Drop with Block Break
     @Inject(method = "onRemove",
-            at = @At(value = "INVOKE", target = "Lcom/simibubi/create/foundation/block/IBE;onRemove(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V", remap = false))
+            at = @At(value = "INVOKE", target = "Lcom/simibubi/create/foundation/block/IBE;onRemove(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V"))
     private void injected(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving, CallbackInfo ci) {
         if (!(level instanceof ServerLevel serverLevel))
             return;
