@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.MendingBySpout;
 
-@Mixin(value = FillingBySpout.class, remap = false)
+@Mixin(value = FillingBySpout.class)
 public class FillingBySpoutMixin {
 
     @Inject(method = "canItemBeFilled", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/fluids/transfer/GenericItemFilling;canItemBeFilled(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;)Z"), cancellable = true)
