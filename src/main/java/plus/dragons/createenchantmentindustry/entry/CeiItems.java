@@ -14,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import plus.dragons.createdragonlib.event.FillCreateItemGroupEvent;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter.EnchantingGuideItem;
-import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.ExperienceRotorItem;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceBottleItem;
 
 public class CeiItems {
@@ -33,16 +32,12 @@ public class CeiItems {
             .tag(CeiTags.ItemTag.UPRIGHT_ON_BELT.tag)
             .register();
 
-    public static final ItemEntry<ExperienceRotorItem> EXPERIENCE_ROTOR = REGISTRATE.item("experience_rotor", ExperienceRotorItem::new)
-            .register();
-
     public static InteractionResult fillCreateItemGroup(CreateCreativeModeTab itemGroup, NonNullList<ItemStack> items) {
         if (itemGroup == AllCreativeModeTabs.BASE_CREATIVE_TAB) {
 			FillCreateItemGroupEvent.Inserter inserter = new FillCreateItemGroupEvent.Inserter(items);
 			inserter.addInsertion(AllBlocks.ITEM_DRAIN.get(), CeiBlocks.DISENCHANTER.asStack());
 			inserter.addInsertion(AllBlocks.SPOUT.get(), CeiBlocks.PRINTER.asStack());
 			inserter.addInsertion(AllBlocks.BLAZE_BURNER.get(), ENCHANTING_GUIDE.asStack());
-			//inserter.addInsertion(AllItems.ELECTRON_TUBE.get(), EXPERIENCE_ROTOR.asStack()); Hide it for now
 			inserter.addInsertion(AllFluids.CHOCOLATE.get().getBucket(), CeiFluids.INK.get().getBucket().getDefaultInstance());
 			inserter.addInsertion(AllFluids.CHOCOLATE.get().getBucket(), HYPER_EXP_BOTTLE.asStack());
 			inserter.doneInsertion();
