@@ -45,7 +45,7 @@ jobs:
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
           # Config
-          name: "CEI Fabric ${{ env.VERSION }} for Create ${{ env.MINECRAFT_VERSION }}-${{ env.CREATE_VERSION }}"
+          name: "CEI Fabric ${{ env.VERSION }} for Create Fabric ${{ env.MINECRAFT_VERSION }}-${{ env.CREATE_VERSION }}"
           version: ${{ env.VERSION }}
           version-type: beta
           changelog-file: changelog/${{ env.VERSION }}.md
@@ -53,7 +53,8 @@ jobs:
           files-secondary: ""
 
           loaders: |
-            forge
+            fabric
+            quilt
           game-versions: |
             ${{ env.MINECRAFT_VERSION }}
           dependencies: |
