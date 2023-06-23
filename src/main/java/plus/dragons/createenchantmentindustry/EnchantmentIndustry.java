@@ -36,8 +36,7 @@ public class EnchantmentIndustry implements ModInitializer {
     public static final String ID = "create_enchantment_industry";
     public static final SafeRegistrate REGISTRATE = new SafeRegistrate(ID);
     public static final Lang LANG = new Lang(ID);
-    public static final AdvancementFactory ADVANCEMENT_FACTORY = AdvancementFactory.create(NAME, ID,
-        CeiAdvancements::register);
+    public static final AdvancementFactory ADVANCEMENT_FACTORY = AdvancementFactory.create(NAME, ID);
     public static final LangFactory LANG_FACTORY = LangFactory.create(NAME, ID)
         .advancements(CeiAdvancements::register)
         .ponders(() -> {
