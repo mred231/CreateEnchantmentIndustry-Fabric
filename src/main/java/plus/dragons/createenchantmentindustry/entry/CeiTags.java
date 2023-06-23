@@ -25,20 +25,20 @@ public class CeiTags {
         return TagKey.create(registry.key(), id);
     }
 
-    public static <T> TagKey<T> forgeTag(Registry<T> registry, String path) {
-        return optionalTag(registry, new ResourceLocation("forge", path));
+    public static <T> TagKey<T> commonTag(Registry<T> registry, String path) {
+        return optionalTag(registry, new ResourceLocation("c", path));
     }
 
     public static TagKey<Block> forgeBlockTag(String path) {
-        return forgeTag(Registry.BLOCK, path);
+        return commonTag(Registry.BLOCK, path);
     }
 
     public static TagKey<Item> forgeItemTag(String path) {
-        return forgeTag(Registry.ITEM, path);
+        return commonTag(Registry.ITEM, path);
     }
 
     public static TagKey<Fluid> forgeFluidTag(String path) {
-        return forgeTag(Registry.FLUID, path);
+        return commonTag(Registry.FLUID, path);
     }
     String FORGE = "forge";
     String CREATE = "create";
@@ -50,7 +50,7 @@ public class CeiTags {
     public enum NameSpace {
         MOD(EnchantmentIndustry.ID, false, true),
         CREATE(Create.ID, false, true),
-        FORGE("forge")
+        COMMON("c")
         ;
 
         public final String id;
@@ -171,7 +171,7 @@ public class CeiTags {
 
     public enum FluidTag {
         //No experience fluid tag here as different ratios is not acceptable
-        INK(NameSpace.FORGE, false),
+        INK(NameSpace.COMMON, false),
         BLAZE_ENCHANTER_INPUT(false),
         PRINTER_INPUT(true);
 
