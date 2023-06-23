@@ -25,10 +25,10 @@ public class FillingBySpoutMixin {
 			at = @At(value = "INVOKE",
 					target = "Lcom/simibubi/create/content/fluids/transfer/GenericItemFilling;getRequiredAmountForItem(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lio/github/fabricators_of_create/porting_lib/util/FluidStack;)J"),
 			cancellable = true)
-    private static void getRequiredXpAmountForItem(Level world, ItemStack stack, FluidStack availableFluid, CallbackInfoReturnable<Integer> cir) {
+    private static void getRequiredXpAmountForItem(Level world, ItemStack stack, FluidStack availableFluid, CallbackInfoReturnable<Long> cir) {
         int amount = MendingBySpout.getRequiredAmountForItem(world, stack, availableFluid);
         if (amount > 0)
-            cir.setReturnValue(amount);
+            cir.setReturnValue((long) amount);
     }
 
     @Inject(method = "fillItem",
