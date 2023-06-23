@@ -19,7 +19,7 @@
     "frame": "challenge",
     "hidden": false,
     "icon": {
-      "item": "minecraft:air"
+      "item": "create:copper_valve_handle"
     },
     "show_toast": true,
     "title": {

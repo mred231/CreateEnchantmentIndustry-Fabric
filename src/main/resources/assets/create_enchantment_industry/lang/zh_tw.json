@@ -1,10 +1,61 @@
 {
+	"_": "Missing Localizations: 0",
+
 	"_": "->------------------------]  Game Elements  [------------------------<-",
 
 	"block.create_enchantment_industry.blaze_enchanter": "烈焰使者附魔室",
 	"block.create_enchantment_industry.disenchanter": "祛魔池",
 	"block.create_enchantment_industry.ink": "墨水",
 	"block.create_enchantment_industry.printer": "印表機",
+
+	"create_enchantment_industry.ponder.absorb_experience_nugget.header": "融化經驗顆粒",
+	"create_enchantment_industry.ponder.absorb_experience_nugget.text_1": "經驗顆粒可被祛魔池吸收。",
+
+	"create_enchantment_industry.ponder.copy.header": "使用印表機",
+	"create_enchantment_industry.ponder.copy.text_1": "影印附魔書需要液態經驗。",
+	"create_enchantment_industry.ponder.copy.text_2": "如果想要影印的附魔書包含超出等級上限的附魔，你就需要使用超經驗",
+	"create_enchantment_industry.ponder.copy.text_3": "影印成書需要墨水。",
+	"create_enchantment_industry.ponder.copy.text_4": "命名牌和火車時刻表也可以影印。",
+	"create_enchantment_industry.ponder.copy.text_5": "將命名牌設置為影印目標時，印表機可以命名物品。",
+
+	"create_enchantment_industry.ponder.crushing_wheel_tweak.header": "我們稱之為低效...",
+	"create_enchantment_industry.ponder.crushing_wheel_tweak.text_1": "粉碎輪在擊殺生物後有一定概率掉落非常少的經驗顆粒。",
+
+	"create_enchantment_industry.ponder.disenchant.header": "使用祛魔池",
+	"create_enchantment_industry.ponder.disenchant.text_1": "所有接收的物品都將被祛除附魔，被去除的附魔將被折算成液態經驗儲存。",
+	"create_enchantment_industry.ponder.disenchant.text_2": "站在祛魔池上方的玩家將被快速洗去經驗等級，所洗去的經驗值將被轉換為液態經驗儲存。",
+
+	"create_enchantment_industry.ponder.drop_experience_nugget.header": "...經驗農場？",
+	"create_enchantment_industry.ponder.drop_experience_nugget.text_1": "機械手殺死生物時將掉落經驗顆粒。",
+
+	"create_enchantment_industry.ponder.enchant.header": "使用烈焰使者附魔室",
+	"create_enchantment_industry.ponder.enchant.text_1": "烈焰使者附魔室可以附魔物品。",
+	"create_enchantment_industry.ponder.enchant.text_2": "但它並不能附魔書本...",
+	"create_enchantment_industry.ponder.enchant.text_3": "也不能附魔上不相容的附魔。",
+	"create_enchantment_industry.ponder.enchant.text_4": "當可行時，烈焰使者附魔室會升級現有的附魔",
+
+	"create_enchantment_industry.ponder.experience_bottle.header": "處理附魔之瓶",
+	"create_enchantment_industry.ponder.experience_bottle.text_1": "附魔之瓶能在分液池處被排空。",
+	"create_enchantment_industry.ponder.experience_bottle.text_2": "附魔之瓶也能通過注液器製造。",
+
+	"create_enchantment_industry.ponder.hyper_enchant.header": "超越附魔",
+	"create_enchantment_industry.ponder.hyper_enchant.text_1": "這是一罐液態超經驗。",
+	"create_enchantment_industry.ponder.hyper_enchant.text_2": "超經驗可以讓烈焰人附魔室進入超級燃燒狀態，此狀態下產出的附魔的等級將比設定附魔高出一個等級。",
+	"create_enchantment_industry.ponder.hyper_enchant.text_3": "最大附魔等級為1的附魔無法在超越附魔中被附魔為等級2。",
+
+	"create_enchantment_industry.ponder.leak.header": "噢不！漏出來了！",
+	"create_enchantment_industry.ponder.leak.text_1": "我有一罐液態經驗",
+	"create_enchantment_industry.ponder.leak.text_2": "我有一處開口管道",
+	"create_enchantment_industry.ponder.leak.text_3": "噢!",
+	"create_enchantment_industry.ponder.leak.text_4": "不用擔心，洩露的液態經驗會變為經驗球。玩家也可以站在管道開口處吸收經驗。",
+	"create_enchantment_industry.ponder.tag.experience": "經驗值相關",
+	"create_enchantment_industry.ponder.tag.experience.description": "與經驗值相關的物品與組件",
+
+	"create_enchantment_industry.ponder.transform.header": "使用附魔指南",
+	"create_enchantment_industry.ponder.transform.text_1": "手持附魔指南潛行右鍵烈焰使者動力爐室將其轉化為烈焰使者附魔室。",
+	"create_enchantment_industry.ponder.transform.text_2": "要使烈焰使者附魔室正常工作，應首先配置好附魔指南。右鍵附魔指南或右擊烈焰使者附魔室都可打開配置面板。",
+	"create_enchantment_industry.ponder.transform.text_3": "如需取回附魔指南，請持扳手潛行右鍵烈焰使者附魔室。",
+	"create_enchantment_industry.ponder.transform.text_4": "你也可以直接手持附魔指南右鍵烈焰使者附魔室來更換。",
 
 	"entity.create_enchantment_industry.hyper_experience_bottle": "超越附魔之瓶",
 	"entity.create_enchantment_industry.hyper_experience_orb": "超經驗球",
@@ -14,7 +65,6 @@
 	"fluid.create_enchantment_industry.ink": "墨水",
 
 	"item.create_enchantment_industry.enchanting_guide": "附魔指南",
-	"item.create_enchantment_industry.experience_rotor": "經驗轉子",
 	"item.create_enchantment_industry.hyper_experience_bottle": "超越附魔之瓶",
 	"item.create_enchantment_industry.ink_bucket": "墨水桶",
 
@@ -138,6 +188,6 @@
 	"create_enchantment_industry.display_source.blaze_enchanter_source_target_enchantment": "目標附魔",
 	"create_enchantment_industry.display_source.printer_source_copy_content": "影印內容",
 
-	"_": "Thank you for translating Create: Enchantment Industry!"
+	"_": "Thank you for translating Create Enchantment Industry!"
 
 }
