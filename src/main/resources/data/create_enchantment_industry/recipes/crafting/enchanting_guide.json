@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:plates/obsidian"
+      "item": "create:sturdy_sheet"
     },
     {
       "item": "minecraft:book"
