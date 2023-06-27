@@ -1,5 +1,7 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.disenchanter;
 
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.UNIT_PER_MB;
+
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,7 +95,7 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         behaviours.add(new DirectBeltInputBehaviour(this).allowingBeltFunnels()
                 .setInsertionHandler(this::tryInsertingFromSide));
-        behaviours.add(internalTank = SmartFluidTankBehaviour.single(this, CeiConfigs.SERVER.disenchanterTankCapacity.get())
+        behaviours.add(internalTank = SmartFluidTankBehaviour.single(this, (long) CeiConfigs.SERVER.disenchanterTankCapacity.get() * UNIT_PER_MB)
                 .allowExtraction()
                 .forbidInsertion());
 		internalTank.getPrimaryHandler().setValidator(fluidStack -> true);
@@ -237,10 +239,10 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
                 }
             });
             if (sum.get() != 0) {
-                var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), sum.get());
+                var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), (long) sum.get() * UNIT_PER_MB);
 				try(Transaction t = TransferUtil.getTransaction()){
 					internalTank.allowInsertion();
-					var inserted = internalTank.getPrimaryHandler().insert(fluidStack.getType(), fluidStack.getAmount(), t);
+					var inserted = internalTank.getPrimaryHandler().insert(fluidStack.getType(), fluidStack.getAmount(), t) / UNIT_PER_MB;
 					t.commit();
 					if (inserted != 0) {
 						for (var player : players) {
@@ -279,9 +281,9 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
             internalTank.allowInsertion();
             for (var orb : experienceOrbs) {
                 var amount = orb.value;
-                var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), amount);
+                var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), amount * UNIT_PER_MB);
 				try(Transaction t = TransferUtil.getTransaction()) {
-					var inserted = internalTank.getPrimaryHandler().insert(fluidStack.getType(), fluidStack.getAmount(), t);
+					var inserted = internalTank.getPrimaryHandler().insert(fluidStack.getType(), fluidStack.getAmount(), t) / UNIT_PER_MB;
 					t.commit();
 					if (inserted == amount) {
 						absorbedXp = true;

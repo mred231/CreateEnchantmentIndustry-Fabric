@@ -6,17 +6,15 @@ import com.simibubi.create.foundation.config.ui.ConfigAnnotations;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class CeiServerConfig extends ConfigBase {
-
-	public static int BUCKET = 81000;
-    public final ConfigInt disenchanterTankCapacity = i(BUCKET, 0,
+    public final ConfigInt disenchanterTankCapacity = i(1000, 0,
         "disenchanterTankCapacity",
         Comments.disenchanterTankCapacity,
         ConfigAnnotations.RequiresRestart.SERVER.asComment());
-    public final ConfigInt copierTankCapacity = i(4 * BUCKET, 0,
+    public final ConfigInt copierTankCapacity = i(4000, 0,
         "copierTankCapacity",
         Comments.copierTankCapacity,
         ConfigAnnotations.RequiresRestart.SERVER.asComment());
-    public final ConfigInt blazeEnchanterTankCapacity = i(2, 0,
+    public final ConfigInt blazeEnchanterTankCapacity = i(2000, 0,
         "blazeEnchanterTankCapacity",
         Comments.blazeEnchanterTankCapacity,
         ConfigAnnotations.RequiresRestart.SERVER.asComment());
@@ -27,9 +25,9 @@ public class CeiServerConfig extends ConfigBase {
         "deployerXpDropChance",
         Comments.deployerXpDropChance);
 
-    public final ConfigFloat deployerXpDropScale= f(0.34F, 0.1F, 100,
-            "deployerXpDropScale",
-            Comments.deployerXpDropScale);
+    public final ConfigFloat crushingWheelDropExpScale= f(0.34F, 0.1F, 100,
+            "crushingWheelDropExpScale",
+            Comments.crushingWheelDropExpScale);
     public final ConfigBool enableHyperEnchant = b(true, "enableHyperEnchant");
 
     public final ConfigInt copyWrittenBookCostPerPage = i(5, 1, 100,
@@ -70,8 +68,8 @@ public class CeiServerConfig extends ConfigBase {
             "The Maximum Extended Levels beyond Enchantment's Max Level that can be reached through Hyper-Enchanting";
         static String deployerXpDropChance =
             "The Chance of whether Deployer-killed entities will drop Experience Nugget";
-        static String deployerXpDropScale =
-                "The Scale of Experience Nugget dropped by Deployer-killed entities";
+        static String crushingWheelDropExpScale =
+                "The Scale of Experience Nugget dropped by Crushing Wheel killed entities";
         static String copyWrittenBookCostPerPage = "The amount of ink needed to be consumed by Copying one page of Written Book";
         static String copyNameTagCost = "The amount of liquid experience needed to be consumed by Copying Name Tag";
         static String copyTrainScheduleCost = "The amount of ink needed to be consumed by Copying Train Schedule";

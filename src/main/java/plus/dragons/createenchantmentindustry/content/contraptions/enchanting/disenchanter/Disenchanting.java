@@ -1,5 +1,7 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.disenchanter;
 
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.UNIT_PER_MB;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -69,7 +71,7 @@ public class Disenchanting {
         WRAPPER.setItem(0, itemStack);
         var recipe = CeiRecipeTypes.DISENCHANTING.<ItemStackHandlerContainer, DisenchantRecipe>find(WRAPPER, level).orElse(null);
         if (recipe != null && !recipe.hasNoResult()) {
-            var xp = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), recipe.getExperience());
+            var xp = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), recipe.getExperience() * UNIT_PER_MB);
             var result = recipe.getResultItem().copy();
             return Pair.of(xp, result);
         }
@@ -107,7 +109,7 @@ public class Disenchanting {
                 .filter(entry -> !entry.getKey().isCurse())
                 .map(entry -> entry.getKey().getMinCost(entry.getValue()))
                 .reduce(0, Integer::sum);
-        return xp == 0 ? 0 : Mth.ceil(xp * 0.75);
+        return xp == 0 ? 0 : (long) Mth.ceil(xp * 0.75) * UNIT_PER_MB;
     }
 
 }

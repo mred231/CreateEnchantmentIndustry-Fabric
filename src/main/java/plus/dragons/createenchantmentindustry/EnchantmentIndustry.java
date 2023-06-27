@@ -1,5 +1,7 @@
 package plus.dragons.createenchantmentindustry;
 
+import static net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.BUCKET;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,6 +33,7 @@ import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
 import plus.dragons.createenchantmentindustry.foundation.ponder.content.CeiPonderIndex;
 
 public class EnchantmentIndustry implements ModInitializer {
+	public static final int UNIT_PER_MB = (int) (BUCKET / 1000);
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String NAME = "Create Enchantment Industry";
     public static final String ID = "create_enchantment_industry";

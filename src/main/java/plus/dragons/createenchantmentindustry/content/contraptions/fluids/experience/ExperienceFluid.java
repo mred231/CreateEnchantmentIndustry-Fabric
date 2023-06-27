@@ -1,5 +1,7 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience;
 
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.UNIT_PER_MB;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.fluids.VirtualFluid;
@@ -28,7 +30,8 @@ public class ExperienceFluid extends VirtualFluid {
         return new ExperienceOrb(level, x, y, z, fluidAmount);
     }
 
-    public void drop(ServerLevel level, Vec3 pos, int fluidAmount) {
+    public void drop(ServerLevel level, Vec3 pos, int realFluidAmount) {
+		var fluidAmount = realFluidAmount / UNIT_PER_MB;
         while(fluidAmount > 0) {
             int orbSize = ExperienceOrb.getExperienceValue(fluidAmount);
             fluidAmount -= orbSize;
@@ -38,7 +41,8 @@ public class ExperienceFluid extends VirtualFluid {
         }
     }
 
-    public void awardOrDrop(@Nullable Player player, ServerLevel level, Vec3 pos, Vec3 speed, int amount) {
+    public void awardOrDrop(@Nullable Player player, ServerLevel level, Vec3 pos, Vec3 speed, int realAmount) {
+		var amount = realAmount / UNIT_PER_MB;
         var orb = this.convertToOrb(level, pos.x, pos.y, pos.z, amount);
         if (player == null) {
             if (!ExperienceOrb.tryMergeToExisting(level, pos, orb.value)) {

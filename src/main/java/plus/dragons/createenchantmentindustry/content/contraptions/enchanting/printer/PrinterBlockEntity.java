@@ -3,6 +3,7 @@ package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.p
 import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.HOLD;
 import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.PASS;
 import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.UNIT_PER_MB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +95,7 @@ public class PrinterBlockEntity extends SmartBlockEntity implements IHaveGoggleI
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         behaviours.add(tank = FilteringFluidTankBehaviour
             .single(fluidStack -> fluidStack.getFluid().is(CeiTags.FluidTag.PRINTER_INPUT.tag),
-                this, CeiConfigs.SERVER.copierTankCapacity.get()));
+                this, CeiConfigs.SERVER.copierTankCapacity.get() * UNIT_PER_MB));
         behaviours.add(beltProcessing = new BeltProcessingBehaviour(this).whenItemEnters(this::onItemReceived)
                 .whileItemHeld(this::whenItemHeld));
         registerAwardables(behaviours,
@@ -126,7 +127,7 @@ public class PrinterBlockEntity extends SmartBlockEntity implements IHaveGoggleI
         else {
             this.copyTarget = copyTarget;
             matchPrintEntry(copyTarget);
-            tooExpensive = Printing.isTooExpensive(printEntry, copyTarget, CeiConfigs.SERVER.copierTankCapacity.get());
+            tooExpensive = Printing.isTooExpensive(printEntry, copyTarget, CeiConfigs.SERVER.copierTankCapacity.get() * UNIT_PER_MB);
         }
         processingTicks = -1;
         notifyUpdate();

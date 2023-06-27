@@ -1,6 +1,7 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.printer;
 
 import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.UNIT_PER_MB;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +56,7 @@ public class PrintEntries {
 
         @Override
         public int requiredInkAmount(ItemStack target) {
-            return getExperienceFromItem(target);
+            return getExperienceFromItem(target) * UNIT_PER_MB;
         }
 
         @Override
@@ -69,14 +70,14 @@ public class PrintEntries {
 
         @Override
         public boolean isTooExpensive(ItemStack target, int limit) {
-            return getExperienceFromItem(target) > limit;
+            return getExperienceFromItem(target) * UNIT_PER_MB > limit;
         }
 
         @Override
         public void addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking, ItemStack target) {
             var b = LANG.itemName(target).style(ChatFormatting.LIGHT_PURPLE);
             b.forGoggles(tooltip, 1);
-            boolean tooExpensive = Printing.isTooExpensive(this, target, CeiConfigs.SERVER.copierTankCapacity.get());
+            boolean tooExpensive = Printing.isTooExpensive(this, target, CeiConfigs.SERVER.copierTankCapacity.get() * UNIT_PER_MB);
             if (tooExpensive)
                 tooltip.add(Component.literal("     ").append(LANG.translate(
                         "gui.goggles.too_expensive").component()
@@ -137,7 +138,7 @@ public class PrintEntries {
 
         @Override
         public int requiredInkAmount(ItemStack target) {
-            return WrittenBookItem.getPageCount(target) * CeiConfigs.SERVER.copyWrittenBookCostPerPage.get();
+            return WrittenBookItem.getPageCount(target) * CeiConfigs.SERVER.copyWrittenBookCostPerPage.get() * UNIT_PER_MB;
         }
 
         @Override
@@ -156,7 +157,7 @@ public class PrintEntries {
 
         @Override
         public boolean isTooExpensive(ItemStack target, int limit) {
-            return WrittenBookItem.getPageCount(target) * CeiConfigs.SERVER.copyWrittenBookCostPerPage.get() > limit;
+            return WrittenBookItem.getPageCount(target) * CeiConfigs.SERVER.copyWrittenBookCostPerPage.get() * UNIT_PER_MB > limit;
         }
 
         @Override
@@ -171,7 +172,7 @@ public class PrintEntries {
                             .add(page == 1 ? LANG.translate("generic.unit.page") : LANG.translate("generic.unit.pages"))
                             .style(ChatFormatting.DARK_GRAY));
             b.forGoggles(tooltip, 1);
-            if (Printing.isTooExpensive(this, target, CeiConfigs.SERVER.copierTankCapacity.get()))
+            if (Printing.isTooExpensive(this, target, CeiConfigs.SERVER.copierTankCapacity.get() * UNIT_PER_MB))
                 tooltip.add(Component.literal("     ").append(LANG.translate(
                         "gui.goggles.too_expensive").component()
                 ).withStyle(ChatFormatting.RED));
@@ -213,7 +214,7 @@ public class PrintEntries {
 
         @Override
         public int requiredInkAmount(ItemStack target) {
-            return CeiConfigs.SERVER.copyNameTagCost.get();
+            return CeiConfigs.SERVER.copyNameTagCost.get() * UNIT_PER_MB;
         }
 
         @Override
@@ -225,7 +226,7 @@ public class PrintEntries {
 
         @Override
         public boolean isTooExpensive(ItemStack target, int limit) {
-            return CeiConfigs.SERVER.copyNameTagCost.get() > limit;
+            return CeiConfigs.SERVER.copyNameTagCost.get() * UNIT_PER_MB > limit;
         }
 
         @Override
@@ -236,7 +237,7 @@ public class PrintEntries {
                     .add(LANG.itemName(target)
                             .style(ChatFormatting.GREEN));
             b.forGoggles(tooltip, 1);
-            boolean tooExpensive = Printing.isTooExpensive(this, target, CeiConfigs.SERVER.copierTankCapacity.get());
+            boolean tooExpensive = Printing.isTooExpensive(this, target, CeiConfigs.SERVER.copierTankCapacity.get() * UNIT_PER_MB);
             if (tooExpensive)
                 tooltip.add(Component.literal("     ").append(LANG.translate(
                         "gui.goggles.too_expensive").component()
@@ -276,7 +277,7 @@ public class PrintEntries {
 
         @Override
         public int requiredInkAmount(ItemStack target) {
-            return CeiConfigs.SERVER.copyTrainScheduleCost.get();
+            return CeiConfigs.SERVER.copyTrainScheduleCost.get() * UNIT_PER_MB;
         }
 
         @Override
@@ -286,14 +287,14 @@ public class PrintEntries {
 
         @Override
         public boolean isTooExpensive(ItemStack target, int limit) {
-            return CeiConfigs.SERVER.copyTrainScheduleCost.get() > limit;
+            return CeiConfigs.SERVER.copyTrainScheduleCost.get() * UNIT_PER_MB > limit;
         }
 
         @Override
         public void addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking, ItemStack target) {
             var b = LANG.itemName(target).style(ChatFormatting.BLUE);
             b.forGoggles(tooltip, 1);
-            boolean tooExpensive = Printing.isTooExpensive(this, target, CeiConfigs.SERVER.copierTankCapacity.get());
+            boolean tooExpensive = Printing.isTooExpensive(this, target, CeiConfigs.SERVER.copierTankCapacity.get() * UNIT_PER_MB);
             if (tooExpensive)
                 tooltip.add(Component.literal("     ").append(LANG.translate(
                         "gui.goggles.too_expensive").component()

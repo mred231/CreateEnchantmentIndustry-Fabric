@@ -1,6 +1,7 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter;
 
 import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.UNIT_PER_MB;
 
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
@@ -31,6 +33,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -124,7 +127,7 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
                 .setInsertionHandler(this::tryInsertingFromSide));
         behaviours.add(internalTank = FilteringFluidTankBehaviour
                 .single(fluidVariant -> fluidVariant.getFluid().is(CeiTags.FluidTag.BLAZE_ENCHANTER_INPUT.tag),
-                    this, CeiConfigs.SERVER.blazeEnchanterTankCapacity.get())
+                    this, CeiConfigs.SERVER.blazeEnchanterTankCapacity.get() * UNIT_PER_MB)
                 .whenFluidUpdates(() -> {
                     var fluid = internalTank.getPrimaryHandler().getFluid().getFluid();
                     if (CeiFluids.EXPERIENCE.is(fluid))
@@ -400,7 +403,10 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
             award(CeiAdvancements.HYPOTHETICAL_EXTENSION.asCreateAdvancement());
         // Process finished
         Enchanting.enchantItem(heldItem.stack, entry);
-        internalTank.getPrimaryHandler().getFluid().shrink(exp.getAmount());
+		try(Transaction t = TransferUtil.getTransaction()) {
+			internalTank.getPrimaryHandler().extract(exp.getType(),exp.getAmount(),t);
+			t.commit();
+		}
         sendParticles = true;
         notifyUpdate();
         return true;
@@ -547,13 +553,13 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
                             .withStyle(ChatFormatting.RED));
                 else {
                     int consumption = Enchanting.getExperienceConsumption(entry.getFirst(), entry.getSecond());
-                    if (consumption > CeiConfigs.SERVER.blazeEnchanterTankCapacity.get())
+                    if (consumption > CeiConfigs.SERVER.blazeEnchanterTankCapacity.get() * UNIT_PER_MB)
                         tooltip.add(Component.literal("     ").append(LANG.translate("gui.goggles.too_expensive")
                                         .component())
                                 .withStyle(ChatFormatting.RED));
                     else
                         tooltip.add(Component.literal("     ")
-                                .append(LANG.translate("gui.goggles.xp_consumption", consumption).component())
+                                .append(LANG.translate("gui.goggles.xp_consumption", consumption / UNIT_PER_MB).component())
                                 .withStyle(ChatFormatting.GREEN));
                 }
             }

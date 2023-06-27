@@ -1,13 +1,17 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter;
 
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.UNIT_PER_MB;
+
+import java.util.Map;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.simibubi.create.foundation.utility.Pair;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import org.jetbrains.annotations.Nullable;
 import plus.dragons.createenchantmentindustry.entry.CeiItems;
-
-import java.util.Map;
 
 public class Enchanting {
 
@@ -25,7 +29,7 @@ public class Enchanting {
         } else
             throw new RuntimeException("TargetItem is not an enchanting guide for blaze!");
     }
-    
+
     @Nullable
     public static EnchantmentEntry getValidEnchantment(ItemStack itemStack, ItemStack targetItem, boolean hyper) {
         var entry = getTargetEnchantment(targetItem, hyper);
@@ -58,7 +62,7 @@ public class Enchanting {
         map.put(enchantment.getFirst(), enchantment.getSecond());
         EnchantmentHelper.setEnchantments(map, itemStack);
     }
-    
+
     public static int expPointFromLevel(int level) {
         if (level > 31) {
             return (int) (4.5 * level * level - 162.5 * level + 2220);
@@ -68,7 +72,7 @@ public class Enchanting {
                 : level * level + 6 * level;
         }
     }
-    
+
     public static int expPointForNextLevel(int level) {
         if (level > 30) {
             return 9 * level - 158;
@@ -90,7 +94,7 @@ public class Enchanting {
 
     public static int getExperienceConsumption(Enchantment enchantment, int level) {
         int xpLevel = enchantment.getMinCost(level) + level * rarityLevel(enchantment.getRarity());
-        return expPointForNextLevel(xpLevel);
+        return expPointForNextLevel(xpLevel) * UNIT_PER_MB;
     }
-    
+
 }

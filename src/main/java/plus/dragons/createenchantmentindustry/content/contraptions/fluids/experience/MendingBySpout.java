@@ -1,5 +1,7 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience;
 
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.UNIT_PER_MB;
+
 import org.jetbrains.annotations.Nullable;
 
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
@@ -19,7 +21,7 @@ public class MendingBySpout {
     public static int getRequiredAmountForItem(Level world, ItemStack stack, FluidStack availableFluid) {
         if (!(CeiFluids.EXPERIENCE.is(availableFluid.getFluid()) && canItemBeMended(world, stack)))
             return -1;
-        return (int) Math.min(availableFluid.getAmount(), Mth.ceil(stack.getDamageValue() / getXpRepairRatio()));
+        return (int) Math.min(availableFluid.getAmount(), (long) Mth.ceil(stack.getDamageValue() / getXpRepairRatio()) * UNIT_PER_MB);
     }
 
     @Nullable
@@ -29,7 +31,7 @@ public class MendingBySpout {
         ItemStack result = stack.split(1);
         availableFluid.shrink(requiredAmount);
         int damage = result.getDamageValue();
-        damage -= Math.min((int) (requiredAmount * getXpRepairRatio()), damage);
+        damage -= Math.min((int) (requiredAmount * getXpRepairRatio() / UNIT_PER_MB), damage);
         result.setDamageValue(damage);
         return result;
     }
