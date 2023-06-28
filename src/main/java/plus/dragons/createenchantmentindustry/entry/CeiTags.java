@@ -1,9 +1,9 @@
 package plus.dragons.createenchantmentindustry.entry;
 
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.LANG;
+
 import java.util.Locale;
 
-import com.simibubi.create.Create;
-import com.simibubi.create.foundation.utility.Lang;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 
 import net.minecraft.core.Registry;
@@ -29,18 +29,6 @@ public class CeiTags {
         return optionalTag(registry, new ResourceLocation("c", path));
     }
 
-    public static TagKey<Block> forgeBlockTag(String path) {
-        return commonTag(Registry.BLOCK, path);
-    }
-
-    public static TagKey<Item> forgeItemTag(String path) {
-        return commonTag(Registry.ITEM, path);
-    }
-
-    public static TagKey<Fluid> forgeFluidTag(String path) {
-        return commonTag(Registry.FLUID, path);
-    }
-    String FORGE = "forge";
     String CREATE = "create";
 
     static String toTagName(String enumName) {
@@ -49,7 +37,7 @@ public class CeiTags {
 
     public enum NameSpace {
         MOD(EnchantmentIndustry.ID, false, true),
-        CREATE(Create.ID, false, true),
+        CREATE("create", false, true),
         COMMON("c")
         ;
 
@@ -99,7 +87,7 @@ public class CeiTags {
         }
 
         BlockTag(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
-			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
+			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? LANG.asId(name()) : path);
 			tag = optionalTag(Registry.BLOCK, id);
 			this.alwaysDatagen = alwaysDatagen;
         }
@@ -150,7 +138,7 @@ public class CeiTags {
         }
 
         ItemTag(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
-			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
+			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? LANG.asId(name()) : path);
 			tag = optionalTag(Registry.ITEM, id);
 			this.alwaysDatagen = alwaysDatagen;
         }
@@ -203,7 +191,7 @@ public class CeiTags {
         }
 
         FluidTag(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
-			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
+			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? LANG.asId(name()) : path);
 			tag = optionalTag(Registry.FLUID, id);
 			this.alwaysDatagen = alwaysDatagen;
         }
