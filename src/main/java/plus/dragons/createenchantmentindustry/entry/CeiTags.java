@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
@@ -216,12 +215,14 @@ public class CeiTags {
     }
 
     public static void genFluidTag(RegistrateTagsProvider<Fluid> pov){
-        pov.tag(FluidTag.PRINTER_INPUT.tag).addTag(FluidTag.INK.tag);
+		// FIXME BUGGY
+        //pov.tag(FluidTag.PRINTER_INPUT.tag).addTag(FluidTag.INK.tag);
     }
 
     public static void genItemTag(RegistrateTagsProvider<Item> pov){
-        pov.tag(ItemTag.INK_INGREDIENT.tag).add(Items.BLACK_DYE, Items.WITHER_ROSE, Items.INK_SAC);
-        pov.tag(ItemTag.UPRIGHT_ON_BELT.tag).add(Items.EXPERIENCE_BOTTLE);
+		// FIXME BUGGY
+        //pov.tag(ItemTag.INK_INGREDIENT.tag).add(Items.BLACK_DYE, Items.WITHER_ROSE, Items.INK_SAC);
+        //pov.tag(ItemTag.UPRIGHT_ON_BELT.tag).add(Items.EXPERIENCE_BOTTLE);
     }
 
 }

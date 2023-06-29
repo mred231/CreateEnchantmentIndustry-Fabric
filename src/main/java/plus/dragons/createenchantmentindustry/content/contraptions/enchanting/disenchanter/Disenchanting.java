@@ -71,7 +71,7 @@ public class Disenchanting {
         WRAPPER.setItem(0, itemStack);
         var recipe = CeiRecipeTypes.DISENCHANTING.<ItemStackHandlerContainer, DisenchantRecipe>find(WRAPPER, level).orElse(null);
         if (recipe != null && !recipe.hasNoResult()) {
-            var xp = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), recipe.getExperience() * UNIT_PER_MB);
+            var xp = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), recipe.getExperience());
             var result = recipe.getResultItem().copy();
             return Pair.of(xp, result);
         }
