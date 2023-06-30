@@ -56,9 +56,9 @@ public class CeiFluids {
 			.onRegisterAfter(Registry.ITEM_REGISTRY, exp -> {
 				Fluid source = exp.getSource();
 				FluidStorage.combinedItemApiProvider(Items.EXPERIENCE_BOTTLE).register(context ->
-						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), FluidConstants.BOTTLE));
+						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 810));
 				FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
-						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(Items.EXPERIENCE_BOTTLE), source, FluidConstants.BOTTLE));
+						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(Items.EXPERIENCE_BOTTLE), source, 810));
 			})
             .register();
 
@@ -82,9 +82,9 @@ public class CeiFluids {
 			.onRegisterAfter(Registry.ITEM_REGISTRY, hyperExp -> {
 				Fluid source = hyperExp.getSource();
 				FluidStorage.combinedItemApiProvider(CeiItems.HYPER_EXP_BOTTLE.get()).register(context ->
-						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), FluidConstants.BOTTLE));
+						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 810));
 				FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
-						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(CeiItems.HYPER_EXP_BOTTLE.get()), source, FluidConstants.BOTTLE));
+						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(CeiItems.HYPER_EXP_BOTTLE.get()), source, 810));
 			})
             .register();
 
