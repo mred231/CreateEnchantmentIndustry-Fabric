@@ -40,13 +40,13 @@ public class Disenchanting {
                     tank.allowInsertion();
                     long amount = recipe.getExperience();
                     var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), itemStack.getCount() * amount);
-					int inserted = 0;
+					int inserted;
 					try(Transaction t = TransferUtil.getTransaction()) {
 						inserted = (int) tank.getPrimaryHandler().simulateInsert(fluidStack.getType(),fluidStack.getAmount(),t);
 					}
                     ItemStack ret = itemStack.copy();
                     if (!simulate) {
-						fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), inserted * amount);
+						fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), inserted);
 						try(Transaction t = TransferUtil.getTransaction()) {
 							tank.getPrimaryHandler().insert(fluidStack.getType(),fluidStack.getAmount(),t);
 							t.commit();
