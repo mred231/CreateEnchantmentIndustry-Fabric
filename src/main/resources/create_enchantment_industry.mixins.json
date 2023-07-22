@@ -4,7 +4,7 @@
   "package": "plus.dragons.createenchantmentindustry.foundation.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "BasinBlockMixin",
+    "BasinBlockEntityMixin",
     "CrushingWheelControllerBlockEntityMixin",
     "DeployerFakePlayerMixin",
     "FillingBySpoutMixin",
