@@ -318,6 +318,9 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
             return true;
         if (processingTicks < 5)
             return true;
+		// it shouldn't happen but it happened. It's temporary fix since I don't have time to figure out why now
+		if(heldItem.stack.getCount()<=0)
+			return false;
 
         Pair<FluidStack, ItemStack> result = Disenchanting.disenchantResult(heldItem.stack, level);
         if (result == null)
