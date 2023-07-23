@@ -56,7 +56,7 @@ public class PrintEntries {
 
         @Override
         public int requiredInkAmount(ItemStack target) {
-            return getExperienceFromItem(target) * UNIT_PER_MB;
+            return getExperienceFromItem(target);
         }
 
         @Override
@@ -70,7 +70,7 @@ public class PrintEntries {
 
         @Override
         public boolean isTooExpensive(ItemStack target, int limit) {
-            return getExperienceFromItem(target) * UNIT_PER_MB > limit;
+            return getExperienceFromItem(target)> limit;
         }
 
         @Override
