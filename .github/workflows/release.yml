@@ -7,7 +7,7 @@ permissions:
 env:
   MINECRAFT_VERSION: 1.19.2
   JAVA_VERSION: 17
-  VERSION: beta-0.2.1
+  VERSION: 1.0.0
   CREATE_VERSION: 0.5.1.b
 
 jobs:
@@ -48,7 +48,7 @@ jobs:
           # Config
           name: "CEI Fabric ${{ env.VERSION }} for Create Fabric ${{ env.MINECRAFT_VERSION }}-${{ env.CREATE_VERSION }}"
           version: ${{ env.VERSION }}
-          version-type: beta
+          version-type: release
           changelog-file: changelog/${{ env.VERSION }}.md
           files: |
             build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim)).jar
