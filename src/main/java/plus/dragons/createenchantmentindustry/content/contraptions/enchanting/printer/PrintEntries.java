@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 
 import net.minecraft.ChatFormatting;
@@ -31,10 +32,12 @@ public class PrintEntries {
         var e2 = new WrittenBook();
         var e3 = new NameTag();
         var e4 = new Schedule();
+        var e5 = new Clipboard();
         ENTRIES.put(e1.id(),e1);
         ENTRIES.put(e2.id(),e2);
         ENTRIES.put(e3.id(),e3);
         ENTRIES.put(e4.id(),e4);
+		ENTRIES.put(e5.id(),e5);
     }
 
     static class EnchantedBook implements PrintEntry{
@@ -258,58 +261,111 @@ public class PrintEntries {
         }
     }
 
-    static class Schedule implements PrintEntry{
+	static class Schedule implements PrintEntry{
 
-        @Override
-        public ResourceLocation id() {
-            return EnchantmentIndustry.genRL("schedule");
-        }
+		@Override
+		public ResourceLocation id() {
+			return EnchantmentIndustry.genRL("schedule");
+		}
 
-        @Override
-        public boolean match(ItemStack toPrint) {
-            return toPrint.is(AllItems.SCHEDULE.get());
-        }
+		@Override
+		public boolean match(ItemStack toPrint) {
+			return toPrint.is(AllItems.SCHEDULE.get());
+		}
 
-        @Override
-        public boolean valid(ItemStack target, ItemStack tested) {
-            return tested.is(target.getItem()) && !ItemStack.tagMatches(target, tested);
-        }
+		@Override
+		public boolean valid(ItemStack target, ItemStack tested) {
+			return tested.is(target.getItem()) && !ItemStack.tagMatches(target, tested);
+		}
 
-        @Override
-        public int requiredInkAmount(ItemStack target) {
-            return CeiConfigs.SERVER.copyTrainScheduleCost.get() * UNIT_PER_MB;
-        }
+		@Override
+		public int requiredInkAmount(ItemStack target) {
+			return CeiConfigs.SERVER.copyTrainScheduleCost.get() * UNIT_PER_MB;
+		}
 
-        @Override
-        public Fluid requiredInkType(ItemStack target) {
-            return CeiFluids.INK.get();
-        }
+		@Override
+		public Fluid requiredInkType(ItemStack target) {
+			return CeiFluids.INK.get();
+		}
 
-        @Override
-        public boolean isTooExpensive(ItemStack target, int limit) {
-            return CeiConfigs.SERVER.copyTrainScheduleCost.get() * UNIT_PER_MB > limit;
-        }
+		@Override
+		public boolean isTooExpensive(ItemStack target, int limit) {
+			return CeiConfigs.SERVER.copyTrainScheduleCost.get() * UNIT_PER_MB > limit;
+		}
 
-        @Override
-        public void addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking, ItemStack target) {
-            var b = LANG.itemName(target).style(ChatFormatting.BLUE);
-            b.forGoggles(tooltip, 1);
-            boolean tooExpensive = Printing.isTooExpensive(this, target, CeiConfigs.SERVER.copierTankCapacity.get() * UNIT_PER_MB);
-            if (tooExpensive)
-                tooltip.add(Component.literal("     ").append(LANG.translate(
-                        "gui.goggles.too_expensive").component()
-                ).withStyle(ChatFormatting.RED));
-            else
-                tooltip.add(Component.literal("     ").append(LANG.translate(
-                        "gui.goggles.ink_consumption",
-                        String.valueOf(CeiConfigs.SERVER.copyTrainScheduleCost.get())).component()
-                ).withStyle(ChatFormatting.DARK_GRAY));
-        }
+		@Override
+		public void addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking, ItemStack target) {
+			var b = LANG.itemName(target).style(ChatFormatting.BLUE);
+			b.forGoggles(tooltip, 1);
+			boolean tooExpensive = Printing.isTooExpensive(this, target, CeiConfigs.SERVER.copierTankCapacity.get() * UNIT_PER_MB);
+			if (tooExpensive)
+				tooltip.add(Component.literal("     ").append(LANG.translate(
+						"gui.goggles.too_expensive").component()
+				).withStyle(ChatFormatting.RED));
+			else
+				tooltip.add(Component.literal("     ").append(LANG.translate(
+						"gui.goggles.ink_consumption",
+						String.valueOf(CeiConfigs.SERVER.copyTrainScheduleCost.get())).component()
+				).withStyle(ChatFormatting.DARK_GRAY));
+		}
 
-        @Override
-        public MutableComponent getDisplaySourceContent(ItemStack target) {
-            return LANG.itemName(target).component();
-        }
-    }
+		@Override
+		public MutableComponent getDisplaySourceContent(ItemStack target) {
+			return LANG.itemName(target).component();
+		}
+	}
 
+	static class Clipboard implements PrintEntry{
+
+		@Override
+		public ResourceLocation id() {
+			return EnchantmentIndustry.genRL("clipboard");
+		}
+
+		@Override
+		public boolean match(ItemStack toPrint) {
+			return toPrint.is(AllBlocks.CLIPBOARD.get().asItem());
+		}
+
+		@Override
+		public boolean valid(ItemStack target, ItemStack tested) {
+			return tested.is(target.getItem()) && !ItemStack.tagMatches(target, tested);
+		}
+
+		@Override
+		public int requiredInkAmount(ItemStack target) {
+			return CeiConfigs.SERVER.copyClipboardCost.get() * UNIT_PER_MB;
+		}
+
+		@Override
+		public Fluid requiredInkType(ItemStack target) {
+			return CeiFluids.INK.get();
+		}
+
+		@Override
+		public boolean isTooExpensive(ItemStack target, int limit) {
+			return CeiConfigs.SERVER.copyClipboardCost.get() * UNIT_PER_MB > limit;
+		}
+
+		@Override
+		public void addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking, ItemStack target) {
+			var b = LANG.itemName(target).style(ChatFormatting.BLUE);
+			b.forGoggles(tooltip, 1);
+			boolean tooExpensive = Printing.isTooExpensive(this, target, CeiConfigs.SERVER.copierTankCapacity.get() * UNIT_PER_MB);
+			if (tooExpensive)
+				tooltip.add(Component.literal("     ").append(LANG.translate(
+						"gui.goggles.too_expensive").component()
+				).withStyle(ChatFormatting.RED));
+			else
+				tooltip.add(Component.literal("     ").append(LANG.translate(
+						"gui.goggles.ink_consumption",
+						String.valueOf(CeiConfigs.SERVER.copyClipboardCost.get())).component()
+				).withStyle(ChatFormatting.DARK_GRAY));
+		}
+
+		@Override
+		public MutableComponent getDisplaySourceContent(ItemStack target) {
+			return LANG.itemName(target).component();
+		}
+	}
 }
