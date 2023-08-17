@@ -1,6 +1,8 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience;
 
+import io.github.fabricators_of_create.porting_lib.entity.ExtraSpawnDataEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.entity.EntityDimensions;
@@ -11,7 +13,7 @@ import net.minecraft.world.level.Level;
 import plus.dragons.createenchantmentindustry.entry.CeiEntityTypes;
 import plus.dragons.createenchantmentindustry.entry.CeiFluids;
 
-public class HyperExperienceOrb extends ExperienceOrb {
+public class HyperExperienceOrb extends ExperienceOrb implements ExtraSpawnDataEntity {
 
     public HyperExperienceOrb(Level level, double x, double y, double z, int value) {
         this(CeiEntityTypes.HYPER_EXPERIENCE_ORB.get(), level);
@@ -84,4 +86,17 @@ public class HyperExperienceOrb extends ExperienceOrb {
         return new ClientboundAddEntityPacket(this);
     }
 
+	@Override
+	public void readSpawnData(FriendlyByteBuf buf) {
+		value = buf.readInt();
+		setPos(buf.readDouble(),buf.readDouble(),buf.readDouble());
+	}
+
+	@Override
+	public void writeSpawnData(FriendlyByteBuf buf) {
+		buf.writeInt(value);
+		buf.writeDouble(position().x);
+		buf.writeDouble(position().y);;
+		buf.writeDouble(position().z);
+	}
 }
