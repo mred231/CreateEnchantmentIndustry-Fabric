@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Mixin(targets = "net.minecraft.world.entity.player.Player", priority = 1)
+@Mixin(value = Player.class, priority = 1)
 public class PlayerMixin {
     @ModifyVariable(method = "attack",
             at = @At("STORE"), ordinal = 3)
