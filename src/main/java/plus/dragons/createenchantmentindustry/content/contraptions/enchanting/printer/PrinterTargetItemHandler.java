@@ -1,7 +1,6 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.printer;
 
 import com.simibubi.create.AllItems;
-
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -28,7 +27,7 @@ public class PrinterTargetItemHandler extends SnapshotParticipant<Unit> implemen
 		if (!be.getCopyTarget().isEmpty())
 			return 0;
 
-		if(isItemValid(resource))
+		if(!isItemValid(resource))
 			return 0;
 
 		be.snapshotParticipant.updateSnapshots(transaction);
