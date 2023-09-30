@@ -5,21 +5,23 @@ import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.REGISTR
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllCreativeModeTabs;
 import com.simibubi.create.AllFluids;
-import com.simibubi.create.infrastructure.item.CreateCreativeModeTab;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import plus.dragons.createdragonlib.event.FillCreateItemGroupEvent;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter.EnchantingGuideItem;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceBottleItem;
 
+import java.util.function.Function;
+
 public class CeiItems {
 
     static {
-        REGISTRATE.creativeModeTab(() -> AllCreativeModeTabs.BASE_CREATIVE_TAB);
+        REGISTRATE.useCreativeTab(AllCreativeModeTabs.MAIN_TAB.key());
     }
 
     public static final ItemEntry<EnchantingGuideItem> ENCHANTING_GUIDE = REGISTRATE.item("enchanting_guide", EnchantingGuideItem::new)
@@ -32,8 +34,8 @@ public class CeiItems {
             .tag(CeiTags.ItemTag.UPRIGHT_ON_BELT.tag)
             .register();
 
-    public static InteractionResult fillCreateItemGroup(CreateCreativeModeTab itemGroup, NonNullList<ItemStack> items) {
-        if (itemGroup == AllCreativeModeTabs.BASE_CREATIVE_TAB) {
+    public static InteractionResult fillCreateItemGroup(AllCreativeModeTabs.TabInfo itemGroup, Function<Item, ItemStack> items) {
+        if (itemGroup == AllCreativeModeTabs.MAIN_TAB) {
 			FillCreateItemGroupEvent.Inserter inserter = new FillCreateItemGroupEvent.Inserter(items);
 			inserter.addInsertion(AllBlocks.ITEM_DRAIN.get(), CeiBlocks.DISENCHANTER.asStack());
 			inserter.addInsertion(AllBlocks.SPOUT.get(), CeiBlocks.PRINTER.asStack());

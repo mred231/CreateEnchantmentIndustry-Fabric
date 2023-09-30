@@ -16,6 +16,8 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -33,7 +35,7 @@ import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experi
 public class CeiFluids {
 
     static {
-        REGISTRATE.creativeModeTab(() -> AllCreativeModeTabs.BASE_CREATIVE_TAB);
+        REGISTRATE.useCreativeTab(AllCreativeModeTabs.MAIN_TAB.key());
     }
 
     public static final ResourceLocation EXPERIENCE_STILL_RL = EnchantmentIndustry.genRL("fluid/experience_still");
@@ -53,7 +55,7 @@ public class CeiFluids {
 				}
 			})
             .tag(CeiTags.FluidTag.BLAZE_ENCHANTER_INPUT.tag, CeiTags.FluidTag.PRINTER_INPUT.tag)
-			.onRegisterAfter(Registry.ITEM_REGISTRY, exp -> {
+			.onRegisterAfter(Registries.ITEM, exp -> {
 				Fluid source = exp.getSource();
 				FluidStorage.combinedItemApiProvider(Items.EXPERIENCE_BOTTLE).register(context ->
 						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 810));
@@ -79,7 +81,7 @@ public class CeiFluids {
 				}
 			})
             .tag(CeiTags.FluidTag.BLAZE_ENCHANTER_INPUT.tag, CeiTags.FluidTag.PRINTER_INPUT.tag)
-			.onRegisterAfter(Registry.ITEM_REGISTRY, hyperExp -> {
+			.onRegisterAfter(Registries.ITEM, hyperExp -> {
 				Fluid source = hyperExp.getSource();
 				FluidStorage.combinedItemApiProvider(CeiItems.HYPER_EXP_BOTTLE.get()).register(context ->
 						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 810));
@@ -103,7 +105,7 @@ public class CeiFluids {
             .tag(CeiTags.FluidTag.INK.tag)
             .bucket()
             .build()
-			.onRegisterAfter(Registry.ITEM_REGISTRY, ink -> {
+			.onRegisterAfter(Registries.ITEM, ink -> {
 				Fluid source = ink.getSource();
 				FluidStorage.combinedItemApiProvider(source.getBucket()).register(context ->
 						new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(source), FluidConstants.BUCKET));

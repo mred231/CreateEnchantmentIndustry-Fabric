@@ -17,7 +17,6 @@ import plus.dragons.createenchantmentindustry.foundation.config.CeiConfigs;
 
 @Mixin(value = DeployerFakePlayer.class, remap = false)
 public class DeployerFakePlayerMixin {
-
     @Inject(method = "deployerKillsDoNotSpawnXP", at = @At(value = "HEAD"), cancellable = true)
     private static void deployerKillsSpawnXpNuggets(int i, Player player, LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
 		if (player instanceof DeployerFakePlayer FakePlayer){
@@ -38,5 +37,4 @@ public class DeployerFakePlayerMixin {
 			cir.setReturnValue(0);
 		}
     }
-
 }

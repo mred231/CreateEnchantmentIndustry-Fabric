@@ -3,6 +3,9 @@ package plus.dragons.createenchantmentindustry.entry;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
@@ -32,9 +35,9 @@ public enum CeiRecipeTypes implements IRecipeTypeInfo {
     CeiRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = EnchantmentIndustry.LANG.asId(name());
         id = EnchantmentIndustry.genRL(name);
-		serializerObject = Registry.register(Registry.RECIPE_SERIALIZER, id, serializerSupplier.get());
+		serializerObject = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, id, serializerSupplier.get());
 		typeObject = simpleType(id);
-		Registry.register(Registry.RECIPE_TYPE, id, typeObject);
+		Registry.register(BuiltInRegistries.RECIPE_TYPE, id, typeObject);
 		type = () -> typeObject;
     }
 

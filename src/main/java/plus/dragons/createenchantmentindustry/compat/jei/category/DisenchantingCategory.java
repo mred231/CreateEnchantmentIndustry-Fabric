@@ -8,6 +8,8 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.disenchanter.DisenchantRecipe;
 import plus.dragons.createenchantmentindustry.entry.CeiFluids;
 
@@ -15,13 +17,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class DisenchantingCategory extends CreateRecipeCategory<DisenchantRecipe> {
-    
+
     private final IDrawable disenchanter = new DisenchanterDrawable();
-    
+
     public DisenchantingCategory(Info<DisenchantRecipe> info) {
         super(info);
     }
-    
+
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, DisenchantRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 27, 25)
@@ -36,12 +38,12 @@ public class DisenchantingCategory extends CreateRecipeCategory<DisenchantRecipe
         if(!recipe.hasNoResult())
             builder.addSlot(RecipeIngredientRole.OUTPUT, 139, 5)
                     .setBackground(getRenderedSlot(), -1, -1)
-                    .addItemStack(recipe.getResultItem());
+                    .addItemStack(recipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
     }
-    
-    @Override
-    public void draw(DisenchantRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
-        AllGuiTextures.JEI_SHADOW.render(matrixStack, 62, 31);
-        disenchanter.draw(matrixStack, getBackground().getWidth() / 2 - 13, 16);
-    }
+
+	@Override
+	public void draw(DisenchantRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+		AllGuiTextures.JEI_SHADOW.render(guiGraphics, 62, 31);
+		disenchanter.draw(guiGraphics, getBackground().getWidth() / 2 - 13, 16);
+	}
 }

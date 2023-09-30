@@ -9,7 +9,6 @@ import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 
 @Mixin(OpenEndedPipe.class)
 public interface OpenEndedPipeInvoker {
-
     @Invoker(remap = false)
     void invokeApplyEffects(FluidStack fluid);
 }

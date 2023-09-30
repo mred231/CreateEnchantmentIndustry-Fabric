@@ -14,7 +14,6 @@ import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experi
 
 @Mixin(value = FillingBySpout.class)
 public class FillingBySpoutMixin {
-
     @Inject(method = "canItemBeFilled", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/fluids/transfer/GenericItemFilling;canItemBeFilled(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;)Z"), cancellable = true)
     private static void canItemBeMended(Level world, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         if (MendingBySpout.canItemBeMended(world, stack))
@@ -40,5 +39,4 @@ public class FillingBySpoutMixin {
         if (result != null)
             cir.setReturnValue(result);
     }
-
 }

@@ -42,7 +42,7 @@ public class Disenchanting {
                     var fluidStack = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), itemStack.getCount() * amount);
 					int inserted;
 					try(Transaction t = TransferUtil.getTransaction()) {
-						inserted = (int) tank.getPrimaryHandler().simulateInsert(fluidStack.getType(),fluidStack.getAmount(),t);
+						inserted = (int) tank.getPrimaryHandler().insert(fluidStack.getType(),fluidStack.getAmount(),t);
 					}
                     ItemStack ret = itemStack.copy();
                     if (!simulate) {
@@ -72,7 +72,7 @@ public class Disenchanting {
         var recipe = CeiRecipeTypes.DISENCHANTING.<ItemStackHandlerContainer, DisenchantRecipe>find(WRAPPER, level).orElse(null);
         if (recipe != null && !recipe.hasNoResult()) {
             var xp = new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), recipe.getExperience());
-            var result = recipe.getResultItem().copy();
+            var result = recipe.getResultItem(level.registryAccess()).copy();
             return Pair.of(xp, result);
         }
         return null;

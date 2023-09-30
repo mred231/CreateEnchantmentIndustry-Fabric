@@ -7,6 +7,8 @@ import java.util.Locale;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -87,7 +89,7 @@ public class CeiTags {
 
         BlockTag(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
 			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? LANG.asId(name()) : path);
-			tag = optionalTag(Registry.BLOCK, id);
+			tag = optionalTag(BuiltInRegistries.BLOCK, id);
 			this.alwaysDatagen = alwaysDatagen;
         }
 
@@ -138,7 +140,7 @@ public class CeiTags {
 
         ItemTag(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
 			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? LANG.asId(name()) : path);
-			tag = optionalTag(Registry.ITEM, id);
+			tag = optionalTag(BuiltInRegistries.ITEM, id);
 			this.alwaysDatagen = alwaysDatagen;
         }
 
@@ -191,7 +193,7 @@ public class CeiTags {
 
         FluidTag(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
 			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? LANG.asId(name()) : path);
-			tag = optionalTag(Registry.FLUID, id);
+			tag = optionalTag(BuiltInRegistries.FLUID, id);
 			this.alwaysDatagen = alwaysDatagen;
         }
 

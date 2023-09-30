@@ -20,7 +20,7 @@ import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.pr
 public class CeiBlocks {
 
     static {
-        REGISTRATE.creativeModeTab(() -> AllCreativeModeTabs.BASE_CREATIVE_TAB);
+        REGISTRATE.useCreativeTab(AllCreativeModeTabs.MAIN_TAB.key());
     }
 
     public static final BlockEntry<DisenchanterBlock> DISENCHANTER = REGISTRATE

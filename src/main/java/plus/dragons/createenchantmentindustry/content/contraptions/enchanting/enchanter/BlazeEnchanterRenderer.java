@@ -7,8 +7,7 @@ import java.util.Set;
 import com.jozufozu.flywheel.core.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
@@ -33,8 +32,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import org.joml.Quaternionf;
+
 import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter.BlazeEnchanterBlock.HeatLevel;
 
@@ -56,7 +59,7 @@ public class BlazeEnchanterRenderer extends SmartBlockEntityRenderer<BlazeEnchan
 
         ps.pushPose();
 
-        renderItem(be, partialTicks, animation, ps, buffer);
+        renderItem(be, partialTicks, animation, ps, buffer, light, overlay);
         renderBlaze(be, horizontalAngle, animation, ps, buffer);
         renderBook(be, partialTicks, horizontalAngle, ps, buffer);
 
@@ -65,7 +68,7 @@ public class BlazeEnchanterRenderer extends SmartBlockEntityRenderer<BlazeEnchan
 
     protected void renderItem(BlazeEnchanterBlockEntity be,
                               float partialTicks, float animation,
-                              PoseStack ps, MultiBufferSource buffer) {
+                              PoseStack ps, MultiBufferSource buffer, int light, int overlay) {
         TransportedItemStack transported = be.heldItem;
         if (transported == null)
             return;
@@ -102,12 +105,12 @@ public class BlazeEnchanterRenderer extends SmartBlockEntityRenderer<BlazeEnchan
         float rotX = active ? rot + PI / 2 : 0;
         float rotY = rot + PI + transported.angle * movingProgress;
         float rotZ = active ? rot : 0;
-        ps.mulPose(Quaternion.fromXYZ(rotX, rotY, rotZ));
+        ps.mulPose(new Quaternionf().identity().rotateXYZ(rotX, rotY, rotZ));
 
         ps.scale(0.5f, 0.5f, 0.5f);
 
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        itemRenderer.renderStatic(transported.stack, ItemTransforms.TransformType.FIXED, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, ps, buffer, 0);
+		itemRenderer.renderStatic(transported.stack, ItemDisplayContext.FIXED, light, overlay, ps, buffer, be.getLevel(), 0);
 
         ps.popPose();
     }
@@ -179,8 +182,8 @@ public class BlazeEnchanterRenderer extends SmartBlockEntityRenderer<BlazeEnchan
         ps.translate(0.5, 0.25, 0.5);
         float time = AnimationTickHolder.getRenderTime(be.getLevel());
         ps.translate(0.0, 0.1f + Mth.sin(time * 0.1f) * 0.01, 0.0);
-        ps.mulPose(Vector3f.YP.rotation(horizontalAngle + PI / 2));
-        ps.mulPose(Vector3f.ZP.rotationDegrees(80.0f));
+        ps.mulPose(Axis.YP.rotation(horizontalAngle + PI / 2));
+        ps.mulPose(Axis.ZP.rotationDegrees(80.0f));
         float flip = Mth.lerp(partialTicks, be.oFlip, be.flip);
         float page0 = Mth.frac(flip + 0.25f) * 1.6f - 0.3f;
         float page1 = Mth.frac(flip + 0.75f) * 1.6f - 0.3f;
@@ -202,5 +205,4 @@ public class BlazeEnchanterRenderer extends SmartBlockEntityRenderer<BlazeEnchan
 			sprites.add(BlazeEnchanterRenderer.BOOK_MATERIAL.texture());
 		}
 	}
-
 }

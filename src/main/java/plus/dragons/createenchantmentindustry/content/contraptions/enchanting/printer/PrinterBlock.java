@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -48,18 +49,18 @@ public class PrinterBlock extends Block implements IWrenchable, IBE<PrinterBlock
         AdvancementBehaviour.setPlacedBy(pLevel, pPos, pPlacer);
     }
 
-    @Override
-    public List<ItemStack> getDrops(BlockState pState, LootContext.Builder pBuilder) {
-        var ret = new ArrayList<ItemStack>();
-        ret.add(CeiBlocks.PRINTER.asStack());
-        return ret;
-    }
+	@Override
+	public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+		var ret = new ArrayList<ItemStack>();
+		ret.add(CeiBlocks.PRINTER.asStack());
+		return ret;
+	}
 
-    @Override
+	@Override
     public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
         return !AllBlocks.BASIN.has(worldIn.getBlockState(pos.below()));
     }
-    
+
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
                                  BlockHitResult blockRayTraceResult) {

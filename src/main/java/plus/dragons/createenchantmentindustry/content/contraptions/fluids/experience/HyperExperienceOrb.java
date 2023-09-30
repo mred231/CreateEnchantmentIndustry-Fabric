@@ -4,6 +4,7 @@ import io.github.fabricators_of_create.porting_lib.entity.ExtraSpawnDataEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -38,7 +39,7 @@ public class HyperExperienceOrb extends ExperienceOrb implements ExtraSpawnDataE
 
     @Override
     public void playerTouch(Player player) {
-        if (!this.level.isClientSide) {
+        if (!this.getCommandSenderWorld().isClientSide) {
             if (player.takeXpDelay == 0) {
                 player.takeXpDelay = 2;
                 player.take(this, 1);
@@ -82,7 +83,7 @@ public class HyperExperienceOrb extends ExperienceOrb implements ExtraSpawnDataE
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return new ClientboundAddEntityPacket(this);
     }
 

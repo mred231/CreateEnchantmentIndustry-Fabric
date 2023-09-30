@@ -3,6 +3,8 @@ package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.e
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.world.level.storage.loot.LootParams;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllBlocks;
@@ -96,9 +98,9 @@ public class BlazeEnchanterBlock extends HorizontalDirectionalBlock implements I
         }
 
         if (player.isShiftKeyDown() && handIn == InteractionHand.MAIN_HAND && heldItem.isEmpty()){
-            if(!player.level.isClientSide()){
-                if(player.level.getBlockEntity(pos) instanceof BlazeEnchanterBlockEntity blazeEnchanter){
-                    withBlockEntityDo(player.level, pos,
+            if(!player.getCommandSenderWorld().isClientSide()){
+                if(player.getCommandSenderWorld().getBlockEntity(pos) instanceof BlazeEnchanterBlockEntity blazeEnchanter){
+                    withBlockEntityDo(player.getCommandSenderWorld(), pos,
                             toolbox -> NetworkHooks.openScreen((ServerPlayer) player,
                                     blazeEnchanter, buf -> {
                                         buf.writeItem(blazeEnchanter.targetItem);
@@ -167,7 +169,7 @@ public class BlazeEnchanterBlock extends HorizontalDirectionalBlock implements I
         Player player = context.getPlayer();
         if (world instanceof ServerLevel) {
             if (player != null)
-                player.level.setBlockAndUpdate(pos, AllBlocks.BLAZE_BURNER.getDefaultState()
+                player.getCommandSenderWorld().setBlockAndUpdate(pos, AllBlocks.BLAZE_BURNER.getDefaultState()
                         .setValue(BlazeBurnerBlock.FACING, state.getValue(FACING))
                         .setValue(BlazeBurnerBlock.HEAT_LEVEL, BlazeBurnerBlock.HeatLevel.SMOULDERING));
         }
@@ -193,7 +195,7 @@ public class BlazeEnchanterBlock extends HorizontalDirectionalBlock implements I
 
 
     @Override
-    public List<ItemStack> getDrops(BlockState pState, LootContext.Builder pBuilder) {
+	public List<ItemStack> getDrops(BlockState pState, LootParams.Builder pParams) {
         var ret = new ArrayList<ItemStack>();
         ret.add(new ItemStack(AllBlocks.BLAZE_BURNER.get()));
         return ret;

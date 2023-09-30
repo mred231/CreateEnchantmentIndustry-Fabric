@@ -2,6 +2,8 @@ package plus.dragons.createenchantmentindustry;
 
 import static net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.BUCKET;
 
+import io.github.fabricators_of_create.porting_lib.data.ExistingFileHelper;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,7 +13,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import plus.dragons.createdragonlib.advancement.AdvancementFactory;
 import plus.dragons.createdragonlib.event.FillCreateItemGroupEvent;
 import plus.dragons.createdragonlib.init.SafeRegistrate;
@@ -39,7 +40,7 @@ public class EnchantmentIndustry implements ModInitializer {
     public static final String ID = "create_enchantment_industry";
     public static final SafeRegistrate REGISTRATE = new SafeRegistrate(ID);
     public static final Lang LANG = new Lang(ID);
-    public static final AdvancementFactory ADVANCEMENT_FACTORY = AdvancementFactory.create(NAME, ID);
+    public static final AdvancementFactory ADVANCEMENT_FACTORY = AdvancementFactory.create(NAME, ID, CeiAdvancements::register);
     public static final LangFactory LANG_FACTORY = LangFactory.create(NAME, ID)
         .advancements(CeiAdvancements::register)
         .ponders(() -> {

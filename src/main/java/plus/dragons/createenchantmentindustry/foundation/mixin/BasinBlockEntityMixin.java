@@ -21,7 +21,6 @@ import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experi
 
 @Mixin(value = BasinBlockEntity.class)
 public abstract class BasinBlockEntityMixin extends SmartBlockEntity implements IHaveGoggleInformation {
-
     @Shadow(remap = false)
     private Couple<SmartFluidTankBehaviour> tanks;
     public BasinBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
