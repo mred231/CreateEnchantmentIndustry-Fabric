@@ -87,6 +87,22 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
     float flipT;
     float flipA;
     public boolean goggles;
+	SnapshotParticipant<TransportedItemStack> snapshotParticipant = new SnapshotParticipant<>() {
+		@Override
+		protected TransportedItemStack createSnapshot() {
+			return heldItem == null ? TransportedItemStack.EMPTY : heldItem.fullCopy();
+		}
+
+		@Override
+		protected void readSnapshot(TransportedItemStack snapshot) {
+			heldItem = snapshot == TransportedItemStack.EMPTY ? null : snapshot;
+		}
+
+		@Override
+		protected void onFinalCommit() {
+			notifyUpdate();
+		}
+	};
 
     public BlazeEnchanterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -444,8 +460,6 @@ public class BlazeEnchanterBlockEntity extends SmartBlockEntity implements IHave
     @Override
     public void invalidate() {
         super.invalidate();
-        for (LazyOptional<EnchantingItemHandler> lazyOptional : itemHandlers.values())
-            lazyOptional.invalidate();
     }
 
     @Override
