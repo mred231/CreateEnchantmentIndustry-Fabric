@@ -16,6 +16,7 @@ import plus.dragons.createdragonlib.event.FillCreateItemGroupEvent;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter.EnchantingGuideItem;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceBottleItem;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class CeiItems {
@@ -34,7 +35,7 @@ public class CeiItems {
             .tag(CeiTags.ItemTag.UPRIGHT_ON_BELT.tag)
             .register();
 
-    public static InteractionResult fillCreateItemGroup(AllCreativeModeTabs.TabInfo itemGroup, Function<Item, ItemStack> items) {
+    public static InteractionResult fillCreateItemGroup(AllCreativeModeTabs.TabInfo itemGroup, List<Item> items) {
         if (itemGroup == AllCreativeModeTabs.MAIN_TAB) {
 			FillCreateItemGroupEvent.Inserter inserter = new FillCreateItemGroupEvent.Inserter(items);
 			inserter.addInsertion(AllBlocks.ITEM_DRAIN.get(), CeiBlocks.DISENCHANTER.asStack());
