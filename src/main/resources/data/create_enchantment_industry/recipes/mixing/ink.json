@@ -7,13 +7,13 @@
     {
       "fluid": "minecraft:water",
       "nbt": {},
-      "amount": 20250
+      "amount": 250
     }
   ],
   "results": [
     {
       "fluid": "create_enchantment_industry:ink",
-      "amount": 20250
+      "amount": 250
     }
   ]
 }

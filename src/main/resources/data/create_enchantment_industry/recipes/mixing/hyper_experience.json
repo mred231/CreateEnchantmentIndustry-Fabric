@@ -9,13 +9,13 @@
     },
     {
       "fluid": "create_enchantment_industry:experience",
-      "amount": 8100
+      "amount": 100
     }
   ],
   "results": [
     {
       "fluid": "create_enchantment_industry:hyper_experience",
-      "amount": 810
+      "amount": 10
     }
   ],
   "heatRequirement": "superheated"

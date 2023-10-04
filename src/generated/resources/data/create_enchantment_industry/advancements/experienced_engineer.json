@@ -6,7 +6,7 @@
         "items": [
           {
             "items": [
-              "create:experience_nugget"
+              "minecraft:air"
             ]
           }
         ]
@@ -23,7 +23,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "create:experience_nugget"
+      "item": "minecraft:air"
     },
     "show_toast": true,
     "title": {
@@ -34,5 +34,6 @@
     [
       "have_experience_nugget"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

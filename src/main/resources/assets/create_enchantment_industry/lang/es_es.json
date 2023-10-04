@@ -8,55 +8,6 @@
 	"block.create_enchantment_industry.ink": "Tinta",
 	"block.create_enchantment_industry.printer": "Impresora",
 
-	"create_enchantment_industry.ponder.absorb_experience_nugget.header": "Conversión de pepita de experiencia en líquido",
-	"create_enchantment_industry.ponder.absorb_experience_nugget.text_1": "La pepita de experiencia puede ser absorbida por el desencantador.",
-
-	"create_enchantment_industry.ponder.copy.header": "Uso de la impresora",
-	"create_enchantment_industry.ponder.copy.text_1": "UNLOCALIZED: Liquid Experience is required to duplicate enchanted books.",
-	"create_enchantment_industry.ponder.copy.text_2": "UNLOCALIZED: If the enchantment on the enchantment book you are copying has a level that exceeds its maximum level, then you will need Hyper Experience.",
-	"create_enchantment_industry.ponder.copy.text_3": "UNLOCALIZED: Ink is required to duplicate written books.",
-	"create_enchantment_industry.ponder.copy.text_4": "UNLOCALIZED: Name Tag and Train Schedule can also be copied.",
-	"create_enchantment_industry.ponder.copy.text_5": "UNLOCALIZED: If you set the name tag as the print target, you can use the printer to name the item.",
-
-	"create_enchantment_industry.ponder.crushing_wheel_tweak.header": "UNLOCALIZED: We call it inefficiency...",
-	"create_enchantment_industry.ponder.crushing_wheel_tweak.text_1": "UNLOCALIZED: The Crushing Wheel has a chance of dropping a very small amount of experience nugget when it kills a creature.",
-
-	"create_enchantment_industry.ponder.disenchant.header": "Desencantar",
-	"create_enchantment_industry.ponder.disenchant.text_1": "Se eliminarán los encantamientos de todos los elementos recibidos y los encantamientos eliminados se convertirán en experiencia líquida para su almacenamiento.",
-	"create_enchantment_industry.ponder.disenchant.text_2": "Los jugadores que estén parados en el desencantador perderán rápidamente su nivel de experiencia, y el valor de experiencia eliminado se convertirá en experiencia líquida para almacenar",
-
-	"create_enchantment_industry.ponder.drop_experience_nugget.header": "¿Tal vez una granja de experiencia?",
-	"create_enchantment_industry.ponder.drop_experience_nugget.text_1": "Cuando el desplegador mata un mob, se obtienen pepitas de experiencia.",
-
-	"create_enchantment_industry.ponder.enchant.header": "Encantamiento",
-	"create_enchantment_industry.ponder.enchant.text_1": "UNLOCALIZED: Blaze Enchanter can enchant your items.",
-	"create_enchantment_industry.ponder.enchant.text_2": "UNLOCALIZED: However, it cannot work on books...",
-	"create_enchantment_industry.ponder.enchant.text_3": "UNLOCALIZED: ... nor can it add incompatible enchantments to your items.",
-	"create_enchantment_industry.ponder.enchant.text_4": "UNLOCALIZED: Blaze Enchanter can upgrade an existing enchantment to a higher level if feasible",
-
-	"create_enchantment_industry.ponder.experience_bottle.header": "Lidiando con botellas de experiencias",
-	"create_enchantment_industry.ponder.experience_bottle.text_1": "Las botellas de experiencia se pueden vaciar con el drenador.",
-	"create_enchantment_industry.ponder.experience_bottle.text_2": "Las botellas de experiencia también pueden ser llenadas.",
-
-	"create_enchantment_industry.ponder.hyper_enchant.header": "Hiperencantamiento",
-	"create_enchantment_industry.ponder.hyper_enchant.text_1": "Esto es hiperexperiencia líquida",
-	"create_enchantment_industry.ponder.hyper_enchant.text_2": "La hiperexperiencia puede hacer que el encantador de Blaze entre en estado de ebullición, y el nivel del encantamiento producido en este estado será un nivel más alto que el encantamiento establecido",
-	"create_enchantment_industry.ponder.hyper_enchant.text_3": "UNLOCALIZED: Enchantment with level cap of 1 level cannot be upgraded to level 2 in hyper-enchant.",
-
-	"create_enchantment_industry.ponder.leak.header": "¡Oh, no! ¡Está goteando!",
-	"create_enchantment_industry.ponder.leak.text_1": "Tengo un tanque lleno de experiencia.",
-	"create_enchantment_industry.ponder.leak.text_2": "Tengo una tubería abierta.",
-	"create_enchantment_industry.ponder.leak.text_3": "¡Uf!",
-	"create_enchantment_industry.ponder.leak.text_4": "No te preocupes, la experiencia líquida filtrada se convertirá en orbes de experiencia. Los jugadores también pueden quedarse en la abertura de la tubería para absorber experiencia.",
-	"create_enchantment_industry.ponder.tag.experience": "Relacionado con la experiencia",
-	"create_enchantment_industry.ponder.tag.experience.description": "Objetos y componentes relacionados con la experiencia",
-
-	"create_enchantment_industry.ponder.transform.header": "Uso de la guía de encantamiento",
-	"create_enchantment_industry.ponder.transform.text_1": "UNLOCALIZED: Right-click the Blaze Burner with an Enchanting Guide in hand when sneaking to transform it to a Blaze Enchanter.",
-	"create_enchantment_industry.ponder.transform.text_2": "UNLOCALIZED: To make Blaze Enchanter work, Enchanting Guide must be configured first. Right-clicking Blaze Enchanter or right-clicking Enchanting Guide in hands can open configuration panel.",
-	"create_enchantment_industry.ponder.transform.text_3": "Para recuperar la guía de encantamiento, haz click con el botón derecho en el quemador de Blaze con la llave inglesa mientras te agachas.",
-	"create_enchantment_industry.ponder.transform.text_4": "UNLOCALIZED: You can replace the Enchanting Guide by holding it directly in your hand and right-clicking on the Blaze Enchanter.",
-
 	"entity.create_enchantment_industry.hyper_experience_bottle": "Botella arrojadiza de hiperencantamiento",
 	"entity.create_enchantment_industry.hyper_experience_orb": "Orbe de hiperexperiencia",
 
@@ -65,6 +16,7 @@
 	"fluid.create_enchantment_industry.ink": "Tinta",
 
 	"item.create_enchantment_industry.enchanting_guide": "Guía de encantamiento",
+	"item.create_enchantment_industry.experience_rotor": "Hélice de experiencia",
 	"item.create_enchantment_industry.hyper_experience_bottle": "Botella de hiperencantamiento",
 	"item.create_enchantment_industry.ink_bucket": "Cubo de tinta",
 
@@ -188,6 +140,6 @@
 	"create_enchantment_industry.display_source.blaze_enchanter_source_target_enchantment": "Encantamiento objetivo",
 	"create_enchantment_industry.display_source.printer_source_copy_content": "UNLOCALIZED: Copy Content",
 
-	"_": "Thank you for translating Create Enchantment Industry!"
+	"_": "Thank you for translating Create: Enchantment Industry!"
 
 }

@@ -34,5 +34,6 @@
     [
       "have_bucket_of_ink"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

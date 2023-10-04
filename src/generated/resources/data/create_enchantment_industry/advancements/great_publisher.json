@@ -30,5 +30,6 @@
     [
       "book_copied"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }
