@@ -7,7 +7,6 @@ import java.util.List;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllCreativeModeTabs;
 import com.simibubi.create.AllFluids;
-import com.simibubi.create.AllItems;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.world.InteractionResult;
@@ -39,8 +38,8 @@ public class CeiItems {
 			inserter.addInsertion(AllBlocks.ITEM_DRAIN.get(), CeiBlocks.DISENCHANTER.asStack());
 			inserter.addInsertion(AllBlocks.SPOUT.get(), CeiBlocks.PRINTER.asStack());
 			inserter.addInsertion(AllBlocks.BLAZE_BURNER.get(), ENCHANTING_GUIDE.asStack());
-			inserter.addInsertion(AllItems.BUILDERS_TEA, CeiFluids.INK.get().getBucket().getDefaultInstance());
-			inserter.addInsertion(AllItems.BUILDERS_TEA, HYPER_EXP_BOTTLE.asStack());
+			inserter.addInsertion(AllFluids.CHOCOLATE.get().getBucket(), CeiFluids.INK.get().getBucket().getDefaultInstance());
+			inserter.addInsertion(AllFluids.CHOCOLATE.get().getBucket(), HYPER_EXP_BOTTLE.asStack());
 			inserter.doneInsertion();
 			return InteractionResult.SUCCESS;
         }
