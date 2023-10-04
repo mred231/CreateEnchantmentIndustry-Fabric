@@ -2,22 +2,19 @@ package plus.dragons.createenchantmentindustry.entry;
 
 import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.REGISTRATE;
 
+import java.util.List;
+
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllCreativeModeTabs;
 import com.simibubi.create.AllFluids;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import plus.dragons.createdragonlib.event.FillCreateItemGroupEvent;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter.EnchantingGuideItem;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceBottleItem;
-
-import java.util.List;
-import java.util.function.Function;
 
 public class CeiItems {
 
