@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "create_enchantment_industry:fluid/ink_flow"
+    },
+    {
+      "type": "single",
+      "resource": "create_enchantment_industry:fluid/ink_still"
+    }
+  ]
+}
