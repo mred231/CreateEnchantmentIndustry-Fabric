@@ -14,7 +14,6 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.resources.ResourceLocation;
 import plus.dragons.createdragonlib.advancement.AdvancementFactory;
-import plus.dragons.createdragonlib.event.FillCreateItemGroupEvent;
 import plus.dragons.createdragonlib.init.SafeRegistrate;
 import plus.dragons.createdragonlib.lang.Lang;
 import plus.dragons.createdragonlib.lang.LangFactory;
@@ -75,8 +74,6 @@ public class EnchantmentIndustry implements ModInitializer {
 		CeiAdvancements.register();
 		CeiPackets.registerPackets();
 		OpenEndedPipeEffects.register();
-
-		FillCreateItemGroupEvent.CallBack.EVENT.register(CeiItems::fillCreateItemGroup);
 
 		ServerTickEvents.START_WORLD_TICK.register(CeiFluids::handleInkEffect);
 
