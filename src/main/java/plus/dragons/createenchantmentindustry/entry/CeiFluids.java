@@ -8,6 +8,8 @@ import com.simibubi.create.AllCreativeModeTabs;
 import com.tterrag.registrate.fabric.SimpleFlowableFluid;
 import com.tterrag.registrate.util.entry.FluidEntry;
 
+import javax.annotation.Nullable;
+
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -21,10 +23,12 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import plus.dragons.createdragonlib.fluid.FluidLavaReaction;
@@ -95,14 +99,26 @@ public class CeiFluids {
 
     public static final FluidEntry<SimpleFlowableFluid.Flowing> INK = REGISTRATE
             .fluid("ink", INK_STILL_RL, INK_FLOW_RL)
-            .fluidAttributes(()->new FluidVariantAttributeHandler(){
-			})
 			.fluidProperties(p -> p.levelDecreasePerBlock(2)
 					.tickRate(25)
 					.flowSpeed(4)
 					.blastResistance(100f))
+            .fluidAttributes(()->new FluidVariantAttributeHandler(){
+				@Override
+				public Component getName(FluidVariant fluidVariant) {
+					return Component.translatable("fluid.create_enchantment_industry.ink");
+				}
+				@Override
+				public int getViscosity(FluidVariant variant, @Nullable Level world) {
+					return 1000;
+				}
+				@Override
+				public boolean isLighterThanAir(FluidVariant variant) {
+					return false;
+				}
+			})
+            .tag(CeiTags.FluidTag.INK.tag, FluidTags.WATER)
             .source(SimpleFlowableFluid.Source::new)
-            .tag(CeiTags.FluidTag.INK.tag)
             .bucket()
             .build()
 			.onRegisterAfter(Registries.ITEM, ink -> {
