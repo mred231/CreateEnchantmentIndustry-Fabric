@@ -99,6 +99,7 @@ public class CeiFluids {
 
     public static final FluidEntry<SimpleFlowableFluid.Flowing> INK = REGISTRATE
             .fluid("ink", INK_STILL_RL, INK_FLOW_RL)
+			.lang("ink")
 			.fluidProperties(p -> p.levelDecreasePerBlock(2)
 					.tickRate(25)
 					.flowSpeed(4)

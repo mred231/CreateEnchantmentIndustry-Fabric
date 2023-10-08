@@ -8,13 +8,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.simibubi.create.foundation.ponder.PonderLocalization;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.resources.ResourceLocation;
 import plus.dragons.createdragonlib.advancement.AdvancementFactory;
-import plus.dragons.createdragonlib.init.SafeRegistrate;
 import plus.dragons.createdragonlib.lang.Lang;
 import plus.dragons.createdragonlib.lang.LangFactory;
 import plus.dragons.createdragonlib.tag.TagGen;
@@ -37,7 +37,7 @@ public class EnchantmentIndustry implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String NAME = "Create Enchantment Industry";
     public static final String ID = "create_enchantment_industry";
-    public static final SafeRegistrate REGISTRATE = new SafeRegistrate(ID);
+    public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
     public static final Lang LANG = new Lang(ID);
     public static final AdvancementFactory ADVANCEMENT_FACTORY = AdvancementFactory.create(NAME, ID, CeiAdvancements::register);
     public static final LangFactory LANG_FACTORY = LangFactory.create(NAME, ID)
@@ -82,7 +82,7 @@ public class EnchantmentIndustry implements ModInitializer {
 
 	public static void gatherData(FabricDataGenerator gen, ExistingFileHelper helper) {
 		ADVANCEMENT_FACTORY.datagen(gen);
-		new TagGen.Builder(REGISTRATE)
+		new TagGen.Builder()
 				.addItemTagFactory(CeiTags::genItemTag)
 				.addFluidTagFactory(CeiTags::genFluidTag)
 				.build().activate();

@@ -160,7 +160,7 @@ public class CeiTags {
 
     public enum FluidTag {
         //No experience fluid tag here as different ratios is not acceptable
-        INK(NameSpace.COMMON, false),
+        INK(NameSpace.COMMON),
         BLAZE_ENCHANTER_INPUT(false),
         PRINTER_INPUT(true);
 
@@ -169,10 +169,6 @@ public class CeiTags {
 
         FluidTag() {
             this(NameSpace.MOD);
-        }
-
-        FluidTag(NameSpace namespace, boolean alwaysDatagen) {
-            this(namespace, namespace.optionalDefault, alwaysDatagen);
         }
 
         FluidTag(boolean alwaysDatagen) {
