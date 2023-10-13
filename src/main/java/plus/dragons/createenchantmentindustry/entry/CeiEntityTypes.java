@@ -17,8 +17,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.MobCategory;
 
-import org.apache.logging.log4j.LogManager;
-
+import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceBottle;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceOrb;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceOrbRenderer;
@@ -48,7 +47,7 @@ public class CeiEntityTypes {
 		MobCategory group, int range, int updateFrequency, boolean sendVelocity,
 		NonNullConsumer<FabricEntityTypeBuilder<T>> propertyBuilder) {
 		String id = Lang.asId(name);
-		LogManager.getLogger().info("CEI: " + name + " got converted to " + id);
+		EnchantmentIndustry.LOGGER.info("CEI: " + name + " got converted to " + id);
 		return (CreateEntityBuilder<T, ?>) REGISTRATE
 			.entity(id, factory, group)
 			.properties(b -> b.trackRangeChunks(range)
