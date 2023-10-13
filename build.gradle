@@ -6,6 +6,7 @@ plugins {
 	id "io.github.juuxel.loom-vineflower" version "1.+" // Vineflower, a better decompiler
 	id "io.github.p03w.machete" version "1.+" // automatic jar compressing on build
 	id "maven-publish"
+	id "me.modmuss50.mod-publish-plugin" version "0.3.5"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -130,6 +131,36 @@ java {
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}" }
+	}
+}
+
+publishMods {
+	file = tasks.jarJar.archiveFile
+	changelog = new File("changelog/${mod_version}.md").toString()
+	version = mod_version
+	type = STABLE
+	displayName = "CEI ${mod_version} for Create ${minecraft_version}-${create_version}"
+	modLoaders.add("fabric")
+	modLoaders.add("quilt")
+
+	curseforge {
+		projectId = "876129"
+		accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+		minecraftVersions.add(minecraft_version)
+
+		requires {
+			slug = "create-fabric"
+		}
+	}
+
+	modrinth {
+		projectId = "AEZO385x"
+		accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+		minecraftVersions.add(minecraft_version)
+
+		requires {
+			slug = "create-fabric"
+		}
 	}
 }
 
