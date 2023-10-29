@@ -135,7 +135,7 @@ jar {
 }
 
 publishMods {
-	file = tasks.jarJar.archiveFile
+	file = remapJar.archiveFile
 	changelog = new File("changelog/${mod_version}.md").toString()
 	version = mod_version
 	type = STABLE
