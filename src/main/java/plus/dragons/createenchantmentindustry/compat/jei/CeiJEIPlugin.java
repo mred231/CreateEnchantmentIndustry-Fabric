@@ -1,30 +1,40 @@
 package plus.dragons.createenchantmentindustry.compat.jei;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.fabric.constants.FabricTypes;
+import mezz.jei.api.fabric.ingredients.fluids.IJeiFluidIngredient;
+import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.material.Fluid;
 import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
 import plus.dragons.createenchantmentindustry.compat.jei.category.DisenchantingCategory;
 import plus.dragons.createenchantmentindustry.compat.jei.category.RecipeCategoryBuilder;
 import plus.dragons.createenchantmentindustry.content.contraptions.enchanting.disenchanter.DisenchantRecipe;
 import plus.dragons.createenchantmentindustry.entry.CeiBlocks;
+import plus.dragons.createenchantmentindustry.entry.CeiFluids;
 import plus.dragons.createenchantmentindustry.entry.CeiRecipeTypes;
 
+// @JeiPlugin Annotation is for forge so check mod.json for the entrypoint
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 @JeiPlugin
@@ -39,7 +49,7 @@ public class CeiJEIPlugin implements IModPlugin {
         return ID;
     }
 
-    @Override
+	@Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         loadCategories(registration);
         registration.addRecipeCategories(allCategories.toArray(IRecipeCategory[]::new));
@@ -49,6 +59,11 @@ public class CeiJEIPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         ingredientManager = registration.getIngredientManager();
         allCategories.forEach(c -> c.registerRecipes(registration));
+
+		Collection<Fluid> removeFluids = new ArrayList<>();
+		removeFluids.add(BuiltInRegistries.FLUID.get(EnchantmentIndustry.genRL("flowing_experience")));
+		removeFluids.add(BuiltInRegistries.FLUID.get(EnchantmentIndustry.genRL("flowing_hyper_experience")));
+		ingredientManager.removeIngredientsAtRuntime((IIngredientType) FabricTypes.FLUID_STACK, removeFluids);
     }
 
     @Override
@@ -59,10 +74,10 @@ public class CeiJEIPlugin implements IModPlugin {
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        /*List<FluidStack> fluidIngredients = new ArrayList<>();
-        fluidIngredients.add(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), FluidType.BUCKET_VOLUME));
-        fluidIngredients.add(new FluidStack(CeiFluids.HYPER_EXPERIENCE.get().getSource(), FluidType.BUCKET_VOLUME));
-        jeiRuntime.getIngredientManager().addIngredientsAtRuntime(FabricTypes.FLUID_STACK,fluidIngredients);*/
+//        Collection<FluidStack> fluidIngredients = new ArrayList<>();
+//        fluidIngredients.add(new FluidStack(CeiFluids.EXPERIENCE.get().getSource(), 81000));
+//        fluidIngredients.add(new FluidStack(CeiFluids.HYPER_EXPERIENCE.get().getSource(), 81000));
+//        jeiRuntime.getIngredientManager().addIngredientsAtRuntime(FabricTypes.FLUID_STACK, fluidIngredients);
     }
 
     private static <T extends Recipe<?>> RecipeCategoryBuilder<T> builder(Class<T> cls) {

@@ -59,13 +59,14 @@ public class CeiFluids {
 				}
 			})
             .tag(CeiTags.FluidTag.BLAZE_ENCHANTER_INPUT.tag, CeiTags.FluidTag.PRINTER_INPUT.tag)
-			.onRegisterAfter(Registries.ITEM, exp -> {
-				Fluid source = exp.getSource();
-				FluidStorage.combinedItemApiProvider(Items.EXPERIENCE_BOTTLE).register(context ->
-						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 810));
-				FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
-						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(Items.EXPERIENCE_BOTTLE), source, 810));
-			})
+			// Weird issue where it wants a full bucket, alternative is using .json's which we use
+//			.onRegisterAfter(Registries.ITEM, exp -> {
+//				Fluid source = exp.getSource();
+//				FluidStorage.combinedItemApiProvider(Items.EXPERIENCE_BOTTLE).register(context ->
+//						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 810));
+//				FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
+//						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(Items.EXPERIENCE_BOTTLE), source, 810));
+//			})
             .register();
 
     public static final ResourceLocation HYPER_EXPERIENCE_STILL_RL = EnchantmentIndustry.genRL("fluid/hyper_experience_still");
@@ -85,13 +86,14 @@ public class CeiFluids {
 				}
 			})
             .tag(CeiTags.FluidTag.BLAZE_ENCHANTER_INPUT.tag, CeiTags.FluidTag.PRINTER_INPUT.tag)
-			.onRegisterAfter(Registries.ITEM, hyperExp -> {
-				Fluid source = hyperExp.getSource();
-				FluidStorage.combinedItemApiProvider(CeiItems.HYPER_EXP_BOTTLE.get()).register(context ->
-						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 810));
-				FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
-						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(CeiItems.HYPER_EXP_BOTTLE.get()), source, 810));
-			})
+			// Weird issue where it wants a full bucket, alternative is using .json's which we use
+//			.onRegisterAfter(Registries.ITEM, hyperExp -> {
+//				Fluid source = hyperExp.getSource();
+//				FluidStorage.combinedItemApiProvider(CeiItems.HYPER_EXP_BOTTLE.get()).register(context ->
+//						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 810));
+//				FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
+//						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(CeiItems.HYPER_EXP_BOTTLE.get()), source, 810));
+//			})
             .register();
 
     public static final ResourceLocation INK_STILL_RL = EnchantmentIndustry.genRL("fluid/ink_still");
@@ -99,7 +101,7 @@ public class CeiFluids {
 
     public static final FluidEntry<SimpleFlowableFluid.Flowing> INK = REGISTRATE
             .fluid("ink", INK_STILL_RL, INK_FLOW_RL)
-			.lang("ink")
+			.lang("Ink")
 			.fluidProperties(p -> p.levelDecreasePerBlock(2)
 					.tickRate(25)
 					.flowSpeed(4)
