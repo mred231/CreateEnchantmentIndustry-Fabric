@@ -150,6 +150,7 @@ publishMods {
 
 		requires {
 			slug = "create-fabric"
+			slug = "fabric-api"
 		}
 	}
 
@@ -160,6 +161,7 @@ publishMods {
 
 		requires {
 			slug = "create-fabric"
+			slug = "fabric-api"
 		}
 	}
 }
