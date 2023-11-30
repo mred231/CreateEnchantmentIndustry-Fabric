@@ -23,6 +23,22 @@
     {
       "type": "single",
       "resource": "create_enchantment_industry:fluid/ink_still"
+    },
+    {
+      "type": "single",
+      "resource": "create_enchantment_industry:fluid/experience_flow"
+    },
+    {
+      "type": "single",
+      "resource": "create_enchantment_industry:fluid/experience_still"
+    },
+    {
+      "type": "single",
+      "resource": "create_enchantment_industry:fluid/hyper_experience_flow"
+    },
+    {
+      "type": "single",
+      "resource": "create_enchantment_industry:fluid/hyper_experience_still"
     }
   ]
 }
