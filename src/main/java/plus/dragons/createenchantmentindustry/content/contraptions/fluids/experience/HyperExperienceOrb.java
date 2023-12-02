@@ -39,7 +39,7 @@ public class HyperExperienceOrb extends ExperienceOrb implements ExtraSpawnDataE
 
     @Override
     public void playerTouch(Player player) {
-        if (!this.getCommandSenderWorld().isClientSide) {
+        if (!this.level().isClientSide) {
             if (player.takeXpDelay == 0) {
                 player.takeXpDelay = 2;
                 player.take(this, 1);

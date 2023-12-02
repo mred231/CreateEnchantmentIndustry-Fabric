@@ -7,7 +7,6 @@ import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
 import com.simibubi.create.foundation.utility.Components;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.BlockPos;
@@ -72,16 +71,16 @@ public class EnchantingGuideScreen extends AbstractSimiContainerScreen<Enchantin
     }
 
     @Override
-	protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         int invX = getLeftOfCentered(PLAYER_INVENTORY.width);
         int invY = topPos + ENCHANTING_GUIDE.height + 4;
-        renderPlayerInventory(graphics, invX, invY);
+        renderPlayerInventory(pGuiGraphics, invX, invY);
 
         int guideX = getLeftOfCentered(ENCHANTING_GUIDE_WIDTH);
         int guideY = topPos;
 
-        ENCHANTING_GUIDE.render(graphics, guideX, guideY);
-		graphics.drawCenteredString(font, title, guideX + ENCHANTING_GUIDE_WIDTH / 2, guideY + 3, 0xFFFFFF);
+        ENCHANTING_GUIDE.render(pGuiGraphics, guideX, guideY);
+        pGuiGraphics.drawCenteredString(font, title, guideX + ENCHANTING_GUIDE_WIDTH / 2, guideY + 3, 0xFFFFFF);
 
         GuiGameElement.of(menu.contentHolder)
                 .<GuiGameElement.GuiRenderBuilder>at(
@@ -90,7 +89,7 @@ public class EnchantingGuideScreen extends AbstractSimiContainerScreen<Enchantin
                         -200
                 )
                 .scale(3)
-                .render(graphics);
+                .render(pGuiGraphics);
     }
 
     @Override

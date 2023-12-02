@@ -36,17 +36,17 @@ public class DisenchanterDrawable implements IDrawable {
         return 30;
     }
 
-	@Override
-	public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
-		PoseStack matrixStack = guiGraphics.pose();
-		matrixStack.pushPose();
-		matrixStack.translate(xOffset, yOffset + 20, 100);
-		matrixStack.mulPose(Axis.XP.rotationDegrees(-15.5f));
-		matrixStack.mulPose(Axis.YP.rotationDegrees(22.5f));
-		GuiGameElement.of(CeiBlocks.DISENCHANTER.getDefaultState())
-				.lighting(DEFAULT_LIGHTING)
-				.scale(20)
-				.render(guiGraphics);
-		matrixStack.popPose();
-	}
+    @Override
+    public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+        var matrixStack = guiGraphics.pose();
+        matrixStack.pushPose();
+        matrixStack.translate(xOffset, yOffset + 20, 100);
+        matrixStack.mulPose(Axis.XP.rotationDegrees(-15.5f));
+        matrixStack.mulPose(Axis.YP.rotationDegrees(22.5f));
+        GuiGameElement.of(CeiBlocks.DISENCHANTER.getDefaultState())
+                .lighting(DEFAULT_LIGHTING)
+                .scale(20)
+                .render(guiGraphics);
+        matrixStack.popPose();
+    }
 }

@@ -22,7 +22,6 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -105,7 +104,7 @@ public class BlazeEnchanterRenderer extends SmartBlockEntityRenderer<BlazeEnchan
         float rotX = active ? rot + PI / 2 : 0;
         float rotY = rot + PI + transported.angle * movingProgress;
         float rotZ = active ? rot : 0;
-        ps.mulPose(new Quaternionf().identity().rotateXYZ(rotX, rotY, rotZ));
+        ps.mulPose(TransformationHelper.quatFromXYZ(rotX, rotY, rotZ, false));
 
         ps.scale(0.5f, 0.5f, 0.5f);
 

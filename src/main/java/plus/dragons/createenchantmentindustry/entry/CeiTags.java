@@ -213,14 +213,14 @@ public class CeiTags {
     }
 
     public static void genFluidTag(RegistrateTagsProvider<Fluid> pov){
-		// FIXME BUGGY
-        //pov.tag(FluidTag.PRINTER_INPUT.tag).addTag(FluidTag.INK.tag);
+        TagGen.CreateTagsProvider<Fluid> prov = new TagGen.CreateTagsProvider<>(pov, Fluid::builtInRegistryHolder);
+        prov.tag(FluidTag.PRINTER_INPUT.tag).addTag(FluidTag.INK.tag);
     }
 
     public static void genItemTag(RegistrateTagsProvider<Item> pov){
-		// FIXME BUGGY
-        //pov.tag(ItemTag.INK_INGREDIENT.tag).add(Items.BLACK_DYE, Items.WITHER_ROSE, Items.INK_SAC);
-        //pov.tag(ItemTag.UPRIGHT_ON_BELT.tag).add(Items.EXPERIENCE_BOTTLE);
+        TagGen.CreateTagsProvider<Item> prov = new TagGen.CreateTagsProvider<>(pov, Item::builtInRegistryHolder);
+        prov.tag(ItemTag.INK_INGREDIENT.tag).add(Items.BLACK_DYE, Items.WITHER_ROSE, Items.INK_SAC);
+        prov.tag(ItemTag.UPRIGHT_ON_BELT.tag).add(Items.EXPERIENCE_BOTTLE);
     }
 
 }

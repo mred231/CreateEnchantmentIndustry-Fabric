@@ -49,12 +49,12 @@ public class PrinterBlock extends Block implements IWrenchable, IBE<PrinterBlock
         AdvancementBehaviour.setPlacedBy(pLevel, pPos, pPlacer);
     }
 
-	@Override
-	public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
-		var ret = new ArrayList<ItemStack>();
-		ret.add(CeiBlocks.PRINTER.asStack());
-		return ret;
-	}
+    @Override
+    public List<ItemStack> getDrops(BlockState pState, LootParams.Builder pParams) {
+        var ret = new ArrayList<ItemStack>();
+        ret.add(CeiBlocks.PRINTER.asStack());
+        return ret;
+    }
 
 	@Override
     public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
@@ -104,6 +104,7 @@ public class PrinterBlock extends Block implements IWrenchable, IBE<PrinterBlock
     public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
+
 
     @Override
     public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos) {
