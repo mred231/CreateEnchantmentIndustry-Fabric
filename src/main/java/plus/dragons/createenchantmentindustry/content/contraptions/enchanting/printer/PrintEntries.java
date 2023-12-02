@@ -32,7 +32,7 @@ public class PrintEntries {
         var e2 = new WrittenBook();
         var e3 = new NameTag();
         var e4 = new Schedule();
-        var e5 = new ClipBoard();
+        var e5 = new Clipboard();
         ENTRIES.put(e1.id(),e1);
         ENTRIES.put(e2.id(),e2);
         ENTRIES.put(e3.id(),e3);

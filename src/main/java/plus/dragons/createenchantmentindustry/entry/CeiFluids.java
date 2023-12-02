@@ -3,12 +3,13 @@ package plus.dragons.createenchantmentindustry.entry;
 import static net.minecraft.world.item.Items.BUCKET;
 import static net.minecraft.world.item.Items.GLASS_BOTTLE;
 import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.REGISTRATE;
+import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.UNIT_PER_MB;
+
+import javax.annotation.Nullable;
 
 import com.simibubi.create.AllCreativeModeTabs;
 import com.tterrag.registrate.fabric.SimpleFlowableFluid;
 import com.tterrag.registrate.util.entry.FluidEntry;
-
-import javax.annotation.Nullable;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -17,8 +18,6 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributeHandler;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -59,14 +58,11 @@ public class CeiFluids {
 				}
 			})
             .tag(CeiTags.FluidTag.BLAZE_ENCHANTER_INPUT.tag, CeiTags.FluidTag.PRINTER_INPUT.tag)
-			// Weird issue where it wants a full bucket, alternative is using .json's which we use
-//			.onRegisterAfter(Registries.ITEM, exp -> {
-//				Fluid source = exp.getSource();
-//				FluidStorage.combinedItemApiProvider(Items.EXPERIENCE_BOTTLE).register(context ->
-//						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 810));
-//				FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
-//						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(Items.EXPERIENCE_BOTTLE), source, 810));
-//			})
+			.onRegisterAfter(Registries.ITEM, exp -> {
+				Fluid source = exp.getSource();
+				FluidStorage.combinedItemApiProvider(Items.EXPERIENCE_BOTTLE).register(context ->
+						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 10 * UNIT_PER_MB));
+			})
             .register();
 
     public static final ResourceLocation HYPER_EXPERIENCE_STILL_RL = EnchantmentIndustry.genRL("fluid/hyper_experience_still");
@@ -86,14 +82,11 @@ public class CeiFluids {
 				}
 			})
             .tag(CeiTags.FluidTag.BLAZE_ENCHANTER_INPUT.tag, CeiTags.FluidTag.PRINTER_INPUT.tag)
-			// Weird issue where it wants a full bucket, alternative is using .json's which we use
-//			.onRegisterAfter(Registries.ITEM, hyperExp -> {
-//				Fluid source = hyperExp.getSource();
-//				FluidStorage.combinedItemApiProvider(CeiItems.HYPER_EXP_BOTTLE.get()).register(context ->
-//						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 810));
-//				FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
-//						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(CeiItems.HYPER_EXP_BOTTLE.get()), source, 810));
-//			})
+			.onRegisterAfter(Registries.ITEM, hyperExp -> {
+				Fluid source = hyperExp.getSource();
+				FluidStorage.combinedItemApiProvider(CeiItems.HYPER_EXP_BOTTLE.get()).register(context ->
+						new FullItemFluidStorage(context, bucket -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), 10 * UNIT_PER_MB));
+			})
             .register();
 
     public static final ResourceLocation INK_STILL_RL = EnchantmentIndustry.genRL("fluid/ink_still");
@@ -128,7 +121,7 @@ public class CeiFluids {
 				Fluid source = ink.getSource();
 				FluidStorage.combinedItemApiProvider(source.getBucket()).register(context ->
 						new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(source), FluidConstants.BUCKET));
-				FluidStorage.combinedItemApiProvider(BUCKET).register(context ->
+				FluidStorage.combinedItemApiProvider(Items.BUCKET).register(context ->
 						new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(source.getBucket()), source, FluidConstants.BUCKET));
 			})
             .register();
