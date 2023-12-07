@@ -15,7 +15,7 @@
     "frame": "goal",
     "hidden": false,
     "icon": {
-      "item": "create:fluid_pipe"
+      "item": "minecraft:air"
     },
     "show_toast": true,
     "title": {

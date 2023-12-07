@@ -113,7 +113,7 @@ public class CeiFluids {
 					return false;
 				}
 			})
-            .tag(CeiTags.FluidTag.INK.tag, FluidTags.WATER)
+            .tag(CeiTags.FluidTag.INK.tag, CeiTags.FluidTag.PRINTER_INPUT.tag, FluidTags.WATER)
             .source(SimpleFlowableFluid.Source::new)
             .bucket()
             .build()
