@@ -46,8 +46,6 @@ import javax.annotation.Nullable;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
 abstract public class AbstractFurnaceBlockEntityMixin<T> extends BaseContainerBlockEntity implements WorldlyContainer, RecipeHolder, StackedContentsCompatible, SidedStorageBlockEntity {
-	private static final FluidVariant EXPERIENCE = FluidVariant.of(CeiFluids.EXPERIENCE.getSource());
-
 	protected AbstractFurnaceBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
@@ -74,12 +72,12 @@ abstract public class AbstractFurnaceBlockEntityMixin<T> extends BaseContainerBl
 			long amount = internalTank.getFluidAmount();
 			amount += (amount == 0) ? calculateExperienceStored() :
 				Math.floor(((AbstractCookingRecipe) recipe).getExperience() * UNIT_PER_MB);
-			internalTank.setFluid(new FluidStack(EXPERIENCE, amount));
+			internalTank.setFluid(new FluidStack(FluidVariant.of(CeiFluids.EXPERIENCE.getSource()), amount));
 		}
 	}
 
 	@Unique
-	protected final FluidTank internalTank = new FluidTank(java.lang.Long.MAX_VALUE, fs -> fs.getType().equals(EXPERIENCE)) {
+	protected final FluidTank internalTank = new FluidTank(java.lang.Long.MAX_VALUE, fs -> fs.getType().equals(FluidVariant.of(CeiFluids.EXPERIENCE.getSource()))) {
 		@Override
 		protected void onContentsChanged() {
 			long total = calculateExperienceStored();
