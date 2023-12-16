@@ -1,7 +1,6 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.enchanter;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.widget.Label;
@@ -12,7 +11,6 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import plus.dragons.createdragonlib.gui.ComponentLabel;
 import plus.dragons.createenchantmentindustry.entry.CeiPackets;
 
 import javax.annotation.Nullable;
@@ -63,7 +61,7 @@ public class EnchantingGuideScreen extends AbstractSimiContainerScreen<Enchantin
         );
         index = menu.contentHolder.getOrCreateTag().getInt("index");
         scrollInput = new SelectionScrollInput(guideX + 40, guideY + 22, 120, 16);
-        scrollInputLabel = new ComponentLabel(guideX + 43, guideY + 26, Components.immutableEmpty()).withShadow();
+        scrollInputLabel = new Label(guideX + 43, guideY + 26, Components.immutableEmpty()).withShadow();
         scrollInput.calling(index -> this.index = index).writingTo(scrollInputLabel);
         addRenderableWidget(scrollInputLabel);
         addRenderableWidget(scrollInput);

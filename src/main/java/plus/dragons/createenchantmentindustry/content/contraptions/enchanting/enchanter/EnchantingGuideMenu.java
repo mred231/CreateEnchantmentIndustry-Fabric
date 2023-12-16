@@ -27,6 +27,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
+import java.util.List;
+
 public class EnchantingGuideMenu extends GhostItemMenu<ItemStack> {
     private static final Component NO_ENCHANTMENT = LANG.translate("gui.enchanting_guide.no_enchantment").component();
     private ImmutableList<Component> previousEnchantments;
@@ -34,6 +36,8 @@ public class EnchantingGuideMenu extends GhostItemMenu<ItemStack> {
     boolean directItemStackEdit;
     @Nullable
     BlockPos blockPos = null;
+
+	private static final List<Integer> listOfBrokenSlots = List.of(8, 17, 26, 35);
 
     public EnchantingGuideMenu(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf extraData) {
         super(type, id, inv, extraData);
@@ -139,6 +143,10 @@ public class EnchantingGuideMenu extends GhostItemMenu<ItemStack> {
 
     @Override
     public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
+		if (listOfBrokenSlots.contains(slotId) && clickTypeIn == ClickType.THROW) {
+			clickTypeIn = ClickType.PICKUP;
+		}
+
         if (slotId < 36) {
             super.clicked(slotId, dragType, clickTypeIn, player);
             return;
@@ -160,6 +168,7 @@ public class EnchantingGuideMenu extends GhostItemMenu<ItemStack> {
     }
 
     @Override
+	@SuppressWarnings("UnstableApiUsage")
     public ItemStack quickMoveStack(Player playerIn, int index) {
         if (index < 36) {
             ItemStack stackToInsert = playerInventory.getItem(index);
