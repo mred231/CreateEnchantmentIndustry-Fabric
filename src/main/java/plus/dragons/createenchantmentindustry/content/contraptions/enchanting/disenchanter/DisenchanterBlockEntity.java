@@ -331,7 +331,7 @@ public class DisenchanterBlockEntity extends SmartBlockEntity implements IHaveGo
         if (processingTicks > 5) {
 			try(Transaction t = TransferUtil.getTransaction()) {
 				internalTank.allowInsertion();
-				if (internalTank.getPrimaryHandler().simulateInsert(xp.getType(),xp.getAmount(),t) != xp.getAmount()) {
+				if (internalTank.getPrimaryHandler().insert(xp.getType(), xp.getAmount(), t) != xp.getAmount()) {
 					internalTank.forbidInsertion();
 					processingTicks = DISENCHANTER_TIME;
 					return true;
