@@ -45,33 +45,29 @@ import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
 import javax.annotation.Nullable;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
-abstract public class AbstractFurnaceBlockEntityMixin<T> extends BaseContainerBlockEntity implements WorldlyContainer, RecipeHolder, StackedContentsCompatible, SidedStorageBlockEntity {
+abstract public class AbstractFurnaceBlockEntityMixin extends BaseContainerBlockEntity implements WorldlyContainer, RecipeHolder, StackedContentsCompatible, SidedStorageBlockEntity {
 	protected AbstractFurnaceBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 
-	@Shadow
-	private Object2IntOpenHashMap<ResourceLocation> recipesUsed;
+	@Shadow @Final private Object2IntOpenHashMap<ResourceLocation> recipesUsed;
 
 	@Unique
 	protected long calculateExperienceStored() {
 		double total = 0.0;
 		for (var entry : recipesUsed.object2IntEntrySet()) {
-			total += getLevel().getRecipeManager().byKey(entry.getKey()).map(recipe -> {
-				return (double)((AbstractCookingRecipe) recipe).getExperience() * entry.getIntValue();
-			}).orElse(0.0);
+			total += getLevel().getRecipeManager().byKey(entry.getKey()).map(recipe -> (double)((AbstractCookingRecipe) recipe).getExperience() * entry.getIntValue()).orElse(0.0);
 		}
 		total *= UNIT_PER_MB;
-		EnchantmentIndustry.LOGGER.debug("Furnace XP amount: {}", total);
 		return (long)total;
 	}
 
-	@Inject(method = "setRecipeUsed", at = @At("TAIL"), cancellable = true)
+	@Inject(method = "setRecipeUsed", at = @At("TAIL"))
 	private void injectSetRecipeUsed(@Nullable Recipe<?> recipe, CallbackInfo ci) {
 		if (recipe != null) {
 			long amount = internalTank.getFluidAmount();
 			amount += (amount == 0) ? calculateExperienceStored() :
-				Math.floor(((AbstractCookingRecipe) recipe).getExperience() * UNIT_PER_MB);
+                    (long) Math.floor(((AbstractCookingRecipe) recipe).getExperience() * UNIT_PER_MB);
 			internalTank.setFluid(new FluidStack(FluidVariant.of(CeiFluids.EXPERIENCE.getSource()), amount));
 		}
 	}
@@ -87,19 +83,16 @@ abstract public class AbstractFurnaceBlockEntityMixin<T> extends BaseContainerBl
 				return;
 			}
 
-			EnchantmentIndustry.LOGGER.debug("Furnace XP removing recipes for a total of {} out of {}", diff, total);
-
 			if (diff >= total) {
-				EnchantmentIndustry.LOGGER.debug("Furnace XP removing all recipes");
 				recipesUsed.clear();
 				return;
 			}
 
 			var recipeManager = getLevel().getRecipeManager();
 			var it = recipesUsed.object2IntEntrySet();
-			var entriesUsed = StreamSupport.stream(it.spliterator(), false)
+			var entriesUsed = it.stream()
 				.filter(e -> recipeManager.byKey(e.getKey()).isPresent())
-				.collect(Collectors.toList());
+				.toList();
 			for (var entry : entriesUsed) {
 				var usedRecipe = (AbstractCookingRecipe)recipeManager.byKey(entry.getKey()).get();
 				long experience = (long)(usedRecipe.getExperience() * UNIT_PER_MB);
@@ -107,7 +100,6 @@ abstract public class AbstractFurnaceBlockEntityMixin<T> extends BaseContainerBl
 				if (count > 0) {
 					diff -= experience;
 					recipesUsed.addTo(usedRecipe.getId(), -count);
-					EnchantmentIndustry.LOGGER.debug("Furnace XP removed {} recipe {} times", entry.getKey(), count);
 				}
 			}
 		}
@@ -118,9 +110,8 @@ abstract public class AbstractFurnaceBlockEntityMixin<T> extends BaseContainerBl
 
     @Override
     public @Nullable Storage<FluidVariant> getFluidStorage(Direction side) {
-        if (side.getAxis().isHorizontal()) {
-            return exposedExperienceTank;
-        }
-        return null;
+		if (side != null && side.getAxis().isHorizontal())
+			return exposedExperienceTank;
+		return null;
     }
 }
