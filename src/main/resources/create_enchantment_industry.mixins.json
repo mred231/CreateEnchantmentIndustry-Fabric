@@ -13,7 +13,6 @@
     "FluidTankBlockMixin",
     "ItemDrainBlockEntityAccessor",
     "ItemDrainBlockMixin",
-    "OpenEndedPipeInvoker",
     "PlayerMixin",
     "SpoutBlockEntityAccessor",
     "SpoutBlockMixin",

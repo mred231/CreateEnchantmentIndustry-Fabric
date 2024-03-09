@@ -22,7 +22,7 @@ public class FillingBySpoutMixin {
 
     @Inject(method = "getRequiredAmountForItem",
 			at = @At(value = "INVOKE",
-					target = "Lcom/simibubi/create/content/fluids/transfer/GenericItemFilling;getRequiredAmountForItem(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lio/github/fabricators_of_create/porting_lib/util/FluidStack;)J"),
+					target = "Lcom/simibubi/create/content/fluids/transfer/GenericItemFilling;getRequiredAmountForItem(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lio/github/fabricators_of_create/porting_lib/fluids/FluidStack;)J"),
 			cancellable = true)
     private static void getRequiredXpAmountForItem(Level world, ItemStack stack, FluidStack availableFluid, CallbackInfoReturnable<Long> cir) {
         int amount = MendingBySpout.getRequiredAmountForItem(world, stack, availableFluid);
@@ -32,7 +32,7 @@ public class FillingBySpoutMixin {
 
     @Inject(method = "fillItem",
 			at = @At(value = "INVOKE",
-					target = "Lcom/simibubi/create/content/fluids/transfer/GenericItemFilling;fillItem(Lnet/minecraft/world/level/Level;JLnet/minecraft/world/item/ItemStack;Lio/github/fabricators_of_create/porting_lib/util/FluidStack;)Lnet/minecraft/world/item/ItemStack;"),
+					target = "Lcom/simibubi/create/content/fluids/transfer/GenericItemFilling;fillItem(Lnet/minecraft/world/level/Level;JLnet/minecraft/world/item/ItemStack;Lio/github/fabricators_of_create/porting_lib/fluids/FluidStack;)Lnet/minecraft/world/item/ItemStack;"),
 			cancellable = true)
     private static void mendItem(Level world, long requiredAmount, ItemStack stack, FluidStack availableFluid, CallbackInfoReturnable<ItemStack> cir) {
         ItemStack result = MendingBySpout.mendItem(world, (int) requiredAmount, stack, availableFluid);

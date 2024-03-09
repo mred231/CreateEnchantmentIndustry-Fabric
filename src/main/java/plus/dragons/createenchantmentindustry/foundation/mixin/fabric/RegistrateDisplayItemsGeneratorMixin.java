@@ -48,19 +48,9 @@ public abstract class RegistrateDisplayItemsGeneratorMixin {
 
 		try {
 			cls = Class.forName("com.simibubi.create.AllCreativeModeTabs$RegistrateDisplayItemsGenerator$ItemOrdering");
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-
-		try {
 			method = cls.getMethod(name, Item.class, Item.class);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		}
-
-		try {
 			ordering = method.invoke(null, item, anchor);
-		} catch (InvocationTargetException | IllegalAccessException e) {
+		} catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 
