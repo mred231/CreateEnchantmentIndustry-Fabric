@@ -38,7 +38,7 @@ import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experi
 public class CeiFluids {
 
     static {
-        REGISTRATE.useCreativeTab(AllCreativeModeTabs.MAIN_TAB.key());
+        REGISTRATE.setCreativeTab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key());
     }
 
     public static final ResourceLocation EXPERIENCE_STILL_RL = EnchantmentIndustry.genRL("fluid/experience_still");

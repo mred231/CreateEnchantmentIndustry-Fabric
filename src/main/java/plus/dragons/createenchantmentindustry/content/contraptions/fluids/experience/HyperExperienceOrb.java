@@ -1,6 +1,6 @@
 package plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience;
 
-import io.github.fabricators_of_create.porting_lib.entity.ExtraSpawnDataEntity;
+import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import plus.dragons.createenchantmentindustry.entry.CeiEntityTypes;
 import plus.dragons.createenchantmentindustry.entry.CeiFluids;
 
-public class HyperExperienceOrb extends ExperienceOrb implements ExtraSpawnDataEntity {
+public class HyperExperienceOrb extends ExperienceOrb implements IEntityAdditionalSpawnData {
 
     public HyperExperienceOrb(Level level, double x, double y, double z, int value) {
         this(CeiEntityTypes.HYPER_EXPERIENCE_ORB.get(), level);

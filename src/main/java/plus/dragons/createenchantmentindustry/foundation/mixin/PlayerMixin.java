@@ -1,10 +1,11 @@
 package plus.dragons.createenchantmentindustry.foundation.mixin;
 
+import net.fabricmc.fabric.api.entity.FakePlayer;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import io.github.fabricators_of_create.porting_lib.fake_players.FakePlayer;
 import io.github.fabricators_of_create.porting_lib.tool.ToolActions;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;

@@ -2,7 +2,7 @@ package plus.dragons.createenchantmentindustry.content.contraptions.enchanting.p
 
 import org.jetbrains.annotations.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.minecraft.world.item.ItemStack;
 
 

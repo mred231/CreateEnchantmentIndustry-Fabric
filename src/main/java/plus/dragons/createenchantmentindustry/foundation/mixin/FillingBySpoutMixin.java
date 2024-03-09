@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.simibubi.create.content.fluids.spout.FillingBySpout;
 
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.MendingBySpout;

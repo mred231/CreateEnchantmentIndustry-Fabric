@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import plus.dragons.createenchantmentindustry.entry.CeiFluids;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
 

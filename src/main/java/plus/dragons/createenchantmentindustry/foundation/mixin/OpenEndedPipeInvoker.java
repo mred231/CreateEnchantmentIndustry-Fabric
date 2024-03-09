@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import com.simibubi.create.content.fluids.OpenEndedPipe;
 
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 @Mixin(OpenEndedPipe.class)
 public interface OpenEndedPipeInvoker {

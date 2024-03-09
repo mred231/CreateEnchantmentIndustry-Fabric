@@ -18,7 +18,7 @@ import plus.dragons.createenchantmentindustry.content.contraptions.fluids.experi
 public class CeiItems {
 
     static {
-        REGISTRATE.useCreativeTab(AllCreativeModeTabs.MAIN_TAB.key());
+        REGISTRATE.setCreativeTab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key());
     }
 
     public static final ItemEntry<EnchantingGuideItem> ENCHANTING_GUIDE = REGISTRATE.item("enchanting_guide", EnchantingGuideItem::new)

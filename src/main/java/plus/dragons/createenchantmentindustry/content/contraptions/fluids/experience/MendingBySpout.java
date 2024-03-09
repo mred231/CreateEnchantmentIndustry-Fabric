@@ -4,7 +4,7 @@ import static plus.dragons.createenchantmentindustry.EnchantmentIndustry.UNIT_PE
 
 import org.jetbrains.annotations.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
