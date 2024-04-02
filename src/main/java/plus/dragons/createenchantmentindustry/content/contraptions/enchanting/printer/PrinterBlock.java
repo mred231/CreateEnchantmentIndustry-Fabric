@@ -59,10 +59,13 @@ public class PrinterBlock extends Block implements IWrenchable, IBE<PrinterBlock
     public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
         return !AllBlocks.BASIN.has(worldIn.getBlockState(pos.below()));
     }
-    
+
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
                                  BlockHitResult blockRayTraceResult) {
+		if (hand == InteractionHand.OFF_HAND) {
+			return InteractionResult.PASS;
+		}
         ItemStack heldItem = player.getItemInHand(hand);
         if (heldItem.isEmpty()) {
             return onBlockEntityUse(world, pos, be -> {

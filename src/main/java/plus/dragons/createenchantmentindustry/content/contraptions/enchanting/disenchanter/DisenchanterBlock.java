@@ -50,6 +50,9 @@ public class DisenchanterBlock extends Block implements IWrenchable, IBE<Disench
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         ItemStack heldItem = player.getItemInHand(handIn);
+		if (handIn == InteractionHand.OFF_HAND) {
+			return InteractionResult.PASS;
+		}
         if (heldItem.isEmpty()){
             return onBlockEntityUse(worldIn, pos, be -> {
                 if (!be.getHeldItemStack().isEmpty()) {
