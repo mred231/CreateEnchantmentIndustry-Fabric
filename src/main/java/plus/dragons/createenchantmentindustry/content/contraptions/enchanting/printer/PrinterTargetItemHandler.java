@@ -41,6 +41,7 @@ public class PrinterTargetItemHandler extends SnapshotParticipant<Unit> implemen
 			return 0;
 
 		be.snapshotParticipant.updateSnapshots(transaction);
+		be.setCopyTarget(ItemStack.EMPTY);
 		return 1;
 	}
 
